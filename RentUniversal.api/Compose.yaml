@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: RentUniversal.api/Dockerfile
+    container_name: rentuniversal_api
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+
+      # MongoDB settings passed into your API
+      MongoDb__ConnectionString: "mongodb://mongo:27017"
+      MongoDb__Database: "RentUniversal"
+
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+
+  mongo:
+    image: mongo:7
+    container_name: rentuniversal_mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo-data:/data/db
+
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  mongo-express:
+    image: mongo-express:1.0.2
+    container_name: rentuniversal_mongo_express
+    ports:
+      - "8085:8081"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
