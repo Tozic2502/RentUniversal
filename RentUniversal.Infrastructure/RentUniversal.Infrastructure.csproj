@@ -12,4 +12,9 @@
     <PackageReference Include="MongoDB.Driver" Version="3.5.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RentUniversal.Application\RentUniversal.Application.csproj" />
+    <ProjectReference Include="..\RentUniversal.Domain\RentUniversal.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
