@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RentUniversal.Application\RentUniversal.Application.csproj" />
+    <ProjectReference Include="..\RentUniversal.Infrastructure\RentUniversal.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
