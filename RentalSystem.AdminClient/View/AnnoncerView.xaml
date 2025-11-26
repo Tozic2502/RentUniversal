@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="RentalSystem.AdminClient.View.AnnoncerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Padding="20">
+
+    <StackPanel>
+        <TextBlock Text="Annoncer" FontSize="26" Margin="0 0 0 20"/>
+
+        <ListBox ItemsSource="{Binding Ads}"
+                 SelectedItem="{Binding SelectedAd}"
+                 DisplayMemberPath="Title"
+                 Height="200" />
+
+        <Button Content="Godkend"
+                Command="{Binding ApproveCommand}"
+                Margin="0 10 0 5"/>
+
+        <Button Content="Reject"
+                Command="{Binding RejectCommand}"/>
+    </StackPanel>
+
+</UserControl>

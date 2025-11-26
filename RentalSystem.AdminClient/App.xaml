@@ -1,9 +1,34 @@
 ﻿<Application x:Class="RentalSystem.AdminClient.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:RentalSystem.AdminClient"
-             StartupUri="MainWindow.xaml">
+             xmlns:vm="clr-namespace:RentalSystem.AdminClient"
+             xmlns:views="clr-namespace:RentalSystem.AdminClient.Views"
+             xmlns:view="clr-namespace:RentalSystem.AdminClient.View"
+             xmlns:viewModel="clr-namespace:RentalSystem.AdminClient.ViewModel"
+             StartupUri="View/MainWindow.xaml">
     <Application.Resources>
-         
+        <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+            <view:LoginView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:AdminShellViewModel}">
+            <view:AdminShellView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
+            <views:SettingsView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:UserViewModel}">
+            <view:UserView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:AnnoncerViewModel}">
+            <view:AnnoncerView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:StatsViewModel}">
+            <view:StatsView />
+        </DataTemplate>
     </Application.Resources>
 </Application>

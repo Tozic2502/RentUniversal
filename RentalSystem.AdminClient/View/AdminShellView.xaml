@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="RentalSystem.AdminClient.View.AdminShellView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:RentalSystem.AdminClient"
+             Background="White">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/> <!-- Topbar -->
+            <RowDefinition Height="*"/>  <!-- Content -->
+        </Grid.RowDefinitions>
+
+        <!-- vores taskbar -->
+        <StackPanel Orientation="Horizontal" Background="#222" Grid.Row="0">
+            <Button Content="Settings" Command="{Binding NavigateSettings}" Margin="5" Foreground="White" Background="#333"/>
+            <Button Content="User" Command="{Binding NavigateUser}" Margin="5" Foreground="White" Background="#333"/>
+            <Button Content="Annoncer" Command="{Binding NavigateAnnoncer}" Margin="5" Foreground="White" Background="#333"/>
+            <Button Content="Stats" Command="{Binding NavigateStats}" Margin="5" Foreground="White" Background="#333"/>
+            <Button Content="Logout" Command="{Binding Logout}" Margin="5" Foreground="White" Background="#AA2222"/>
+        </StackPanel>
+        
+        <ContentControl Grid.Row="1" Content="{Binding CurrentAdminViewModel}" />
+    </Grid>
+</UserControl>
