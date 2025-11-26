@@ -1,7 +1,7 @@
 # RentUniversal
 Docker Commands:
 Starter Docker + Rebuild
-docker compose up --build
+"docker compose up --build"
 
 Start af docker alene
 docker compose up
