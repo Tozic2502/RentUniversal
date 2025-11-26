@@ -12,20 +12,19 @@ namespace RentUniversal.api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // earlier in builder setup:
             builder.Services.AddInfrastructure(builder.Configuration);
 
-            // Register Application services that depend on repository implementations:
+            // Application services
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<IRentalService, RentalService>();
             builder.Services.AddScoped<ILicenseService, LicenseService>();
 
-            
+
             // Add services to the container.
 
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+           
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
