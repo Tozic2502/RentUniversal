@@ -10,6 +10,11 @@ namespace RentUniversal.api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        [HttpGet("ping")]
+        public IActionResult Ping()
+        {
+            return Ok("Users API is running");
+        }
 
         public UsersController(IUserService userService)
         {

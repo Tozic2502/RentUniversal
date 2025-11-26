@@ -1,17 +1,18 @@
 using RentUniversal.Infrastructure.DependencyInjection;
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Application.Services;
+// Add this using if you are using Swashbuckle or NSwag for OpenAPI/Swagger
+using Microsoft.OpenApi.Models;
 
 namespace RentUniversal.api
 {
     public class Program
     {
-
         public static void Main(string[] args)
-
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Infrastructure (MongoDB)
             builder.Services.AddInfrastructure(builder.Configuration);
 
             // Application services
@@ -20,29 +21,32 @@ namespace RentUniversal.api
             builder.Services.AddScoped<IRentalService, RentalService>();
             builder.Services.AddScoped<ILicenseService, LicenseService>();
 
-
-            // Add services to the container.
-
+            // Controllers + OpenAPI
             builder.Services.AddControllers();
-           
-            builder.Services.AddOpenApi();
+            builder.Services.AddEndpointsApiExplorer();
+            // Replace AddOpenApi() with AddSwaggerGen() if using Swashbuckle
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RentUniversal API", Version = "v1" });
+            });
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                // Replace UseOpenApi() with UseSwagger() and UseSwaggerUI()
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "RentUniversal API v1");
+                });
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
+
         }
     }
 }

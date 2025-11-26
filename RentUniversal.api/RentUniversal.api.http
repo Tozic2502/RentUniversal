@@ -1,6 +1,6 @@
-@RentUniversal.api_HostAddress = http://localhost:8080
+@RentUniversal.api_HostAddress = http://localhost:5282
 
-GET {{RentUniversal.api_HostAddress}}/RentUniversal/
+GET {{RentUniversal.api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

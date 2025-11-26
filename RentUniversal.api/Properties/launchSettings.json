@@ -4,23 +4,24 @@
     "RentUniversal.api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
       "launchUrl": "swagger",
+      "launchBrowser": true,
       "applicationUrl": "https://localhost:7187;http://localhost:5282",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-
     "Docker": {
       "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "launchBrowser": false,
       "publishAllPorts": true,
       "useSSL": true,
       "environmentVariables": {
         "ASPNETCORE_HTTP_PORTS": "8080",
-        "ASPNETCORE_HTTPS_PORTS": "8081"
+        "ASPNETCORE_HTTPS_PORTS": "8081",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MongoDb__ConnectionString": "mongodb://root:example@mongo:27017",
+        "MongoDb__Database": "RentUniversal"
       }
     }
   }
