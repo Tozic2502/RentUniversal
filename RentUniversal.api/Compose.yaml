@@ -11,6 +11,7 @@ services:
       - "8081:8081"
     environment:
       ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://0.0.0.0:8080"
 
       # MongoDB settings passed into your API
       MongoDb__ConnectionString: "mongodb://mongo:27017"
@@ -20,9 +21,10 @@ services:
       mongo:
         condition: service_healthy
 
+    networks:
+      - rent-network
     restart: unless-stopped
-
-
+    
   mongo:
     image: mongo:7
     container_name: rentuniversal_mongo
@@ -33,13 +35,14 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - mongo-data:/data/db
-
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
       interval: 10s
       timeout: 5s
       retries: 5
-
+    networks:
+      - rent-network
+    restart: unless-stopped
 
   mongo-express:
     image: mongo-express:1.0.2
@@ -53,7 +56,12 @@ services:
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    networks:
+      - rent-network
     restart: unless-stopped
 
 volumes:
   mongo-data:
+
+networks:
+  rent-network:
