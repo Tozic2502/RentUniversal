@@ -1,42 +1,150 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* App.css */
+
+* {
+    box-sizing: border-box;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* TOPMENU */
+.header {
+    display: flex;
+    border-bottom: 1px solid #ccc;
 }
 
-.card {
-  padding: 2em;
+.nav-button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: #f5f5f5;
+    cursor: pointer;
+    font-size: 16px;
 }
 
-.read-the-docs {
-  color: #888;
+.nav-button-active {
+    background: #cde8ff;
+    font-weight: bold;
+}
+
+/* HOVEDLAYOUT */
+.layout {
+    flex: 1;
+    display: flex;
+}
+
+.sidebar {
+    width: 180px;
+    border-right: 1px solid #ccc;
+    padding: 12px;
+}
+
+.sidebar h3 {
+    margin-top: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin: 8px 0;
+}
+
+.main {
+    flex: 1;
+    padding: 16px;
+}
+
+/* KORT */
+.card-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.item-card,
+.contract-card {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+.item-image {
+    height: 80px;
+    border: 1px dashed #aaa;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* KURV */
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+}
+
+.cart-table th,
+.cart-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+.cart-summary {
+    border-top: 1px solid #ccc;
+    padding-top: 8px;
+}
+
+.primary-btn {
+    padding: 8px 16px;
+    border: none;
+    background: #0070c0;
+    color: white;
+    cursor: pointer;
+}
+
+/* LOGIN */
+.login-section {
+    max-width: 320px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 6px;
+}
+
+/* FOOTER */
+.footer {
+    border-top: 1px solid #ccc;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer-links {
+    display: flex;
+    gap: 8px;
+}
+
+.footer-box {
+    border: 1px solid #0070c0;
+    padding: 4px 8px;
 }
