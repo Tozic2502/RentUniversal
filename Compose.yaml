@@ -41,6 +41,19 @@ services:
       - rent-network
     restart: unless-stopped
 
+  client:
+    build:
+      context: ./rentuniversal-client
+      dockerfile: Dockerfile
+    container_name: rentuniversal_client
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+    networks:
+      - rent-network
+
+
   mongo-express:
     image: mongo-express:1.0.2
     container_name: rentuniversal_mongo_express
@@ -56,6 +69,7 @@ services:
     networks:
       - rent-network
     restart: unless-stopped
+
 
 volumes:
   mongo-data:

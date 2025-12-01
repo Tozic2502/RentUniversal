@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CartContext } from "../context/CartContext";
+import { CartContext } from "../Context/CartContext";
 
 export default function Cart() {
     const { cart, removeFromCart } = useContext(CartContext);

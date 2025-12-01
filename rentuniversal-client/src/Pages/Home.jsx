@@ -28,11 +28,15 @@ function Home() {
 
             <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
                 {items.map(item => (
-                    <div key={item.id} style={{ border: "1px solid #ccc", padding: 10 }}>
+                    <div key={item.id} style={{ border: "1px solid #ccc", padding: 10, width: "200px" }}>
                         <h3>{item.name}</h3>
-                        <p>{item.description}</p>
-                        <p><b>Price: {item.price} kr.</b></p>
-                        <button onClick={() => addToCart(item)}>Add to Cart</button>
+                        <p>Category: {item.category}</p>
+                        <p>Condition: {item.condition}</p>
+                        <p><b>Value: {item.value} kr.</b></p>
+
+                        <button onClick={() => addToCart(item)}>
+                            Add to Cart
+                        </button>
                     </div>
                 ))}
             </div>

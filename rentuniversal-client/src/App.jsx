@@ -1,8 +1,8 @@
 import { Link, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home.jsx";
-import Udlejning from "./pages/Rental.jsx";
-import Kurv from "./pages/Cart.jsx";
-import Login from "./pages/Login.jsx";
+import Home from "./Pages/Home.jsx";
+import Udlejning from "./Pages/Rental.jsx";
+import Kurv from "./Pages/Cart.jsx";
+import Login from "./Pages/Login.jsx";
 
 export default function App() {
     return (
