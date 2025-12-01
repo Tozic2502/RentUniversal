@@ -11,8 +11,7 @@ services:
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://0.0.0.0:8080"
 
-      # MongoDB settings passed into your API
-      MongoDb__ConnectionString: "mongodb://mongo:27017"
+      MongoDb__ConnectionString: "mongodb://root:example@mongo:27017/?authSource=admin"
       MongoDb__Database: "RentUniversal"
 
     depends_on:

@@ -5,17 +5,15 @@ namespace RentUniversal.Infrastructure.Data
 {
     public class MongoContext
     {
-        private readonly IMongoDatabase _database;
+        private readonly IMongoClient _client;
+        private readonly IMongoDbSettings _settings;
 
-
-        public MongoContext(IMongoDbSettings settings)
+        public MongoContext(IMongoClient client, IMongoDbSettings settings)
         {
-            var client = new MongoClient(settings.ConnectionString);
-            _database = client.GetDatabase(settings.Database);
+            _client = client;
+            _settings = settings;
         }
 
-        public IMongoCollection<T> GetCollection<T>(string name) =>
-            _database.GetCollection<T>(name);
-
+        public IMongoDatabase Database => _client.GetDatabase(_settings.Database);
     }
 }

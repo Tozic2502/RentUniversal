@@ -11,7 +11,7 @@ namespace RentUniversal.Infrastructure.Repositories
 
         public MongoUserRepository(MongoContext context)
         {
-            _users = context.GetCollection<User>("Users");
+            _users = context.Database.GetCollection<User>("Users");
         }
 
         public async Task CreateAsync(User user) =>

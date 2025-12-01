@@ -11,7 +11,7 @@ namespace RentUniversal.Infrastructure.Repositories
 
         public MongoRentalRepository(MongoContext context)
         {
-            _rentals = context.GetCollection<Rental>("Rentals");
+            _rentals = context.Database.GetCollection<Rental>("Rentals");
         }
 
         public async Task CreateAsync(Rental rental) => await _rentals.InsertOneAsync(rental);
