@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCart } from "../Context/CartContext";
+import { getItems } from "../api"; 
 
 function Home() {
     const [items, setItems] = useState([]);
@@ -8,15 +9,16 @@ function Home() {
     useEffect(() => {
         async function load() {
             try {
-                const res = await fetch("http://localhost:5282/api/items");
-                const data = await res.json();
+                const data = await getItems(); 
                 setItems(data);
-            } catch (error) {
-                console.error("Failed to load items", error);
+            } catch (err) {
+                console.error("Failed to load items", err);
             }
         }
+
         load();
     }, []);
+
 
     return (
         <div>
