@@ -1,4 +1,4 @@
-import { Link, Routes, Route } from "react-router-dom";
+﻿import { Link, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home.jsx";
 import Udlejning from "./Pages/Rental.jsx";
 import Kurv from "./Pages/Cart.jsx";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCart } from "../Context/CartContext";
-import { getItems } from "../api"; 
+import { getItems } from "../api";
 
 function Home() {
     const [items, setItems] = useState([]);
@@ -9,7 +9,7 @@ function Home() {
     useEffect(() => {
         async function load() {
             try {
-                const data = await getItems(); 
+                const data = await getItems();
                 setItems(data);
             } catch (err) {
                 console.error("Failed to load items", err);
@@ -19,23 +19,40 @@ function Home() {
         load();
     }, []);
 
-
     return (
-        <div>
-            <h1>Available Items</h1>
+        <div style={{ padding: "20px" }}>
+            <h1>Tilgængelige produkter</h1>
 
-            {items.length === 0 && <p>Loading...</p>}
+            {items.length === 0 && <p>Indlæser...</p>}
 
-            <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-                {items.map(item => (
-                    <div key={item.id} style={{ border: "1px solid #ccc", padding: 10, width: "200px" }}>
-                        <h3>{item.name}</h3>
-                        <p>Category: {item.category}</p>
-                        <p>Condition: {item.condition}</p>
-                        <p><b>Value: {item.value} kr.</b></p>
+            <div className="item-grid">
+                {items.map((item) => (
+                    <div key={item.id} className="item-card">
+                        {/* “Billede” – simpelt placeholder med første bogstav i navnet */}
+                        <div className="item-thumb">
+                            <span>{item.name?.charAt(0) ?? "?"}</span>
+                        </div>
 
-                        <button onClick={() => addToCart(item)}>
-                            Add to Cart
+                        <div className="item-info">
+                            <h3>{item.name}</h3>
+
+                            <p className="item-meta">
+                                <strong>Kategori:</strong> {item.category}
+                            </p>
+                            <p className="item-meta">
+                                <strong>Stand:</strong> {item.condition}
+                            </p>
+
+                            <p className="item-price">
+                                Værdi: {item.value} kr.
+                            </p>
+                        </div>
+
+                        <button
+                            className="item-button"
+                            onClick={() => addToCart(item)}
+                        >
+                            Læg i kurv
                         </button>
                     </div>
                 ))}

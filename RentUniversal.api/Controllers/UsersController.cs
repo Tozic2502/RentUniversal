@@ -43,5 +43,6 @@ namespace RentUniversal.api.Controllers
             if (user == null) return Unauthorized();
             return Ok(user);
         }
+
     }
 }
