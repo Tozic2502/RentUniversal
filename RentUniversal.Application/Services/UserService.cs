@@ -20,20 +20,24 @@ public class UserService : IUserService
         var user = await _userRepository.GetByEmailAsync(email);
         if (user == null) return null;
 
-        bool isValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
-        if (!isValid) return null;
+        // Check hashed password
+        if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            return null;
 
         return DTOMapper.ToDTO(user);
     }
 
+
     public async Task<UserDTO> RegisterAsync(User user, string password)
     {
+        
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
 
         await _userRepository.CreateAsync(user);
 
         return DTOMapper.ToDTO(user);
     }
+
 
     public async Task<bool> VerifyIdentificationAsync(string userId, string identificationId)
     {

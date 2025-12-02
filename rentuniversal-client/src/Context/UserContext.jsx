@@ -1,17 +1,27 @@
-﻿import { createContext, useContext, useState } from "react";
+﻿import { createContext, useContext, useState, useEffect } from "react";
 
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
 
-    function login(userData) {
-        setUser(userData);
-    }
+    // 🔹 Load user from localStorage on startup
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
 
-    function logout() {
+    const login = (userData) => {
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData)); // Save
+    };
+
+    const logout = () => {
         setUser(null);
-    }
+        localStorage.removeItem("user"); // Remove session
+    };
 
     return (
         <UserContext.Provider value={{ user, login, logout }}>

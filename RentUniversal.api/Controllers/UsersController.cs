@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RentUniversal.Application.Interfaces;
-using RentUniversal.Domain.Entities;
 using RentUniversal.Application.DTOs;
+using RentUniversal.Application.Interfaces;
+using RentUniversal.Application.Mappers;
+using RentUniversal.Domain.Entities;
 
 namespace RentUniversal.api.Controllers
 {
@@ -30,22 +31,32 @@ namespace RentUniversal.api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserDTO>> RegisterUser([FromBody] User user)
+        public async Task<ActionResult<UserDTO>> RegisterUser([FromBody] LoginDTO register)
         {
-            var result = await _userService.RegisterAsync(user, "testpassword");
-            return CreatedAtAction(nameof(GetUserById), new { id = result.Id }, result);
+            var user = new User
+            {
+                Name = register.Name,
+                Email = register.Email
+            };
+
+            var createdUser = await _userService.RegisterAsync(user, register.Password);
+
+            return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
         }
+
+
 
         [HttpPost("authenticate")]
-        public async Task<ActionResult<UserDTO>> Authenticate([FromBody] LoginDTO login)
+        public async Task<ActionResult<UserDTO>> AuthenticateAndGetUser([FromBody] LoginDTO login)
         {
-            var user = await _userService.AuthenticateAsync(login.Email, login.Password);
+            var authUser = await _userService.AuthenticateAsync(login.Email, login.Password);
 
-            if (user == null)
-                return Unauthorized("Invalid email or password");
+            if (authUser == null)
+                return Unauthorized();
 
-            return Ok(user);
+            return Ok(authUser);
         }
+
         [HttpPut("{id}")]
         public async Task<ActionResult<UserDTO>> UpdateUser(string id, [FromBody] UserDTO updatedUser)
         {
