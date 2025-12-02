@@ -2,6 +2,7 @@
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Application.Mappers;
 using RentUniversal.Domain.Entities;
+using BCrypt.Net;
 
 namespace RentUniversal.Application.Services;
 
@@ -19,15 +20,18 @@ public class UserService : IUserService
         var user = await _userRepository.GetByEmailAsync(email);
         if (user == null) return null;
 
-        // TODO: check password hash (Infrastructure should store PasswordHash)
-        // For now just return DTO
+        bool isValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+        if (!isValid) return null;
+
         return DTOMapper.ToDTO(user);
     }
 
     public async Task<UserDTO> RegisterAsync(User user, string password)
     {
-        // TODO: hash password and store password hash in domain or user entity
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+
         await _userRepository.CreateAsync(user);
+
         return DTOMapper.ToDTO(user);
     }
 
@@ -45,4 +49,17 @@ public class UserService : IUserService
         var user = await _userRepository.GetByIdAsync(id);
         return user == null ? null : DTOMapper.ToDTO(user);
     }
+    public async Task<UserDTO?> UpdateUserAsync(string id, UserDTO updatedUser)
+    {
+        var existingUser = await _userRepository.GetByIdAsync(id);
+        if (existingUser == null) return null;
+
+        existingUser.Name = updatedUser.Name;
+        existingUser.Email = updatedUser.Email;
+
+        await _userRepository.UpdateAsync(existingUser);
+
+        return DTOMapper.ToDTO(existingUser);
+    }
+
 }

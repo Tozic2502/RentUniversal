@@ -37,12 +37,26 @@ namespace RentUniversal.api.Controllers
         }
 
         [HttpPost("authenticate")]
-        public async Task<ActionResult<UserDTO>> Authenticate([FromBody] string email)
+        public async Task<ActionResult<UserDTO>> Authenticate([FromBody] LoginDTO login)
         {
-            var user = await _userService.AuthenticateAsync(email, "testpassword");
-            if (user == null) return Unauthorized();
+            var user = await _userService.AuthenticateAsync(login.Email, login.Password);
+
+            if (user == null)
+                return Unauthorized("Invalid email or password");
+
             return Ok(user);
         }
+        [HttpPut("{id}")]
+        public async Task<ActionResult<UserDTO>> UpdateUser(string id, [FromBody] UserDTO updatedUser)
+        {
+            var user = await _userService.UpdateUserAsync(id, updatedUser);
+            if (user == null)
+                return NotFound("User not found");
+
+            return Ok(user);
+        }
+
+
 
     }
 }

@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
 import { getUserRentals } from "../api";
+import { useUser } from "../Context/UserContext.jsx"; 
 
 function Rental() {
     const [rentals, setRentals] = useState([]);
 
+    const { user } = useUser();
+
     useEffect(() => {
+        if (!user) return; // Prevent fetching if not logged in
+
         async function loadRentals() {
             try {
-                const data = await getUserRentals("1"); // TODO: Skift til login user
+                const data = await getUserRentals(user.id);
                 setRentals(data);
             } catch (err) {
                 console.error("Failed to load rentals", err);
             }
         }
+
         loadRentals();
-    }, []);
+    }, [user]);
+
 
     return (
         <div style={{ padding: "20px" }}>

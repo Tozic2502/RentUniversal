@@ -28,6 +28,8 @@ namespace RentUniversal.Infrastructure.Repositories
 
         public async Task UpdateAsync(User user) =>
             await _users.ReplaceOneAsync(u => u.Id == user.Id, user, new ReplaceOptions { IsUpsert = false });
+        
+
     }
 }
     

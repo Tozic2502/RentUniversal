@@ -9,14 +9,16 @@ namespace RentUniversal.Domain.Entities;
 
 public class User
 {
-    public string Id { get; set; } = string.Empty;   // Mongo ID
+    public string Id { get; set; } = string.Empty; 
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
 
     public UserRole Role { get; set; } = UserRole.Customer;
 
-    public string IdentificationId { get; set; } = string.Empty; // FK -> Identification
+    public string IdentificationId { get; set; } = string.Empty; 
 
-    public List<string> RentalIds { get; set; } = new();         // FK -> Rental
+    public List<string> RentalIds { get; set; } = new();         
+    public string PasswordHash { get; set; } = "";
+
 }
 

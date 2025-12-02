@@ -36,6 +36,13 @@ namespace RentUniversal.api.Controllers
             var rental = await _rentalService.EndRentalAsync(id, condition);
             return Ok(rental);
         }
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<RentalDTO>>> GetUserRentals(string userId)
+        {
+            var rentals = await _rentalService.GetRentalsByUserAsync(userId);
+            return Ok(rentals);
+        }
+
     }
 }
 

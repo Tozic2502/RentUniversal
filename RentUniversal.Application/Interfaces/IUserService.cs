@@ -9,4 +9,6 @@ public interface IUserService
     Task<UserDTO> RegisterAsync(User user, string password);
     Task<bool> VerifyIdentificationAsync(string userId, string identificationId);
     Task<UserDTO?> GetUserByIdAsync(string id);
+    Task<UserDTO?> UpdateUserAsync(string id, UserDTO updatedUser);
+
 }
