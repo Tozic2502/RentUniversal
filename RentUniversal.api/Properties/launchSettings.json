@@ -20,7 +20,7 @@
         "ASPNETCORE_HTTP_PORTS": "8080",
         "ASPNETCORE_HTTPS_PORTS": "8081",
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "MongoDb__ConnectionString": "mongodb://root:example@mongo:27017",
+        "MongoDb__ConnectionString": "mongodb://root:example@mongo:27017/?authSource=admin",
         "MongoDb__Database": "RentUniversal"
       }
     }

@@ -11,7 +11,7 @@ namespace RentUniversal.Infrastructure.Repositories
 
         public MongoUserRepository(MongoContext context)
         {
-            _users = context.GetCollection<User>("Users");
+            _users = context.Database.GetCollection<User>("Users");
         }
 
         public async Task CreateAsync(User user) =>
@@ -20,14 +20,22 @@ namespace RentUniversal.Infrastructure.Repositories
         public async Task<IEnumerable<User>> GetAllAsync() =>
             await (await _users.FindAsync(_ => true)).ToListAsync();
 
-        public async Task<User?> GetByEmailAsync(string email) =>
-            await (await _users.FindAsync(u => u.Email == email)).FirstOrDefaultAsync();
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            var result = await _users.FindAsync(u => u.Email == email);
+            return await result.FirstOrDefaultAsync();
+        }
 
         public async Task<User?> GetByIdAsync(string id) =>
             await (await _users.FindAsync(u => u.Id == id)).FirstOrDefaultAsync();
 
-        public async Task UpdateAsync(User user) =>
-            await _users.ReplaceOneAsync(u => u.Id == user.Id, user, new ReplaceOptions { IsUpsert = false });
+        public async Task UpdateAsync(User user)
+        {
+            await _users.ReplaceOneAsync(u => u.Id == user.Id, user);
+        }
+
+
+
     }
 }
     
