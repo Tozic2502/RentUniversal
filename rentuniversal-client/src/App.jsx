@@ -1,4 +1,5 @@
-﻿import { Link, Routes, Route } from "react-router-dom";
+﻿import "./App.css";
+import { Link, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home.jsx";
 import Udlejning from "./Pages/Rental.jsx";
 import Kurv from "./Pages/Cart.jsx";
@@ -6,55 +7,61 @@ import Login from "./Pages/Login.jsx";
 import { useUser } from "./Context/UserContext.jsx";
 import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 import ProfilePage from "./Pages/ProfilePage.jsx";
+import Header from "./Pages/Header.jsx";
+import Footer from "./Pages/Footer.jsx";
+import SideKategori from "./Pages/SideKategori.jsx";
 
 export default function App() {
-    const { user, logout } = useUser();
-
     return (
-        <div>
-            <nav
-                style={{
-                    padding: "10px",
-                    background: "#222",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
-            >
-                <div>
-                    <Link to="/" style={{ marginRight: "20px", color: "white" }}>Home</Link>
-                    <Link to="/udlejning" style={{ marginRight: "20px", color: "white" }}>Udlejning</Link>
-                    <Link to="/kurv" style={{ marginRight: "20px", color: "white" }}>Kurv</Link>
-                </div>
+        <div className="app">
+            {/* Øverste menu med dine 4 ikoner + login/logout */}
+            <Header />
 
-                <div>
-                    {user ? (
-                        <>
-                            <Link to="/profile" style={{ marginRight: "20px", color: "lightgreen" }}>
-                                {user.name || user.email}
-                            </Link>
-                            <button onClick={logout}>Logout</button>
-                        </>
-                    ) : (
-                        <Link to="/login" style={{ color: "white" }}>Login</Link>
-                    )}
-                </div>
-            </nav>
+            {/* Layout under header: venstre kategori + indhold til højre */}
+            <div className="layout">
+                <SideKategori />
 
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route
-                    path="/profile"
-                    element={
-                        <ProtectedRoute>
-                            <ProfilePage />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route path="/udlejning" element={<ProtectedRoute><Udlejning /></ProtectedRoute>} />
-                <Route path="/kurv" element={<ProtectedRoute><Kurv /></ProtectedRoute>} />
-                <Route path="/login" element={<Login />} />
-            </Routes>
+                <main className="main">
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+
+                        {/* Profil er beskyttet */}
+                        <Route
+                            path="/profile"
+                            element={
+                                <ProtectedRoute>
+                                    <ProfilePage />
+                                </ProtectedRoute>
+                            }
+                        />
+
+                        {/* Udlejning er beskyttet */}
+                        <Route
+                            path="/udlejning"
+                            element={
+                                <ProtectedRoute>
+                                    <Udlejning />
+                                </ProtectedRoute>
+                            }
+                        />
+
+                        {/* Kurv er beskyttet */}
+                        <Route
+                            path="/kurv"
+                            element={
+                                <ProtectedRoute>
+                                    <Kurv />
+                                </ProtectedRoute>
+                            }
+                        />
+
+                        {/* Login er offentlig */}
+                        <Route path="/login" element={<Login />} />
+                    </Routes>
+                </main>
+            </div>
+
+            <Footer />
         </div>
     );
 }

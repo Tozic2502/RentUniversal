@@ -23,16 +23,27 @@ body {
 
 .nav-button {
     flex: 1;
-    padding: 12px;
+    padding: 10px 14px;
     border: none;
     background: #f5f5f5;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;      /* ikon over tekst */
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .nav-button-active {
     background: #cde8ff;
     font-weight: bold;
+}
+
+.nav-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
 }
 
 /* HOVEDLAYOUT */
@@ -41,14 +52,19 @@ body {
     display: flex;
 }
 
+/* Venstre sidekategori */
 .sidebar {
-    width: 180px;
+    width: 200px;
     border-right: 1px solid #ccc;
-    padding: 12px;
+    padding: 16px;
+    background: #f5f7fb;
 }
 
 .sidebar h3 {
     margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .sidebar ul {
@@ -58,7 +74,20 @@ body {
 }
 
 .sidebar li {
-    margin: 8px 0;
+    margin: 6px 0;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.sidebar li:hover {
+    background: #e0ecff;
+}
+
+.sidebar li.active {
+    background: #0070c0;
+    color: #fff;
 }
 
 .main {
@@ -79,13 +108,10 @@ body {
     padding: 8px;
 }
 
-.item-image {
-    height: 80px;
-    border: 1px dashed #aaa;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* KURV */
@@ -99,6 +125,13 @@ body {
 .cart-table td {
     border: 1px solid #ccc;
     padding: 8px;
+}
+
+/* bl√• baggrund p√• kolonneoverskrifterne */
+.cart-table thead th {
+    background: #0070c0;
+    color: #fff;
+    font-weight: 600;
 }
 
 .cart-summary {
@@ -116,18 +149,88 @@ body {
 
 /* LOGIN */
 .login-section {
-    max-width: 320px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 16px;
+}
+
+.login-card {
+    background: #eaf4ff;
+    padding: 24px 32px 28px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    max-width: 360px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-icon {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 12px;
+}
+
+.login-title {
+    margin: 0 0 16px;
 }
 
 .login-form {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 }
 
-.login-form input {
+.login-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.login-field input {
     width: 100%;
-    padding: 6px;
+    padding: 8px 10px;
+    border: 1px solid #b0cbe8;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.login-field input:focus {
+    outline: none;
+    border-color: #0070c0;
+    box-shadow: 0 0 0 1px #0070c033;
+}
+
+.login-extra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.forgot-btn {
+    border: none;
+    background: transparent;
+    padding: 0;
+    color: #0070c0;
+    cursor: pointer;
+}
+
+.login-btn {
+    margin-top: 12px;
+    width: 100%;
+    font-size: 16px;
 }
 
 /* FOOTER */
@@ -148,6 +251,14 @@ body {
     border: 1px solid #0070c0;
     padding: 4px 8px;
 }
+
+/* Logo i footer */
+.footer-logo-img {
+    height: 75px;
+    width: auto;
+    display: block;
+}
+
 /* === Item grid & cards === */
 
 .item-grid {
@@ -169,12 +280,12 @@ body {
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-    .item-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-    }
+.item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
 
-/* ìBilledeî-omrÂdet */
+/* ‚ÄúBillede‚Äù-omr√•det */
 .item-thumb {
     width: 100%;
     height: 110px;
@@ -186,14 +297,13 @@ body {
     margin-bottom: 10px;
 }
 
-    .item-thumb span {
-        font-size: 2.4rem;
-        font-weight: 700;
-        color: #ffffff;
-    }
+.item-thumb span {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #ffffff;
+}
 
-/* Teksten pÂ kortet */
-
+/* Teksten p√• kortet */
 .item-info h3 {
     margin: 0 0 6px;
     font-size: 1.05rem;
@@ -211,7 +321,6 @@ body {
 }
 
 /* Knap */
-
 .item-button {
     margin-top: 14px;
     padding: 8px 10px;
@@ -224,6 +333,6 @@ body {
     transition: background 0.15s ease;
 }
 
-    .item-button:hover {
-        background: #0d47a1;
-    }
+.item-button:hover {
+    background: #0d47a1;
+}
