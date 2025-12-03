@@ -21,6 +21,12 @@ namespace RentUniversal.api.Controllers
         {
             _userService = userService;
         }
+        
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllItems()
+        {
+            return Ok(await _userService.GetAllUsersAsync());
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetUserById(string id)
