@@ -47,27 +47,36 @@ namespace RentUniversal.api.Controllers
 
 
         [HttpPost("authenticate")]
-        public async Task<ActionResult<UserDTO>> AuthenticateAndGetUser([FromBody] LoginDTO login)
+        public async Task<ActionResult<UserDTO>> Authenticate([FromBody] LoginDTO login)
         {
-            var authUser = await _userService.AuthenticateAsync(login.Email, login.Password);
+            var user = await _userService.AuthenticateAsync(login.Email, login.Password);
 
-            if (authUser == null)
-                return Unauthorized();
-
-            return Ok(authUser);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult<UserDTO>> UpdateUser(string id, [FromBody] UserDTO updatedUser)
-        {
-            var user = await _userService.UpdateUserAsync(id, updatedUser);
             if (user == null)
-                return NotFound("User not found");
+                return Unauthorized("Invalid email or password");
 
             return Ok(user);
         }
 
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<UserDTO>> UpdateUser(string id, [FromBody] UserDTO updatedUser)
+        {
+            var user = await _userService.UpdateUserAsync(id, updatedUser);
+            if (user == null) return NotFound("User not found");
+
+            return Ok(user);
+        }
+
+        [HttpPut("{id}/password")]
+        public async Task<ActionResult> ChangePassword(string id, [FromBody] ChangePasswordDTO dto)
+        {
+            var result = await _userService.ChangePasswordAsync(id, dto.OldPassword, dto.NewPassword);
+
+            if (!result)
+                return Unauthorized("Forkert nuværende password");
+
+            return Ok("Password opdateret");
+        }
 
     }
 }

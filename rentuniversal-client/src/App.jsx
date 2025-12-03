@@ -4,7 +4,8 @@ import Udlejning from "./Pages/Rental.jsx";
 import Kurv from "./Pages/Cart.jsx";
 import Login from "./Pages/Login.jsx";
 import { useUser } from "./Context/UserContext.jsx";
-import ProtectedRoute from "./Components/ProtectedRoute.jsx"; // <-- ADD THIS
+import ProtectedRoute from "./Components/ProtectedRoute.jsx";
+import ProfilePage from "./Pages/ProfilePage.jsx";
 
 export default function App() {
     const { user, logout } = useUser();
@@ -29,26 +30,10 @@ export default function App() {
                 <div>
                     {user ? (
                         <>
-                            <span style={{ color: "lightgreen", marginRight: "15px" }}>
+                            <Link to="/profile" style={{ marginRight: "20px", color: "lightgreen" }}>
                                 {user.name || user.email}
-                            </span>
-
-                            <button
-                                onClick={() => {
-                                    logout();
-                                    window.location.href = "/";
-                                }}
-                                style={{
-                                    background: "crimson",
-                                    color: "white",
-                                    border: "none",
-                                    padding: "6px 10px",
-                                    cursor: "pointer",
-                                    borderRadius: "4px",
-                                }}
-                            >
-                                Logout
-                            </button>
+                            </Link>
+                            <button onClick={logout}>Logout</button>
                         </>
                     ) : (
                         <Link to="/login" style={{ color: "white" }}>Login</Link>
@@ -58,26 +43,16 @@ export default function App() {
 
             <Routes>
                 <Route path="/" element={<Home />} />
-
-                {/* 🔒 Protected Routes */}
                 <Route
-                    path="/udlejning"
+                    path="/profile"
                     element={
                         <ProtectedRoute>
-                            <Udlejning />
+                            <ProfilePage />
                         </ProtectedRoute>
                     }
                 />
-                <Route
-                    path="/kurv"
-                    element={
-                        <ProtectedRoute>
-                            <Kurv />
-                        </ProtectedRoute>
-                    }
-                />
-
-                {/* Public route */}
+                <Route path="/udlejning" element={<ProtectedRoute><Udlejning /></ProtectedRoute>} />
+                <Route path="/kurv" element={<ProtectedRoute><Kurv /></ProtectedRoute>} />
                 <Route path="/login" element={<Login />} />
             </Routes>
         </div>

@@ -43,9 +43,9 @@ function Login() {
         e.preventDefault();
 
         const updatedUser = {
-            ...user,
+            id: user.id,
             name: nameInput,
-            email: emailInput,
+            email: emailInput
         };
 
         const response = await fetch(`http://localhost:8080/api/users/${user.id}`, {
@@ -59,9 +59,12 @@ function Login() {
             return;
         }
 
-        login(updatedUser); // update user in context
+        const newUserData = await response.json();
+        login(newUserData); // Update context!
+
         alert("Profil opdateret!");
     }
+
 
     // 🔥 If user is logged in → Show Profile UI
     if (user) {

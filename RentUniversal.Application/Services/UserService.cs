@@ -20,12 +20,12 @@ public class UserService : IUserService
         var user = await _userRepository.GetByEmailAsync(email);
         if (user == null) return null;
 
-        // Check hashed password
-        if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-            return null;
+        bool passwordMatches = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+        if (!passwordMatches) return null;
 
         return DTOMapper.ToDTO(user);
     }
+
 
 
     public async Task<UserDTO> RegisterAsync(User user, string password)
@@ -65,5 +65,22 @@ public class UserService : IUserService
 
         return DTOMapper.ToDTO(existingUser);
     }
+    public async Task<bool> ChangePasswordAsync(string id, string oldPassword, string newPassword)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user == null) return false;
+
+        // Check old password matches
+        if (!BCrypt.Net.BCrypt.Verify(oldPassword, user.PasswordHash))
+            return false;
+
+        // Hash new password & save
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+        await _userRepository.UpdateAsync(user);
+
+        return true;
+    }
+
+
 
 }

@@ -10,5 +10,6 @@ public interface IUserService
     Task<bool> VerifyIdentificationAsync(string userId, string identificationId);
     Task<UserDTO?> GetUserByIdAsync(string id);
     Task<UserDTO?> UpdateUserAsync(string id, UserDTO updatedUser);
+    Task<bool> ChangePasswordAsync(string id, string oldPassword, string newPassword);
 
 }
