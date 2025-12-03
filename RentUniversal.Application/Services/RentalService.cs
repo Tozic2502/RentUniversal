@@ -47,6 +47,12 @@ namespace RentUniversal.Application.Services
             await _rentalRepository.UpdateAsync(rental);
             return DTOMapper.ToDTO(rental);
         }
+        public async Task<IEnumerable<RentalDTO>> GetRentalsByUserAsync(string userId)
+        {
+            var rentals = await _rentalRepository.GetByUserIdAsync(userId);
+            return rentals.Select(DTOMapper.ToDTO);
+        }
+
 
         public double CalculatePrice(Rental rental)
         {

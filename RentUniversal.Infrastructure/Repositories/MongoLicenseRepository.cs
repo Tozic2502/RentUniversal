@@ -11,7 +11,7 @@ namespace RentUniversal.Infrastructure.Repositories
 
         public MongoLicenseRepository(MongoContext context)
         {
-            _licenses = context.GetCollection<License>("Licenses");
+            _licenses = context.Database.GetCollection<License>("Licenses");
         }
 
         public async Task<License?> GetAsync() =>

@@ -1,35 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+﻿import { Link, Routes, Route } from "react-router-dom";
+import Home from "./Pages/Home.jsx";
+import Udlejning from "./Pages/Rental.jsx";
+import Kurv from "./Pages/Cart.jsx";
+import Login from "./Pages/Login.jsx";
+import { useUser } from "./Context/UserContext.jsx";
+import ProtectedRoute from "./Components/ProtectedRoute.jsx";
+import ProfilePage from "./Pages/ProfilePage.jsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+    const { user, logout } = useUser();
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <div>
+            <nav
+                style={{
+                    padding: "10px",
+                    background: "#222",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                }}
+            >
+                <div>
+                    <Link to="/" style={{ marginRight: "20px", color: "white" }}>Home</Link>
+                    <Link to="/udlejning" style={{ marginRight: "20px", color: "white" }}>Udlejning</Link>
+                    <Link to="/kurv" style={{ marginRight: "20px", color: "white" }}>Kurv</Link>
+                </div>
+
+                <div>
+                    {user ? (
+                        <>
+                            <Link to="/profile" style={{ marginRight: "20px", color: "lightgreen" }}>
+                                {user.name || user.email}
+                            </Link>
+                            <button onClick={logout}>Logout</button>
+                        </>
+                    ) : (
+                        <Link to="/login" style={{ color: "white" }}>Login</Link>
+                    )}
+                </div>
+            </nav>
+
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <ProfilePage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route path="/udlejning" element={<ProtectedRoute><Udlejning /></ProtectedRoute>} />
+                <Route path="/kurv" element={<ProtectedRoute><Kurv /></ProtectedRoute>} />
+                <Route path="/login" element={<Login />} />
+            </Routes>
+        </div>
+    );
 }
-
-export default App
