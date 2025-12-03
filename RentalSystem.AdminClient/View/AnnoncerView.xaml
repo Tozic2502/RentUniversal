@@ -3,8 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Padding="20">
 
+    <!-- TODO: Change this up COMPLETELY. Right now this is just a placeholder-->
     <StackPanel>
-        <TextBlock Text="Annoncer" FontSize="26" Margin="0 0 0 20"/>
+        <TextBlock Text="Annoncer" 
+                   FontSize="32"
+                   FontWeight="Bold"
+                   Margin="0 0 0 20"/>
 
         <ListBox ItemsSource="{Binding Ads}"
                  SelectedItem="{Binding SelectedAd}"

@@ -1,34 +1,44 @@
 ﻿<Application x:Class="RentalSystem.AdminClient.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:RentalSystem.AdminClient"
-             xmlns:views="clr-namespace:RentalSystem.AdminClient.Views"
              xmlns:view="clr-namespace:RentalSystem.AdminClient.View"
-             xmlns:viewModel="clr-namespace:RentalSystem.AdminClient.ViewModel"
+             xmlns:vm="clr-namespace:RentalSystem.AdminClient.ViewModel"
+             xmlns:converters="clr-namespace:RentalSystem.AdminClient.Converters"
              StartupUri="View/MainWindow.xaml">
+
     <Application.Resources>
+
+        <!-- LOGIN -->
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
             <view:LoginView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type viewModel:AdminShellViewModel}">
+        <!-- ADMIN DASHBOARD -->
+        <DataTemplate DataType="{x:Type vm:AdminShellViewModel}">
             <view:AdminShellView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
-            <views:SettingsView />
+        <!-- SETTINGS -->
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <view:SettingsView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type viewModel:UserViewModel}">
+        <!-- USER -->
+        <DataTemplate DataType="{x:Type vm:UserViewModel}">
             <view:UserView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type viewModel:AnnoncerViewModel}">
+        <!-- ANNONCER -->
+        <DataTemplate DataType="{x:Type vm:AnnoncerViewModel}">
             <view:AnnoncerView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type viewModel:StatsViewModel}">
+        <!-- STATS -->
+        <DataTemplate DataType="{x:Type vm:StatsViewModel}">
             <view:StatsView />
         </DataTemplate>
+
+        <converters:BoolToStatusConv x:Key="BoolToStatusConverter"/>
+        
     </Application.Resources>
 </Application>

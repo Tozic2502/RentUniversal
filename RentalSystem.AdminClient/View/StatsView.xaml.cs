@@ -1,11 +1,12 @@
 ﻿using System.Windows.Controls;
 
-namespace RentalSystem.AdminClient.View;
-
-public partial class StatsView : UserControl
+namespace RentalSystem.AdminClient.View
 {
-    public StatsView()
+    public partial class StatsView : UserControl
     {
-        //InitializeComponent();
+        public StatsView()
+        {
+            InitializeComponent();
+        }
     }
 }

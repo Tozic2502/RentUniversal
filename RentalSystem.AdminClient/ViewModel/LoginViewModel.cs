@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using RentalSystem.AdminClient.ViewModel;
 
-namespace RentalSystem.AdminClient
+namespace RentalSystem.AdminClient.ViewModel
 {
     public class LoginViewModel : INotifyPropertyChanged
     {

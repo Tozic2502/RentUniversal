@@ -1,10 +1,12 @@
 ﻿using System.Windows.Controls;
 
-namespace RentalSystem.AdminClient.View;
-
-public partial class SettingsView : Page
+namespace RentalSystem.AdminClient.View
 {
-    public SettingsView()
+    public partial class SettingsView : UserControl
     {
+        public SettingsView()
+        {
+            InitializeComponent();
+        }
     }
 }
