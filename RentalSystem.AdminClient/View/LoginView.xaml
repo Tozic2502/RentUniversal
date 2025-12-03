@@ -11,6 +11,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        
+        <!--TODO: Make this more beautiful-->
 
         <TextBlock Text="Admin Login" FontSize="22" FontWeight="Bold" Grid.Row="0"
                    HorizontalAlignment="Center" Margin="0 0 0 20"/>

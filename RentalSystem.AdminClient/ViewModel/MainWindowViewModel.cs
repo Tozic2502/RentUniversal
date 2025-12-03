@@ -19,7 +19,7 @@ namespace RentalSystem.AdminClient.ViewModel
             Navigation = new NavigationService();
             Navigation.Configure(vm => CurrentViewModel = vm);
 
-            // Start mit LoginViewModel
+            // the first thing we see . which is in our case login
             CurrentViewModel = new LoginViewModel(Navigation);
         }
 
