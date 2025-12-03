@@ -1,12 +1,10 @@
 // src/Pages/Header.jsx
-import {Link, NavLink, useNavigate} from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useUser } from "../Context/UserContext.jsx";
 import HomeImg from "../assets/Home.jpg";
 import UdlejningImg from "../assets/Udlejning.jpg";
 import IndkobsvognImg from "../assets/Indkobsvogn.jpg";
 import LoginImg from "../assets/Login.jpg";
-
-
 
 function Header() {
     const { user, logout } = useUser();
@@ -18,16 +16,17 @@ function Header() {
                 <NavIcon to="/" label="Home" icon={HomeImg} />
                 <NavIcon to="/udlejning" label="Udlejning" icon={UdlejningImg} />
                 <NavIcon to="/kurv" label="Kurv" icon={IndkobsvognImg} />
-                
             </div>
 
             <div className="header-right">
                 {user ? (
                     <>
-                        {/* Klik på navnet -> /profile */}
-                       <Link to="/profile" className="header-user">
-                            {user.name || user.email}
-                        </Link>
+                        {/* Samme ikon som Login, men label = brugernavn */}
+                        <NavIcon
+                            to="/profile"
+                            label={user.name || user.email}
+                            icon={LoginImg}
+                        />
 
                         <button
                             className="header-logout"

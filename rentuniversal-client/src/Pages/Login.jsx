@@ -4,7 +4,7 @@ import { useUser } from "../context/UserContext";
 
 
 export default function Login() {
-    const { user, login } = useUser();
+    const {user, login} = useUser();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
@@ -24,8 +24,8 @@ export default function Login() {
 
         const response = await fetch("http://localhost:8080/api/users/authenticate", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({email, password}),
         });
 
         if (!response.ok) {
@@ -39,31 +39,42 @@ export default function Login() {
     }
 
     return (
-        <div className="login-page">
-            <div className="login-box">
-                <h2>Log ind</h2>
+        <section className="login-section">
+            <div className="login-card">
+                <h2 className="login-title">Log ind</h2>
 
-                {errorMessage && <p className="login-error">{errorMessage}</p>}
+                {errorMessage && (
+                    <p className="login-error">{errorMessage}</p>
+                )}
 
-                <form onSubmit={handleLogin}>
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
+                <form className="login-form" onSubmit={handleLogin}>
+                    <div className="login-field">
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
 
-                    <button type="submit" className="login-btn">Log ind</button>
+                    <div className="login-field">
+                        <label>Adgangskode</label>
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <button type="submit" className="primary-btn login-btn">
+                        Log ind
+                    </button>
                 </form>
             </div>
-        </div>
+        </section>
     );
 }
