@@ -11,8 +11,7 @@ services:
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://0.0.0.0:8080"
 
-      # MongoDB settings passed into your API
-      MongoDb__ConnectionString: "mongodb://mongo:27017"
+      MongoDb__ConnectionString: "mongodb://root:example@mongo:27017/?authSource=admin"
       MongoDb__Database: "RentUniversal"
 
     depends_on:
@@ -42,6 +41,19 @@ services:
       - rent-network
     restart: unless-stopped
 
+  client:
+    build:
+      context: ./rentuniversal-client
+      dockerfile: Dockerfile
+    container_name: rentuniversal_client
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+    networks:
+      - rent-network
+
+
   mongo-express:
     image: mongo-express:1.0.2
     container_name: rentuniversal_mongo_express
@@ -57,6 +69,7 @@ services:
     networks:
       - rent-network
     restart: unless-stopped
+
 
 volumes:
   mongo-data:

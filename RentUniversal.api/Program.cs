@@ -15,11 +15,23 @@ namespace RentUniversal.api
             // Infrastructure (MongoDB)
             builder.Services.AddInfrastructure(builder.Configuration);
 
+
             // Application services
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<IRentalService, RentalService>();
             builder.Services.AddScoped<ILicenseService, LicenseService>();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+
 
             // Controllers + OpenAPI
             builder.Services.AddControllers();
@@ -43,6 +55,7 @@ namespace RentUniversal.api
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowAll");
             app.UseAuthorization();
             app.MapControllers();
             app.Run();

@@ -4,19 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace RentUniversal.Domain.Entities;
 
 public class User
 {
-    public string Id { get; set; } = string.Empty;   // Mongo ID
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
 
     public UserRole Role { get; set; } = UserRole.Customer;
 
-    public string IdentificationId { get; set; } = string.Empty; // FK -> Identification
+    public string IdentificationId { get; set; } = string.Empty; 
 
-    public List<string> RentalIds { get; set; } = new();         // FK -> Rental
+    public List<string> RentalIds { get; set; } = new();         
+    public string PasswordHash { get; set; } = "";
+
 }
 

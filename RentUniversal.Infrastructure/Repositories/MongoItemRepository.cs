@@ -11,7 +11,7 @@ namespace RentUniversal.Infrastructure.Repositories
 
         public MongoItemRepository(MongoContext context)
         {
-            _items = context.GetCollection<Item>("Items");
+            _items = context.Database.GetCollection<Item>("Items");
         }
 
         public async Task CreateAsync(Item item) => await _items.InsertOneAsync(item);
