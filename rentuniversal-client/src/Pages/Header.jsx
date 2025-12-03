@@ -1,10 +1,12 @@
 // src/Pages/Header.jsx
-import { NavLink, useNavigate } from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 import { useUser } from "../Context/UserContext.jsx";
 import HomeImg from "../assets/Home.jpg";
 import UdlejningImg from "../assets/Udlejning.jpg";
 import IndkobsvognImg from "../assets/Indkobsvogn.jpg";
 import LoginImg from "../assets/Login.jpg";
+
+
 
 function Header() {
     const { user, logout } = useUser();
@@ -16,14 +18,17 @@ function Header() {
                 <NavIcon to="/" label="Home" icon={HomeImg} />
                 <NavIcon to="/udlejning" label="Udlejning" icon={UdlejningImg} />
                 <NavIcon to="/kurv" label="Kurv" icon={IndkobsvognImg} />
+                
             </div>
 
             <div className="header-right">
                 {user ? (
                     <>
-                        <span className="header-user">
+                        {/* Klik på navnet -> /profile */}
+                       <Link to="/profile" className="header-user">
                             {user.name || user.email}
-                        </span>
+                        </Link>
+
                         <button
                             className="header-logout"
                             onClick={() => {

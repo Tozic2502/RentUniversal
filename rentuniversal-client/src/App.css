@@ -15,12 +15,28 @@ body {
     flex-direction: column;
 }
 
-/* TOPMENU */
+/* TOPMENU / HEADER */
 .header {
     display: flex;
+    justify-content: space-between; /* venstre ikoner + højre login/profil */
+    align-items: center;
     border-bottom: 1px solid #ccc;
+    background: #f5f5f5;
 }
 
+/* venstre række med ikoner */
+.header-left {
+    display: flex;
+}
+
+/* højre side med bruger + logout eller login */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Nav-knapper (ikon + tekst) */
 .nav-button {
     flex: 1;
     padding: 10px 14px;
@@ -33,6 +49,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: 6px;
+    text-decoration: none;
+    color: #0070c0;
 }
 
 .nav-button-active {
@@ -44,6 +62,31 @@ body {
     width: 40px;
     height: 40px;
     object-fit: contain;
+}
+
+/* brugernavn i header */
+.header-user {
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.header-user:hover {
+    text-decoration: underline;
+}
+
+/* logout-knap */
+.header-logout {
+    border: none;
+    background: #d32f2f;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.header-logout:hover {
+    background: #b71c1c;
 }
 
 /* HOVEDLAYOUT */
