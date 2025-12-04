@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
-using RentUniversal.Application.Mappers;
+using RentUniversal.Application.Mapper;
 using RentUniversal.Domain.Entities;
 
 namespace RentUniversal.api.Controllers

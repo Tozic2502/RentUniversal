@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RentUniversal.Application.Interfaces;
 using RentUniversal.Application.DTOs;
+using RentUniversal.Application.Interfaces;
+using RentUniversal.Application.Mapper;
+using RentUniversal.Application.Services;
+using RentUniversal.Domain.Entities;
 
 namespace RentUniversal.api.Controllers
 {
@@ -9,11 +12,14 @@ namespace RentUniversal.api.Controllers
     public class RentalsController : ControllerBase
     {
         private readonly IRentalService _rentalService;
+        private readonly IItemService _itemService;
 
-        public RentalsController(IRentalService rentalService)
+        public RentalsController(IRentalService rentalService, IItemService itemService)
         {
             _rentalService = rentalService;
+            _itemService = itemService;
         }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<RentalDTO>> GetRental(string id)
@@ -23,13 +29,6 @@ namespace RentUniversal.api.Controllers
             return Ok(rental);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<RentalDTO>> StartRental(string userId, string itemId, string condition)
-        {
-            var rental = await _rentalService.StartRentalAsync(userId, itemId, condition);
-            return CreatedAtAction(nameof(GetRental), new { id = rental.Id }, rental);
-        }
-
         [HttpPut("{id}/return")]
         public async Task<ActionResult<RentalDTO>> EndRental(string id, string condition)
         {
@@ -37,11 +36,49 @@ namespace RentUniversal.api.Controllers
             return Ok(rental);
         }
         [HttpGet("user/{userId}")]
-        public async Task<ActionResult<IEnumerable<RentalDTO>>> GetUserRentals(string userId)
+        public async Task<IEnumerable<RentalDTO>> GetByUserId(string userId)
         {
-            var rentals = await _rentalService.GetRentalsByUserAsync(userId);
-            return Ok(rentals);
+            var rentals = await _rentalService.GetByUserIdAsync(userId);
+            var rentalDTOs = new List<RentalDTO>();
+
+            foreach (var rental in rentals)
+            {
+                var item = await _itemService.GetByIdAsync(rental.ItemId);
+                rentalDTOs.Add(DTOMapper.ToDTO(rental, item));
+            }
+
+            return rentalDTOs;
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RentItem([FromBody] RentalCreateDTO request)
+        {
+            if (request == null || string.IsNullOrEmpty(request.UserId) || string.IsNullOrEmpty(request.ItemId))
+                return BadRequest("UserId and ItemId are required");
+
+            var item = await _itemService.GetByIdAsync(request.ItemId);
+            if (item == null)
+                return NotFound("Item not found");
+
+            if (!item.IsAvailable)
+                return BadRequest("Item is not available");
+
+            var rental = new Rental
+            {
+                UserId = request.UserId,
+                ItemId = request.ItemId,
+                RentalDate = DateTime.UtcNow,
+                StartCondition = "OK",
+                Price = item.Value
+            };
+
+            await _rentalService.CreateAsync(rental);
+            await _itemService.UpdateAvailabilityAsync(request.ItemId, false);
+
+            return Ok(DTOMapper.ToDTO(rental, item));
+        }
+
+
 
     }
 }

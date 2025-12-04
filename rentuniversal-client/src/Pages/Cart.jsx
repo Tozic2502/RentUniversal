@@ -1,93 +1,100 @@
-﻿import { useCart } from "../Context/CartContext";
+﻿import { useEffect } from "react";
+import { useCart } from "../Context/CartContext.jsx";
+import { useUser } from "../Context/UserContext.jsx";
+import { useNavigate } from "react-router-dom";
+import { rentItem } from "../api.js";
 
-function Cart() {
-    const { cart, removeFromCart, clearCart } = useCart();
+export default function Cart() {
+    const { cartItems, clearCart } = useCart();
+    const { user } = useUser();
+    const navigate = useNavigate();
 
+    const validCartItems = Array.isArray(cartItems) ? cartItems : [];
+    const totalValue = validCartItems.reduce((sum, item) => sum + (item.value || 0), 0);
 
-    // Total price
-    const total = cart.reduce((sum, item) => sum + item.value, 0);
 
     async function handleCheckout() {
+        if (!user) {
+            alert("Du skal være logget ind for at leje dine varer!");
+            navigate("/login");
+            return;
+        }
+
         try {
-            // 1. For hver item i kurven → lav en rental i backend
-            for (const item of cart) {
-                await fetch("http://localhost:8080/api/rentals/start", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        userId: "1",       // TODO: replace with login user
-                        itemId: item.id,
-                        startCondition: item.condition
-                    })
-                });
+            for (const item of cartItems) {
+                await rentItem(user.id, item.id);
             }
 
             alert("Udlejning gennemført!");
-
-            // 2. Tøm kurven
             clearCart();
+            navigate("/udlejning");
 
-            // 3. Redirect til udlejning
-            window.location.href = "/udlejning";
-
-        } catch (err) {
-            console.error("Checkout failed", err);
-            alert("Der skete en fejl under udlejningen.");
+        } catch (error) {
+            console.error("Checkout failed:", error);
+            alert("Fejl! Prøv igen senere.");
         }
+    }
+
+    if (validCartItems.length === 0)
+    {
+        return (
+            <div style={{ padding: "20px", textAlign: "center" }}>
+                <h2>Din kurv er tom 🛒</h2>
+                <button
+                    style={{
+                        marginTop: "10px",
+                        padding: "10px 15px",
+                        background: "#007bff",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "6px",
+                        cursor: "pointer"
+                    }}
+                    onClick={() => navigate("/")}
+                >
+                    Gå til Home
+                </button>
+            </div>
+        );
     }
 
     return (
         <div style={{ padding: "20px" }}>
-            <h1>Din kurv</h1>
+            <h2>Din kurv 🛒</h2>
 
-            {cart.length === 0 && <p>Din kurv er tom.</p>}
-
-            <div>
-                {cart.map((item) => (
-                    <div
-                        key={item.id}
+            <ul style={{ listStyle: "none", padding: 0 }}>
+                {cartItems.map((item) => (
+                    <li key={item.id}
                         style={{
-                            border: "1px solid #ddd",
+                            marginBottom: "10px",
                             padding: "10px",
-                            marginBottom: "10px"
+                            border: "1px solid #ccc",
+                            borderRadius: "6px"
                         }}
                     >
-                        <h3>{item.name}</h3>
-                        <p>Kategori: {item.category}</p>
-                        <p>Stand: {item.condition}</p>
-                        <p>Pris: {item.value} kr.</p>
-
-                        <button
-                            onClick={() => removeFromCart(item.id)}
-                            style={{ background: "red", color: "white", padding: "5px 10px" }}
-                        >
-                            Fjern
-                        </button>
-                    </div>
+                        <strong>{item.name}</strong>
+                        <p>Værdi: {item.value} kr</p>
+                    </li>
                 ))}
-            </div>
+            </ul>
 
-            {cart.length > 0 && (
-                <><h2>Total pris: {total} kr.</h2>
-                    <button
+            <div style={{ marginTop: "20px", textAlign: "right" }}>
+                <p><strong>Total værdi:</strong> {totalValue} kr</p>
+
+                <button
+                    onClick={handleCheckout}
                     style={{
-                        marginTop: "20px",
-                        padding: "10px 20px",
-                        background: "#0066ff",
+                        background: "#28a745",
                         color: "white",
-                        fontSize: "18px",
                         border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "6px",
                         cursor: "pointer"
                     }}
-                    onClick={handleCheckout}
                 >
-                    Bekræft udlejning
-                </button></>
-            )}
-            
-
+                    Bekræft Udlejning
+                </button>
+            </div>
         </div>
     );
 }
-
-export default Cart;

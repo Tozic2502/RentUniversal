@@ -8,6 +8,7 @@ namespace RentUniversal.Application.DTOs;
 
     public class RentalDTO
     {
+        public ItemDTO? Item { get; set; }
         public string Id { get; set; } = "";
         public string UserId { get; set; } = "";
         public string ItemId { get; set; } = "";

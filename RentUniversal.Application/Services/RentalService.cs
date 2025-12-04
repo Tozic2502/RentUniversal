@@ -1,6 +1,6 @@
 ﻿using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
-using RentUniversal.Application.Mappers;
+using RentUniversal.Application.Mapper;
 using RentUniversal.Domain.Entities;
 
 namespace RentUniversal.Application.Services
@@ -28,7 +28,7 @@ namespace RentUniversal.Application.Services
                 UserId = userId,
                 ItemId = itemId,
                 StartCondition = startCondition,
-                StartDate = DateTime.UtcNow
+                RentalDate = DateTime.UtcNow
             };
 
             await _rentalRepository.CreateAsync(rental);
@@ -40,25 +40,31 @@ namespace RentUniversal.Application.Services
             var rental = await _rentalRepository.GetByIdAsync(rentalId);
             if (rental == null) throw new Exception("Rental not found");
 
-            rental.EndDate = DateTime.UtcNow;
+            rental.ReturnDate = DateTime.UtcNow;
             rental.ReturnCondition = returnCondition;
             rental.Price = CalculatePrice(rental);
 
             await _rentalRepository.UpdateAsync(rental);
             return DTOMapper.ToDTO(rental);
         }
-        public async Task<IEnumerable<RentalDTO>> GetRentalsByUserAsync(string userId)
+        public async Task<IEnumerable<Rental>> GetByUserIdAsync(string userId)
         {
-            var rentals = await _rentalRepository.GetByUserIdAsync(userId);
-            return rentals.Select(DTOMapper.ToDTO);
+            return await _rentalRepository.GetByUserIdAsync(userId);
         }
+
 
 
         public double CalculatePrice(Rental rental)
         {
-            if (rental.EndDate == null) return 0;
-            var hours = (rental.EndDate.Value - rental.StartDate).TotalHours;
+            if (rental.ReturnDate == null) return 0;
+            var hours = (rental.ReturnDate.Value - rental.RentalDate).TotalHours;
             return Math.Round(hours * 29.00, 2);
         }
+        public async Task CreateAsync(Rental rental)
+        {
+            await _rentalRepository.CreateAsync(rental);
+        }
+
+        
     }
 }

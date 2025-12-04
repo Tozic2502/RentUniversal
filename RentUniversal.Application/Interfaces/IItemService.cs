@@ -9,4 +9,7 @@ public interface IItemService
     Task<IEnumerable<ItemDTO>> GetAllItemsAsync();
     Task<ItemDTO> AddItemAsync(Item item);
     Task<bool> UpdateItemAsync(Item item);
+    Task UpdateAvailabilityAsync(string itemId, bool available);
+    Task<Item?> GetByIdAsync(string id);
+
 }

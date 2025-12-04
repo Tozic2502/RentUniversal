@@ -1,6 +1,6 @@
 ﻿using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
-using RentUniversal.Application.Mappers;
+using RentUniversal.Application.Mapper;
 using RentUniversal.Domain.Entities;
 
 namespace RentUniversal.Application.Services
@@ -40,5 +40,18 @@ namespace RentUniversal.Application.Services
             await _itemRepository.UpdateAsync(item);
             return true;
         }
+        public async Task UpdateAvailabilityAsync(string itemId, bool available)
+        {
+            var item = await _itemRepository.GetByIdAsync(itemId);
+            if (item == null) return;
+
+            item.IsAvailable = available;
+            await _itemRepository.UpdateAsync(item);
+        }
+        public async Task<Item?> GetByIdAsync(string id)
+        {
+            return await _itemRepository.GetByIdAsync(id);
+        }
+
     }
 }

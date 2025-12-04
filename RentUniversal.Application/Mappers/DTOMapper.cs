@@ -1,7 +1,7 @@
 ﻿using RentUniversal.Application.DTOs;
 using RentUniversal.Domain.Entities;
 
-namespace RentUniversal.Application.Mappers;
+namespace RentUniversal.Application.Mapper;
 
 public static class DTOMapper
 {
@@ -24,17 +24,20 @@ public static class DTOMapper
         IsAvailable = item.IsAvailable
     };
 
-    public static RentalDTO ToDTO(Rental rental) => new()
+    public static RentalDTO ToDTO(Rental rental, Item? item = null) => new()
     {
         Id = rental.Id,
         UserId = rental.UserId,
         ItemId = rental.ItemId,
-        StartDate = rental.StartDate,
-        EndDate = rental.EndDate,
+        StartDate = rental.RentalDate,
+        EndDate = rental.ReturnDate,
         StartCondition = rental.StartCondition,
         ReturnCondition = rental.ReturnCondition,
-        Price = rental.Price
+        Price = rental.Price,
+
+        Item = item != null ? DTOMapper.ToDTO(item) : null
     };
+
 
     public static LicenseDTO ToDTO(License license) => new()
     {
