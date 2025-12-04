@@ -35,7 +35,8 @@ body {
     align-items: center;
     gap: 8px;
 }
-.header-logout{
+
+.header-logout {
     padding: 6px 12px;
     border: none;
     border-radius: 4pc;
@@ -43,6 +44,7 @@ body {
     color: #fff;
     cursor: pointer;
 }
+
 /* Nav-knapper (ikon + tekst) */
 .nav-button {
     flex: 1;
@@ -123,23 +125,45 @@ body {
     margin: 0;
 }
 
+/* Kategoriknapper i venstremenuen */
 .sidebar li {
     margin: 6px 0;
-    padding: 6px 10px;
-    border-radius: 4px;
+    padding: 0;              /* ingen indre padding – håndteres af knappen */
+    border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
 }
 
-.sidebar li:hover {
+/* selve knappen inde i li */
+.sidebar-btn {
+    width: 100%;
+    padding: 8px 12px;
+    border: none;            /* fjern hvid kant */
+    outline: none;           /* fjern fokus-ring */
+    background: transparent; /* ingen hvid baggrund */
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* hover-effekt */
+.sidebar li:hover .sidebar-btn {
     background: #e0ecff;
 }
 
+/* aktiv kategori – blå baggrund og hvid tekst */
 .sidebar li.active {
     background: #0070c0;
     color: #fff;
 }
 
+.sidebar li.active .sidebar-btn {
+    font-weight: 600;
+}
+
+/* MAIN-INDHOLD */
 .main {
     flex: 1;
     padding: 16px;

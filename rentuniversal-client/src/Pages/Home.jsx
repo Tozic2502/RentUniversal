@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useCart } from "../Context/CartContext";
 import { getItems } from "../api";
 
-function Home() {
+function Home({ selectedCategory }) {
     const [items, setItems] = useState([]);
     const { addToCart } = useCart();
 
@@ -19,16 +19,26 @@ function Home() {
         load();
     }, []);
 
+    // Filtrer efter valgt kategori (hvis der er valgt en)
+    const visibleItems =
+        selectedCategory
+            ? items.filter((item) => item.category === selectedCategory)
+            : items;
+
     return (
         <div style={{ padding: "20px" }}>
             <h1>Tilgængelige produkter</h1>
 
             {items.length === 0 && <p>Indlæser...</p>}
 
+            {items.length > 0 && visibleItems.length === 0 && (
+                <p>Ingen produkter i den valgte kategori.</p>
+            )}
+
             <div className="item-grid">
-                {items.map((item) => (
+                {visibleItems.map((item) => (
                     <div key={item.id} className="item-card">
-                        {/* “Billede” – simpelt placeholder med første bogstav i navnet */}
+                        {/* Simpelt ?billede? med første bogstav i navnet */}
                         <div className="item-thumb">
                             <span>{item.name?.charAt(0) ?? "?"}</span>
                         </div>

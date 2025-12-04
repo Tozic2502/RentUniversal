@@ -1,10 +1,10 @@
 ﻿import "./App.css";
-import { Link, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import Home from "./Pages/Home.jsx";
 import Udlejning from "./Pages/Rental.jsx";
 import Kurv from "./Pages/Cart.jsx";
 import Login from "./Pages/Login.jsx";
-import { useUser } from "./Context/UserContext.jsx";
 import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 import ProfilePage from "./Pages/ProfilePage.jsx";
 import Header from "./Pages/Header.jsx";
@@ -12,6 +12,9 @@ import Footer from "./Pages/Footer.jsx";
 import SideKategori from "./Pages/SideKategori.jsx";
 
 export default function App() {
+    // Hvilken kategori er valgt i venstremenuen (null = alle)
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
     return (
         <div className="app">
             {/* Øverste menu med dine 4 ikoner + login/logout */}
@@ -19,11 +22,18 @@ export default function App() {
 
             {/* Layout under header: venstre kategori + indhold til højre */}
             <div className="layout">
-                <SideKategori />
+                <SideKategori
+                    selectedCategory={selectedCategory}
+                    onSelectCategory={setSelectedCategory}
+                />
 
                 <main className="main">
                     <Routes>
-                        <Route path="/" element={<Home />} />
+                        {/* Home får valgt kategori som prop */}
+                        <Route
+                            path="/"
+                            element={<Home selectedCategory={selectedCategory} />}
+                        />
 
                         {/* Profil er beskyttet */}
                         <Route
