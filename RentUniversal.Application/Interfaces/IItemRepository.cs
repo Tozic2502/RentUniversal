@@ -8,6 +8,7 @@ namespace RentUniversal.Application.Interfaces
         Task<IEnumerable<Item>> GetAllAsync();
         Task CreateAsync(Item item);
         Task UpdateAsync(Item item);
+        Task DeleteAsync(string id);
     }
 }
 
