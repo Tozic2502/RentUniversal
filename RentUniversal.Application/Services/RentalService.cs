@@ -65,6 +65,26 @@ namespace RentUniversal.Application.Services
             await _rentalRepository.CreateAsync(rental);
         }
 
-        
+        public async Task<bool> UpdateRentalAsync(RentalDTO rentalDto)
+        {
+            // 1. Find existing rental in DB
+            var existingRental = await _rentalRepository.GetByIdAsync(rentalDto.Id);
+
+            if (existingRental == null)
+                return false;
+
+            // 2. Update allowed fields
+            existingRental.ReturnDate = rentalDto.EndDate ?? DateTime.UtcNow;
+            existingRental.ReturnCondition = rentalDto.ReturnCondition;
+
+            // 3. Recalculate price based on new EndDate
+            existingRental.Price = CalculatePrice(existingRental);
+
+            // 4. Save back to DB
+            await _rentalRepository.UpdateAsync(existingRental);
+
+            return true;
+        }
+
     }
 }

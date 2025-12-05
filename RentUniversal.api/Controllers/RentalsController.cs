@@ -29,12 +29,27 @@ namespace RentUniversal.api.Controllers
             return Ok(rental);
         }
 
-        [HttpPut("{id}/return")]
-        public async Task<ActionResult<RentalDTO>> EndRental(string id, string condition)
+        [HttpPut("return/{id}")]
+        public async Task<IActionResult> ReturnRental(string id)
         {
-            var rental = await _rentalService.EndRentalAsync(id, condition);
-            return Ok(rental);
+            var rentalDTO = await _rentalService.GetRentalAsync(id);
+            if (rentalDTO == null)
+                return NotFound("Rental not found");
+
+            rentalDTO.EndDate = DateTime.UtcNow;
+
+            var result = await _rentalService.UpdateRentalAsync(rentalDTO);
+
+            if (!result)
+                return BadRequest("Failed to update rental");
+
+            // Make item available again
+            await _itemService.UpdateAvailabilityAsync(rentalDTO.ItemId, true);
+
+            return Ok();
         }
+
+
         [HttpGet("user/{userId}")]
         public async Task<IEnumerable<RentalDTO>> GetByUserId(string userId)
         {

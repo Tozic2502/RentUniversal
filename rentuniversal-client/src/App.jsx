@@ -1,31 +1,32 @@
 ﻿import "./App.css";
-import { Link, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home.jsx";
-import Udlejning from "./Pages/Rental.jsx";
+import Rental from "./Pages/Rental.jsx"; // Browse & add to cart
 import Kurv from "./Pages/Cart.jsx";
 import Login from "./Pages/Login.jsx";
-import { useUser } from "./Context/UserContext.jsx";
-import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 import ProfilePage from "./Pages/ProfilePage.jsx";
 import Header from "./Pages/Header.jsx";
 import Footer from "./Pages/Footer.jsx";
 import SideKategori from "./Pages/SideKategori.jsx";
+import Udlejning from "./Pages/Udlejning.jsx"; // My rentals
+import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 
 export default function App() {
     return (
         <div className="app">
-            {/* Øverste menu med dine 4 ikoner + login/logout */}
             <Header />
 
-            {/* Layout under header: venstre kategori + indhold til højre */}
             <div className="layout">
                 <SideKategori />
 
                 <main className="main">
                     <Routes>
+                        {/* 📌 Public pages */}
                         <Route path="/" element={<Home />} />
+                        <Route path="/rental" element={<Rental />} />
+                        <Route path="/login" element={<Login />} />
 
-                        {/* Profil er beskyttet */}
+                        {/* 🔒 Protected pages */}
                         <Route
                             path="/profile"
                             element={
@@ -35,7 +36,6 @@ export default function App() {
                             }
                         />
 
-                        {/* Udlejning er beskyttet */}
                         <Route
                             path="/udlejning"
                             element={
@@ -45,7 +45,6 @@ export default function App() {
                             }
                         />
 
-                        {/* Kurv er beskyttet */}
                         <Route
                             path="/kurv"
                             element={
@@ -54,9 +53,6 @@ export default function App() {
                                 </ProtectedRoute>
                             }
                         />
-
-                        {/* Login er offentlig */}
-                        <Route path="/login" element={<Login />} />
                     </Routes>
                 </main>
             </div>

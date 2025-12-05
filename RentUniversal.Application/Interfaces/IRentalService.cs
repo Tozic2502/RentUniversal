@@ -9,6 +9,7 @@ public interface IRentalService
     Task<RentalDTO> StartRentalAsync(string userId, string itemId, string startCondition);
     Task<RentalDTO> EndRentalAsync(string rentalId, string returnCondition);
     Task<IEnumerable<Rental>> GetByUserIdAsync(string userId);
+    Task<bool> UpdateRentalAsync(RentalDTO rental);
     Task CreateAsync(Rental rental);
     double CalculatePrice(Rental rental);
 }

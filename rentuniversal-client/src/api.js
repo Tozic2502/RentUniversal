@@ -11,11 +11,11 @@ export async function getItems() {
 // ---------------- Rentals ----------------
 
 // Create a rental
-export async function rentItem(userID, itemID) {
+export async function rentItem(userId, itemId) {
     const response = await fetch(`${API_BASE}/rentals`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userID, itemID }),
+        body: JSON.stringify({ userId, itemId }),
     });
 
     if (!response.ok) {
@@ -30,9 +30,9 @@ export async function getUserRentals(userId) {
     return response.json();
 }
 
-// Return rental (future feature - optional)
+// Return rental
 export async function returnRental(rentalId) {
-    const response = await fetch(`${API_BASE}/rentals/return/${rentalId}`, {
+    const response = await fetch(`${API_BASE}/Rentals/return/${rentalId}`, {
         method: "PUT",
     });
 
