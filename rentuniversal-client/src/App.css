@@ -54,7 +54,7 @@ body {
     cursor: pointer;
     font-size: 14px;
     display: flex;
-    flex-direction: column;      /* ikon over tekst */
+    flex-direction: column;      
     align-items: center;
     justify-content: center;
     gap: 6px;
@@ -128,19 +128,19 @@ body {
 /* Kategoriknapper i venstremenuen */
 .sidebar li {
     margin: 6px 0;
-    padding: 0;              /* ingen indre padding – håndteres af knappen */
+    padding: 0;             
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
 }
 
-/* selve knappen inde i li */
+
 .sidebar-btn {
     width: 100%;
     padding: 8px 12px;
-    border: none;            /* fjern hvid kant */
-    outline: none;           /* fjern fokus-ring */
-    background: transparent; /* ingen hvid baggrund */
+    border: none;            
+    outline: none;           
+    background: transparent; 
     color: inherit;
     font: inherit;
     text-align: left;
@@ -148,12 +148,12 @@ body {
     cursor: pointer;
 }
 
-/* hover-effekt */
+
 .sidebar li:hover .sidebar-btn {
     background: #e0ecff;
 }
 
-/* aktiv kategori – blå baggrund og hvid tekst */
+/* aktiv kategori  */
 .sidebar li.active {
     background: #0070c0;
     color: #fff;
@@ -201,7 +201,7 @@ body {
     padding: 8px;
 }
 
-/* blå baggrund på kolonneoverskrifterne */
+
 .cart-table thead th {
     background: #0070c0;
     color: #fff;
@@ -333,7 +333,7 @@ body {
     display: block;
 }
 
-/* === Item grid & cards === */
+/* Item grid & cards */
 
 .item-grid {
     display: grid;
@@ -394,7 +394,6 @@ body {
     font-weight: 600;
 }
 
-/* Knap */
 .item-button {
     margin-top: 14px;
     padding: 8px 10px;
@@ -409,4 +408,84 @@ body {
 
 .item-button:hover {
     background: #0d47a1;
+}
+
+/* HOME-LAYOUT MED KONTAKT-BOKS  */
+
+.home-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+/* venstre side (produkterne) */
+.home-left {
+    flex: 3;
+}
+
+/* højre side: kontakt-boks */
+.contact-box {
+    flex: 2;
+    margin-right: 16px;
+    margin-top: 20px;
+    background: #f5f7fb;
+    border: 1px solid #c7d5f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    box-shadow: 0 2px 6px rgba(255, 255, 255, 0.06);
+}
+
+.contact-box h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.contact-text {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.contact-form label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    font: inherit;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid #b0cbe8;
+    resize: vertical;
+    background: #ffffff;  
+    color: #000000;       
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: #0070c0;
+    box-shadow: 0 0 0 1px #0070c033;
+}
+
+.contact-btn {
+    align-self: flex-start;
+    margin-top: 4px;
+}
+
+.contact-status {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: #006400;
 }

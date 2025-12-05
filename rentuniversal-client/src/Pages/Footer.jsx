@@ -35,8 +35,8 @@ function Footer() {
                 <div className="footer-box">
                     <h4>Support</h4>
                     <p>
-                        Har du spørgsmål til en booking eller problemer med din konto, kan du
-                        kontakte vores support på mail via xxxxxxx@outlook.com.
+                        Har du spørgsmål vedrørende en booking eller udfordringer med din konto, er du velkommen til at kontakte vores support via formularen ovenfor.
+
                     </p>
                 </div>
             </div>
