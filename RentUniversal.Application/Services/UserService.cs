@@ -80,6 +80,12 @@ public class UserService : IUserService
 
         return true;
     }
+    
+    public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
+    {
+        var users = await _userRepository.GetAllAsync();
+        return users.Select(DTOMapper.ToDTO);
+    }
 
 
 
