@@ -1,5 +1,6 @@
 ﻿import "./App.css";
 import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import Home from "./Pages/Home.jsx";
 import Rental from "./Pages/Rental.jsx"; // Browse & add to cart
 import Kurv from "./Pages/Cart.jsx";
@@ -12,19 +13,26 @@ import Udlejning from "./Pages/Udlejning.jsx"; // My rentals
 import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 
 export default function App() {
+    // Hvilken kategori er valgt i venstremenuen (null = alle)
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
     return (
         <div className="app">
             <Header />
 
             <div className="layout">
-                <SideKategori />
+                <SideKategori
+                    selectedCategory={selectedCategory}
+                    onSelectCategory={setSelectedCategory}
+                />
 
                 <main className="main">
                     <Routes>
-                        {/* 📌 Public pages */}
-                        <Route path="/" element={<Home />} />
-                        <Route path="/rental" element={<Rental />} />
-                        <Route path="/login" element={<Login />} />
+                        {/* Home får valgt kategori som prop */}
+                        <Route
+                            path="/"
+                            element={<Home selectedCategory={selectedCategory} />}
+                        />
 
                         {/* 🔒 Protected pages */}
                         <Route

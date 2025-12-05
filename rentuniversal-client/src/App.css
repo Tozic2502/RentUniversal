@@ -15,12 +15,37 @@ body {
     flex-direction: column;
 }
 
-/* TOPMENU */
+/* TOPMENU / HEADER */
 .header {
     display: flex;
+    justify-content: space-between; /* venstre ikoner + højre login/profil */
+    align-items: center;
     border-bottom: 1px solid #ccc;
+    background: #f5f5f5;
 }
 
+/* venstre række med ikoner */
+.header-left {
+    display: flex;
+}
+
+/* højre side med bruger + logout eller login */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-logout {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4pc;
+    background: #d43f2f;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Nav-knapper (ikon + tekst) */
 .nav-button {
     flex: 1;
     padding: 10px 14px;
@@ -33,6 +58,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: 6px;
+    text-decoration: none;
+    color: #0070c0;
 }
 
 .nav-button-active {
@@ -44,6 +71,31 @@ body {
     width: 40px;
     height: 40px;
     object-fit: contain;
+}
+
+/* brugernavn i header */
+.header-user {
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.header-user:hover {
+    text-decoration: underline;
+}
+
+/* logout-knap */
+.header-logout {
+    border: none;
+    background: #d32f2f;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.header-logout:hover {
+    background: #b71c1c;
 }
 
 /* HOVEDLAYOUT */
@@ -73,23 +125,45 @@ body {
     margin: 0;
 }
 
+/* Kategoriknapper i venstremenuen */
 .sidebar li {
     margin: 6px 0;
-    padding: 6px 10px;
-    border-radius: 4px;
+    padding: 0;              /* ingen indre padding – håndteres af knappen */
+    border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
 }
 
-.sidebar li:hover {
+/* selve knappen inde i li */
+.sidebar-btn {
+    width: 100%;
+    padding: 8px 12px;
+    border: none;            /* fjern hvid kant */
+    outline: none;           /* fjern fokus-ring */
+    background: transparent; /* ingen hvid baggrund */
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* hover-effekt */
+.sidebar li:hover .sidebar-btn {
     background: #e0ecff;
 }
 
+/* aktiv kategori – blå baggrund og hvid tekst */
 .sidebar li.active {
     background: #0070c0;
     color: #fff;
 }
 
+.sidebar li.active .sidebar-btn {
+    font-weight: 600;
+}
+
+/* MAIN-INDHOLD */
 .main {
     flex: 1;
     padding: 16px;

@@ -27,5 +27,9 @@ namespace RentUniversal.Infrastructure.Repositories
 
         public async Task UpdateAsync(Item item) =>
             await _items.ReplaceOneAsync(i => i.Id == item.Id, item, new ReplaceOptions { IsUpsert = false });
+        public async Task DeleteAsync(string id)
+        {
+            await _items.DeleteOneAsync(i => i.Id == id);
+        }
     }
 }

@@ -35,7 +35,8 @@ namespace RentUniversal.Application.Services
         public async Task<bool> UpdateItemAsync(Item item)
         {
             var existing = await _itemRepository.GetByIdAsync(item.Id);
-            if (existing == null) return false;
+            if (existing == null)
+                return false;
 
             await _itemRepository.UpdateAsync(item);
             return true;
@@ -53,5 +54,15 @@ namespace RentUniversal.Application.Services
             return await _itemRepository.GetByIdAsync(id);
         }
 
+
+        public async Task<bool> DeleteItemAsync(string id)
+        {
+            var existing = await _itemRepository.GetByIdAsync(id);
+            if (existing == null)
+                return false;
+
+            await _itemRepository.DeleteAsync(id);
+            return true;
+        }
     }
 }

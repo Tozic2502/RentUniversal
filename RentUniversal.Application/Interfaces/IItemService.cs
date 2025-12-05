@@ -11,5 +11,5 @@ public interface IItemService
     Task<bool> UpdateItemAsync(Item item);
     Task UpdateAvailabilityAsync(string itemId, bool available);
     Task<Item?> GetByIdAsync(string id);
-
+    Task<bool> DeleteItemAsync(string id);
 }

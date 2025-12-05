@@ -1,5 +1,5 @@
 // src/Pages/Header.jsx
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useUser } from "../Context/UserContext.jsx";
 import HomeImg from "../assets/Home.jpg";
 import UdlejningImg from "../assets/Udlejning.jpg";
@@ -21,9 +21,13 @@ function Header() {
             <div className="header-right">
                 {user ? (
                     <>
-                        <span className="header-user">
-                            {user.name || user.email}
-                        </span>
+                        {/* Samme ikon som Login, men label = brugernavn */}
+                        <NavIcon
+                            to="/profile"
+                            label={user.name || user.email}
+                            icon={LoginImg}
+                        />
+
                         <button
                             className="header-logout"
                             onClick={() => {
