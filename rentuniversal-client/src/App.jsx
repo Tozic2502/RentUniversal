@@ -61,6 +61,8 @@ export default function App() {
                                 </ProtectedRoute>
                             }
                         />
+                        <Route path="/login" element={<Login />} />
+
                     </Routes>
                 </main>
             </div>
