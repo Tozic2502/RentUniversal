@@ -31,6 +31,15 @@ public class UserService : IUserService
 
     public async Task<UserDTO> RegisterAsync(CreateUserRequestDTO request)
     {
+        if (request.Name.Length < 2)
+            throw new Exception("Name is too short.");
+
+        if (!request.Email.Contains("@"))
+            throw new Exception("Invalid email format.");
+
+        if (request.Password.Length < 6)
+            throw new Exception("Password must be at least 6 characters.");
+
         // 1. Tjek om email allerede findes
         var existing = await _userRepository.GetByEmailAsync(request.Email);
         if (existing != null)
