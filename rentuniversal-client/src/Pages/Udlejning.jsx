@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useUser } from "../Context/UserContext";
 import { getUserRentals, returnRental } from "../api";
-
+import { jsPDF } from "jspdf";
 
 export default function Udlejning() {
     const { user } = useUser();
@@ -25,18 +25,40 @@ export default function Udlejning() {
         }
     }
 
+    function generatePDFReceipt(rentItem) {
+        const doc = new jsPDF();
+
+        doc.setFontSize(18);
+        doc.text("Kvittering for aflevering", 15, 20);
+
+        doc.setFontSize(12);
+        doc.text(`Bruger: ${user.name} (${user.email})`, 15, 35);
+        doc.text(`Produkt: ${rentItem.item?.name}`, 15, 45);
+        doc.text(`Pris: ${rentItem.item?.value} kr.`, 15, 55);
+        doc.text(`Udlejet d.: ${new Date(rentItem.startDate).toLocaleDateString()}`, 15, 65);
+        doc.text(`Afleveret d.: ${new Date().toLocaleDateString()}`, 15, 75);
+
+        doc.text("Tak for at benytte vores service!", 15, 95);
+
+        doc.save(`Kvittering_${rentItem.id}.pdf`);
+    }
+
     async function handleReturn(rentalId) {
+        const rentItem = rentals.find(r => r.id === rentalId);
         try {
             await returnRental(rentalId);
+
+            generatePDFReceipt(rentItem);
+
             alert("Varen er afleveret!");
-            loadRentals(); // Refresh list after return
+            loadRentals();
         } catch (err) {
             alert("Fejl ved aflevering af varen.");
             console.error(err);
         }
     }
 
-    if (!user) return <p>Du skal v�re logget ind for at se dine udlejninger.</p>;
+    if (!user) return <p>Du skal være logget ind for at se dine udlejninger.</p>;
     if (loading) return <p>Henter dine udlejninger...</p>;
 
     if (rentals.length === 0) {
@@ -64,7 +86,7 @@ export default function Udlejning() {
                             className="return-btn"
                             onClick={() => handleReturn(rent.id)}
                         >
-                            Aflever
+                            Aflever & Download Kvittering
                         </button>
                     </div>
                 ))}
