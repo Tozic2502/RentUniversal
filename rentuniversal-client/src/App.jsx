@@ -33,6 +33,7 @@ export default function App() {
                             path="/"
                             element={<Home selectedCategory={selectedCategory} />}
                         />
+                        <Route path="/login" element={<Login />} />
 
                         {/* 🔒 Protected pages */}
                         <Route
@@ -61,7 +62,7 @@ export default function App() {
                                 </ProtectedRoute>
                             }
                         />
-                        <Route path="/login" element={<Login />} />
+                       
 
                     </Routes>
                 </main>
