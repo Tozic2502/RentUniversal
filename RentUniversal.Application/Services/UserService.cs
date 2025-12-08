@@ -1,8 +1,9 @@
-﻿using RentUniversal.Application.DTOs;
+﻿using BCrypt.Net;
+using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Application.Mapper;
 using RentUniversal.Domain.Entities;
-using BCrypt.Net;
+using RentUniversal.Domain.Enums;
 
 namespace RentUniversal.Application.Services;
 
@@ -28,15 +29,33 @@ public class UserService : IUserService
 
 
 
-    public async Task<UserDTO> RegisterAsync(User user, string password)
+    public async Task<UserDTO> RegisterAsync(CreateUserRequestDTO request)
     {
-        
-        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        // 1. Tjek om email allerede findes
+        var existing = await _userRepository.GetByEmailAsync(request.Email);
+        if (existing != null)
+            throw new Exception("Email already registered");
 
+        // 2. Hash password
+        string hash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
+        // 3. Opret domain user-entity
+        var user = new User
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = request.Name,
+            Email = request.Email,
+            PasswordHash = hash,
+            Role = UserRole.Customer
+        };
+
+        // 4. Gem i database
         await _userRepository.CreateAsync(user);
 
+        // 5. Return DTO
         return DTOMapper.ToDTO(user);
     }
+
 
 
     public async Task<bool> VerifyIdentificationAsync(string userId, string identificationId)

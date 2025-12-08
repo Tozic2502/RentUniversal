@@ -23,7 +23,7 @@ public class User
     public string IdentificationId { get; set; } = string.Empty; 
 
     public List<string> RentalIds { get; set; } = new();         
-    public string PasswordHash { get; set; } = "";
+    public string PasswordHash { get; set; } = string.Empty;
 
 }
 
