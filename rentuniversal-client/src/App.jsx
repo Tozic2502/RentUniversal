@@ -1,10 +1,11 @@
-﻿import "./App.css";
+﻿// src/App.jsx
+import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
 import Home from "./Pages/Home.jsx";
 import Udlejning from "./Pages/Rental.jsx";
 import Kurv from "./Pages/Cart.jsx";
 import Login from "./Pages/Login.jsx";
+import Register from "./Pages/Register.jsx";
 import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 import ProfilePage from "./Pages/ProfilePage.jsx";
 import Header from "./Pages/Header.jsx";
@@ -12,30 +13,17 @@ import Footer from "./Pages/Footer.jsx";
 import SideKategori from "./Pages/SideKategori.jsx";
 
 export default function App() {
-    // Hvilken kategori er valgt i venstremenuen (null = alle)
-    const [selectedCategory, setSelectedCategory] = useState(null);
-
     return (
         <div className="app">
-            {/* Øverste menu med dine 4 ikoner + login/logout */}
             <Header />
 
-            {/* Layout under header: venstre kategori + indhold til højre */}
             <div className="layout">
-                <SideKategori
-                    selectedCategory={selectedCategory}
-                    onSelectCategory={setSelectedCategory}
-                />
+                <SideKategori />
 
                 <main className="main">
                     <Routes>
-                        {/* Home får valgt kategori som prop */}
-                        <Route
-                            path="/"
-                            element={<Home selectedCategory={selectedCategory} />}
-                        />
+                        <Route path="/" element={<Home />} />
 
-                        {/* Profil er beskyttet */}
                         <Route
                             path="/profile"
                             element={
@@ -45,7 +33,6 @@ export default function App() {
                             }
                         />
 
-                        {/* Udlejning er beskyttet */}
                         <Route
                             path="/udlejning"
                             element={
@@ -55,7 +42,6 @@ export default function App() {
                             }
                         />
 
-                        {/* Kurv er beskyttet */}
                         <Route
                             path="/kurv"
                             element={
@@ -65,8 +51,10 @@ export default function App() {
                             }
                         />
 
-                        {/* Login er offentlig */}
                         <Route path="/login" element={<Login />} />
+
+                        {/* Ny route til oprettelse af konto */}
+                        <Route path="/register" element={<Register />} />
                     </Routes>
                 </main>
             </div>
@@ -75,3 +63,4 @@ export default function App() {
         </div>
     );
 }
+    

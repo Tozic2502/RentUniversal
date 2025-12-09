@@ -9,7 +9,6 @@ export default function Profile() {
     const [oldPass, setOldPass] = useState("");
     const [newPass, setNewPass] = useState("");
 
-
     async function handleProfileUpdate(e) {
         e.preventDefault();
 
@@ -35,6 +34,7 @@ export default function Profile() {
 
         alert("Profil opdateret!");
     }
+
     async function handleChangePassword(e) {
         e.preventDefault();
 
@@ -57,43 +57,67 @@ export default function Profile() {
         alert("Password ændret!");
     }
 
-
     return (
-        <div style={{ padding: "20px" }}>
-            <h2>Min Profil</h2>
+        <div className="profile-page">
+            {/* Sektion: profiloplysninger */}
+            <section className="profile-section">
+                <h2>Min profil</h2>
 
-            <form onSubmit={handleProfileUpdate}>
-                <label>Navn</label><br />
-                <input type="text" value={nameInput} onChange={e => setNameInput(e.target.value)} /><br /><br />
+                <form onSubmit={handleProfileUpdate}>
+                    <label htmlFor="profile-name">Navn</label>
+                    <input
+                        id="profile-name"
+                        type="text"
+                        value={nameInput}
+                        onChange={(e) => setNameInput(e.target.value)}
+                    />
 
-                <label>Email</label><br />
-                <input type="email" value={emailInput} onChange={e => setEmailInput(e.target.value)} /><br /><br />
+                    <label htmlFor="profile-email">Email</label>
+                    <input
+                        id="profile-email"
+                        type="email"
+                        value={emailInput}
+                        onChange={(e) => setEmailInput(e.target.value)}
+                    />
 
-                <button type="submit">Gem ændringer</button>
-            </form>
-            <hr style={{ margin: "20px 0" }} />
+                    <button type="submit" className="primary-btn profile-btn">
+                        Gem ændringer
+                    </button>
+                </form>
+            </section>
 
-            <h3>Skift password</h3>
+            {/* Sektion: skift password */}
+            <section className="profile-section">
+                <h3>Skift password</h3>
 
-            <form onSubmit={handleChangePassword}>
-                <label>Gammelt password</label><br />
-                <input
-                    type="password"
-                    value={oldPass}
-                    onChange={(e) => setOldPass(e.target.value)}
-                /><br /><br />
+                <form onSubmit={handleChangePassword}>
+                    <label htmlFor="old-password">Gammelt password</label>
+                    <input
+                        id="old-password"
+                        type="password"
+                        value={oldPass}
+                        onChange={(e) => setOldPass(e.target.value)}
+                    />
 
-                <label>Nyt password</label><br />
-                <input
-                    type="password"
-                    value={newPass}
-                    onChange={(e) => setNewPass(e.target.value)}
-                /><br /><br />
+                    <label htmlFor="new-password">Nyt password</label>
+                    <input
+                        id="new-password"
+                        type="password"
+                        value={newPass}
+                        onChange={(e) => setNewPass(e.target.value)}
+                    />
 
-                <button type="submit">Opdater password</button>
-            </form>
+                    <button type="submit" className="primary-btn profile-btn">
+                        Opdater password
+                    </button>
+                </form>
+            </section>
 
-            <button style={{ marginTop: "20px" }} onClick={() => logout()}>
+            {/* Log ud-knap */}
+            <button
+                className="primary-btn profile-logout-btn"
+                onClick={() => logout()}
+            >
                 Log ud
             </button>
         </div>

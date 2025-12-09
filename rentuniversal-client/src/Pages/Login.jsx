@@ -1,16 +1,14 @@
 ﻿import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../Context/UserContext";
 
-
 export default function Login() {
-    const {user, login} = useUser();
+    const { user, login } = useUser();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-
 
     useEffect(() => {
         if (user) {
@@ -24,8 +22,8 @@ export default function Login() {
 
         const response = await fetch("http://localhost:8080/api/users/authenticate", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({email, password}),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
         });
 
         if (!response.ok) {
@@ -74,6 +72,14 @@ export default function Login() {
                         Log ind
                     </button>
                 </form>
+
+                {/* Ny tekst under login-formen */}
+                <p className="login-register-text">
+                    Ny bruger?{" "}
+                    <Link to="/register">
+                        Opret en konto
+                    </Link>
+                </p>
             </div>
         </section>
     );
