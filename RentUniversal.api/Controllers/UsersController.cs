@@ -50,10 +50,13 @@ namespace RentUniversal.api.Controllers
             if (string.IsNullOrWhiteSpace(register.Password) || register.Password.Length < 6)
                 return BadRequest("Password must be at least 6 characters");
 
+            if (string.IsNullOrWhiteSpace(register.IdentificationId) || register.IdentificationId.Length == 10)
+                return BadRequest("CPR Number required");
             var user = new User
             {
                 Name = register.Name,
-                Email = register.Email
+                Email = register.Email,
+                Id = register.IdentificationId
             };
 
             var createdUser = await _userService.RegisterAsync(user, register.Password);
