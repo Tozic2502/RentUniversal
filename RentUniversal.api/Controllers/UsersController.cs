@@ -39,22 +39,23 @@ namespace RentUniversal.api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> RegisterUser([FromBody] CreateUserRequestDTO request)
         {
+            // Basic format validation (API boundary)
             if (string.IsNullOrWhiteSpace(request.Name))
                 return BadRequest("Name is required");
 
             if (string.IsNullOrWhiteSpace(request.Email) || !request.Email.Contains('@'))
                 return BadRequest("Valid email is required");
 
-            if (request.Password.Length < 6)
+            if (string.IsNullOrWhiteSpace(request.Password) || request.Password.Length < 6)
                 return BadRequest("Password must be at least 6 characters");
 
+            // Call service
             var result = await _userService.RegisterAsync(request);
 
             return CreatedAtAction(nameof(GetUserById),
                 new { id = result.Id },
                 result);
         }
-
 
         [HttpPost("authenticate")]
         public async Task<ActionResult<UserDTO>> Authenticate([FromBody] LoginDTO login)

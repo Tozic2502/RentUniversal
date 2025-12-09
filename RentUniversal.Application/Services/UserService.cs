@@ -31,24 +31,25 @@ public class UserService : IUserService
 
     public async Task<UserDTO> RegisterAsync(CreateUserRequestDTO request)
     {
+        // Business-rule validation (domain protection)
         if (request.Name.Length < 2)
             throw new Exception("Name is too short.");
 
-        if (!request.Email.Contains("@"))
+        if (!request.Email.Contains('@'))
             throw new Exception("Invalid email format.");
 
         if (request.Password.Length < 6)
             throw new Exception("Password must be at least 6 characters.");
 
-        // 1. Tjek om email allerede findes
+        // Must be unique
         var existing = await _userRepository.GetByEmailAsync(request.Email);
         if (existing != null)
             throw new Exception("Email already registered");
 
-        // 2. Hash password
+        // Hash password
         string hash = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
-        // 3. Opret domain user-entity
+        // Create domain entity
         var user = new User
         {
             Id = Guid.NewGuid().ToString(),
@@ -58,14 +59,10 @@ public class UserService : IUserService
             Role = UserRole.Customer
         };
 
-        // 4. Gem i database
         await _userRepository.CreateAsync(user);
 
-        // 5. Return DTO
         return DTOMapper.ToDTO(user);
     }
-
-
 
     public async Task<bool> VerifyIdentificationAsync(string userId, string identificationId)
     {
