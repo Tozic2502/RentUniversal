@@ -129,6 +129,7 @@ export default function Cart() {
                             <li>Udstyret skal returneres i samme stand</li>
                             <li>Du hæfter for eventuelle skader</li>
                             <li>Forsinket aflevering kan medføre ekstra omkostninger</li>
+                            <li>Ved Acceptering af disse krav skal du signere med MitID</li>
                         </ul>
 
                         <div style={{ marginTop: "15px", textAlign: "right" }}>
