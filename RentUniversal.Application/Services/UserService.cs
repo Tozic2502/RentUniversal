@@ -44,6 +44,15 @@ public class UserService : IUserService
         if (existing != null)
             throw new Exception("Email already registered");
 
+        // Must be unique for IdentificationId if provided
+        if (!string.IsNullOrEmpty(user.IdentificationId))
+        {
+            var existingById = await _userRepository.GetByIdentificationIdAsync(user.IdentificationId);
+            if (existingById != null)
+                throw new Exception("Identification ID already registered");
+        }
+
+
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
 
         await _userRepository.CreateAsync(user);
