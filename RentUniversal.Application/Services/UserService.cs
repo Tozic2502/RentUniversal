@@ -1,9 +1,8 @@
-﻿using BCrypt.Net;
-using RentUniversal.Application.DTOs;
+﻿using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Application.Mapper;
 using RentUniversal.Domain.Entities;
-using RentUniversal.Domain.Enums;
+using BCrypt.Net;
 
 namespace RentUniversal.Application.Services;
 
@@ -29,40 +28,16 @@ public class UserService : IUserService
 
 
 
-    public async Task<UserDTO> RegisterAsync(CreateUserRequestDTO request)
+    public async Task<UserDTO> RegisterAsync(User user, string password)
     {
-        // Business-rule validation (domain protection)
-        if (request.Name.Length < 2)
-            throw new Exception("Name is too short.");
-
-        if (!request.Email.Contains('@'))
-            throw new Exception("Invalid email format.");
-
-        if (request.Password.Length < 6)
-            throw new Exception("Password must be at least 6 characters.");
-
-        // Must be unique
-        var existing = await _userRepository.GetByEmailAsync(request.Email);
-        if (existing != null)
-            throw new Exception("Email already registered");
-
-        // Hash password
-        string hash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-
-        // Create domain entity
-        var user = new User
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = request.Name,
-            Email = request.Email,
-            PasswordHash = hash,
-            Role = UserRole.Customer
-        };
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
 
         await _userRepository.CreateAsync(user);
 
         return DTOMapper.ToDTO(user);
     }
+
+
 
     public async Task<bool> VerifyIdentificationAsync(string userId, string identificationId)
     {

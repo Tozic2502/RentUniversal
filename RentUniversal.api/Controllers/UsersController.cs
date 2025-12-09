@@ -37,25 +37,30 @@ namespace RentUniversal.api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserDTO>> RegisterUser([FromBody] CreateUserRequestDTO request)
+        public async Task<ActionResult<UserDTO>> RegisterUser([FromBody] LoginDTO register)
         {
             // Basic format validation (API boundary)
-            if (string.IsNullOrWhiteSpace(request.Name))
+            if (string.IsNullOrWhiteSpace(register.Name))
                 return BadRequest("Name is required");
+            
 
-            if (string.IsNullOrWhiteSpace(request.Email) || !request.Email.Contains('@'))
+            if (string.IsNullOrWhiteSpace(register.Email) || !register.Email.Contains('@'))
                 return BadRequest("Valid email is required");
 
-            if (string.IsNullOrWhiteSpace(request.Password) || request.Password.Length < 6)
+            if (string.IsNullOrWhiteSpace(register.Password) || register.Password.Length < 6)
                 return BadRequest("Password must be at least 6 characters");
 
-            // Call service
-            var result = await _userService.RegisterAsync(request);
+            var user = new User
+            {
+                Name = register.Name,
+                Email = register.Email
+            };
 
-            return CreatedAtAction(nameof(GetUserById),
-                new { id = result.Id },
-                result);
+            var createdUser = await _userService.RegisterAsync(user, register.Password);
+
+            return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
         }
+
 
         [HttpPost("authenticate")]
         public async Task<ActionResult<UserDTO>> Authenticate([FromBody] LoginDTO login)
