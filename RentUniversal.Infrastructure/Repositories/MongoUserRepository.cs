@@ -44,4 +44,3 @@ namespace RentUniversal.Infrastructure.Repositories
 
     }
 }
-    

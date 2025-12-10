@@ -15,4 +15,3 @@ public class Item
     public double Value { get; set; }                     // Price of the item
     public bool IsAvailable { get; set; } = true;
 }
-

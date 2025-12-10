@@ -13,4 +13,3 @@ public class LicenseDTO
     public DateTime StartDate { get; set; }
     public DateTime ExpiryDate { get; set; }
 }
-

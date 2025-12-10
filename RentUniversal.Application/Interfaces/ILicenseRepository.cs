@@ -8,4 +8,3 @@ namespace RentUniversal.Application.Interfaces
         Task UpsertAsync(License license);
     }
 }
-

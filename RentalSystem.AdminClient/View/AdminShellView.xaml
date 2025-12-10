@@ -53,7 +53,8 @@
                 <Button Content="User" Command="{Binding NavigateUser}" Style="{StaticResource NavButton}"/>
                 <Button Content="Annoncer" Command="{Binding NavigateAnnoncer}" Style="{StaticResource NavButton}"/>
                 <Button Content="Stats" Command="{Binding NavigateStats}" Style="{StaticResource NavButton}"/>
-            </StackPanel>
+				<Button Content="Upload" Command="{Binding NavigateUpload}" Style="{StaticResource NavButton}"/>
+			</StackPanel>
 
             <!-- logout button -->
             <Button Grid.Column="1"

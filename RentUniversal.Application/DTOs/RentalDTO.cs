@@ -18,4 +18,3 @@ namespace RentUniversal.Application.DTOs;
         public string? ReturnCondition { get; set; }
         public double Price { get; set; }
     }
-

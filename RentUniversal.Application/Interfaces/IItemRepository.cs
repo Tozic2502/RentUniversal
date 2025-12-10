@@ -11,4 +11,3 @@ namespace RentUniversal.Application.Interfaces
         Task DeleteAsync(string id);
     }
 }
-

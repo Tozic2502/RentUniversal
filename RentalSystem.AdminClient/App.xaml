@@ -38,7 +38,13 @@
             <view:StatsView />
         </DataTemplate>
 
-        <converters:BoolToStatusConv x:Key="BoolToStatusConverter"/>
+		<!-- UPLOAD -->
+		<DataTemplate DataType="{x:Type vm:UploadViewModel}">
+			<view:UploadView />
+		</DataTemplate>
+
+
+		<converters:BoolToStatusConv x:Key="BoolToStatusConverter"/>
         
     </Application.Resources>
 </Application>

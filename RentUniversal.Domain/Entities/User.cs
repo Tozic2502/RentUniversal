@@ -26,4 +26,3 @@ public class User
     public string PasswordHash { get; set; } = "";
 
 }
-
