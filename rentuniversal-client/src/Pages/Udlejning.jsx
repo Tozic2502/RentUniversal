@@ -75,22 +75,27 @@ export default function Udlejning() {
             <h1>Mine aktive udlejninger</h1>
 
             <div className="rental-grid">
-                {rentals.map((rent) => (
-                    <div key={rent.id} className="rental-card">
-                        <h3>{rent.item?.name || "Ukendt vare"}</h3>
+                {rentals.map(r => (
+                    <div key={r.id} className="item-card">
+                        <h3>{r.item.name}</h3>
 
-                        <p><strong>Pris:</strong>{item.deposit} kr</p>
-                        <p><strong>Pris pr. dag:</strong> {item.pricePerDay} kr</p>
-                        <p><strong>Udlejet d.:</strong> {new Date(rent.startDate).toLocaleDateString()}</p>
+                        <p>Kategori: {r.item.category}</p>
+                        <p>Stand: {r.item.condition}</p>
+                        <p>Værdi: {r.item.value} kr</p>
 
-                        <button
-                            className="return-btn"
-                            onClick={() => handleReturn(rent.id)}
-                        >
-                            Aflever & Download Kvittering
-                        </button>
+                        <p>Pris pr. dag: {r.item.pricePerDay} kr</p>
+                        <p>Depositum: {r.item.deposit} kr</p>
+
+                        {r.endDate ? (
+                            <p>Returneret ✔</p>
+                        ) : (
+                            <button onClick={() => handleReturn(r.id)}>
+                                Aflever vare
+                            </button>
+                        )}
                     </div>
                 ))}
+
             </div>
         </div>
     );
