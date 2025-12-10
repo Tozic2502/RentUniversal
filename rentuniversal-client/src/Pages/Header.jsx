@@ -16,17 +16,16 @@ function Header() {
                 <NavIcon to="/" label="Home" icon={HomeImg} />
                 <NavIcon to="/udlejning" label="Udlejning" icon={UdlejningImg} />
                 <NavIcon to="/kurv" label="Kurv" icon={IndkobsvognImg} />
+                {/* Nyt menupunkt */}
+                <NavIcon to="/support" label="Support" />
             </div>
 
             <div className="header-right">
                 {user ? (
                     <>
-                        {/* Samme ikon som Login, men label = brugernavn */}
-                        <NavIcon
-                            to="/profile"
-                            label={user.name || user.email}
-                            icon={LoginImg}
-                        />
+                        <Link to="/profile" className="header-user">
+                            {user.name || user.email}
+                        </Link>
 
                         <button
                             className="header-logout"
@@ -35,7 +34,7 @@ function Header() {
                                 navigate("/");
                             }}
                         >
-                            Logout
+                            Log ud
                         </button>
                     </>
                 ) : (
@@ -54,7 +53,7 @@ function NavIcon({ to, label, icon }) {
                 "nav-button" + (isActive ? " nav-button-active" : "")
             }
         >
-            <img src={icon} alt={label} className="nav-icon" />
+            {icon && <img src={icon} alt={label} className="nav-icon" />}
             <span>{label}</span>
         </NavLink>
     );

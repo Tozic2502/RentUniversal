@@ -1,4 +1,4 @@
-// src/Pages/Footer.jsx
+
 
 function Footer() {
     return (
