@@ -36,6 +36,8 @@ public class UserService : IUserService
         if (!user.Email.Contains('@'))
             throw new Exception("Invalid email format.");
 
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+
         if (user.PasswordHash.Length < 6)
             throw new Exception("Password must be at least 6 characters.");
 
@@ -45,30 +47,16 @@ public class UserService : IUserService
             throw new Exception("Email already registered");
 
         // Must be unique for IdentificationId if provided
-        if (!string.IsNullOrEmpty(user.IdentificationId))
+        if (user.IdentificationId != 0)
         {
             var existingById = await _userRepository.GetByIdentificationIdAsync(user.IdentificationId);
             if (existingById != null)
                 throw new Exception("Identification ID already registered");
         }
 
-
-        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
-
         await _userRepository.CreateAsync(user);
 
         return DTOMapper.ToDTO(user);
-    }
-
-
-
-    public async Task<bool> VerifyIdentificationAsync(string userId, string identificationId)
-    {
-        var user = await _userRepository.GetByIdAsync(userId);
-        if (user == null) return false;
-        user.IdentificationId = identificationId;
-        await _userRepository.UpdateAsync(user);
-        return true;
     }
 
     public async Task<UserDTO?> GetUserByIdAsync(string id)

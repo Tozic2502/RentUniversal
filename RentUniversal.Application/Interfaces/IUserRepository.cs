@@ -9,6 +9,6 @@ namespace RentUniversal.Application.Interfaces
         Task CreateAsync(User user);
         Task UpdateAsync(User user);
         Task<IEnumerable<User>> GetAllAsync();
-        Task<User?> GetByIdentificationIdAsync(string identificationId);
+        Task<User?> GetByIdentificationIdAsync(int identificationId);
     }
 }

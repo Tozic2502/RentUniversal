@@ -26,7 +26,7 @@ namespace RentUniversal.Infrastructure.Repositories
             return await result.FirstOrDefaultAsync();
         }
 
-        public async Task<User?> GetByIdentificationIdAsync(string identificationId)
+        public async Task<User?> GetByIdentificationIdAsync(int identificationId)
         {
             var result = await _users.FindAsync(u => u.IdentificationId == identificationId);
             return await result.FirstOrDefaultAsync();

@@ -10,6 +10,8 @@ namespace RentUniversal.api.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
+        private const int MinPasswordLength = 6;
+        private const int CprLength = 10;
         private readonly IUserService _userService;
         [HttpGet("ping")]
         public IActionResult Ping()
@@ -47,16 +49,16 @@ namespace RentUniversal.api.Controllers
             if (string.IsNullOrWhiteSpace(register.Email) || !register.Email.Contains('@'))
                 return BadRequest("Valid email is required");
 
-            if (string.IsNullOrWhiteSpace(register.Password) || register.Password.Length < 6)
+            if (string.IsNullOrWhiteSpace(register.Password) || register.Password.Length < MinPasswordLength)
                 return BadRequest("Password must be at least 6 characters");
 
-            if (string.IsNullOrWhiteSpace(register.IdentificationId) || register.IdentificationId.Length == 10)
+            if (register.IdentificationId.ToString().Length < CprLength || register.IdentificationId.ToString().Length > CprLength)
                 return BadRequest("CPR Number required");
             var user = new User
             {
                 Name = register.Name,
                 Email = register.Email,
-                Id = register.IdentificationId
+                IdentificationId = register.IdentificationId
             };
 
             var createdUser = await _userService.RegisterAsync(user, register.Password);
