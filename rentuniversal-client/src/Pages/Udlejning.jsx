@@ -79,7 +79,8 @@ export default function Udlejning() {
                     <div key={rent.id} className="rental-card">
                         <h3>{rent.item?.name || "Ukendt vare"}</h3>
 
-                        <p><strong>Pris:</strong> {rent.item?.value} kr.</p>
+                        <p><strong>Pris:</strong>{item.deposit} kr</p>
+                        <p><strong>Pris pr. dag:</strong> {item.pricePerDay} kr</p>
                         <p><strong>Udlejet d.:</strong> {new Date(rent.startDate).toLocaleDateString()}</p>
 
                         <button

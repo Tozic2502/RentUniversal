@@ -2,6 +2,7 @@
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Domain.Entities;
 using RentUniversal.Application.DTOs;
+using RentUniversal.Application.Mapper;
 
 namespace RentUniversal.api.Controllers
 {
@@ -42,15 +43,18 @@ namespace RentUniversal.api.Controllers
             if (item == null)
                 return BadRequest();
 
+            
             var created = await _itemService.AddItemAsync(item);
 
-            // created.Id skal matche typen på id (string i dette tilfælde)
             return CreatedAtAction(
                 nameof(GetItem),
                 new { id = created.Id },
                 created
             );
         }
+
+
+
 
         // PUT: api/Items/{id}
         [HttpPut("{id}")]

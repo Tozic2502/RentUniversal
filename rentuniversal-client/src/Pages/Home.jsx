@@ -73,8 +73,14 @@ function Home({ selectedCategory }) {
                             </p>
 
                             <p className="item-price">
-                                Værdi: {item.value} kr.
+                                Pris pr. dag: {item.pricePerDay} kr
                             </p>
+
+                            <p className="item-deposit">
+                                Depositum: {item.deposit} kr
+                            </p>
+
+
                         </div>
 
                         <button

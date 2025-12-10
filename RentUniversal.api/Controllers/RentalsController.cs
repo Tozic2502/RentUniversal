@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Application.Mapper;
@@ -38,10 +39,19 @@ namespace RentUniversal.api.Controllers
 
             rentalDTO.EndDate = DateTime.UtcNow;
 
+            var rentalPeriod = rentalDTO.EndDate - rentalDTO.StartDate;
+            double duration = rentalPeriod.ToBsonDocument().GetValue("Days").ToDouble() + 1; // Include partial days as full days
+
+            rentalDTO.TotalPrice = duration * rentalDTO.PricePerDay;
+
+
+
             var result = await _rentalService.UpdateRentalAsync(rentalDTO);
 
             if (!result)
                 return BadRequest("Failed to update rental");
+
+            
 
             // Make item available again
             await _itemService.UpdateAvailabilityAsync(rentalDTO.ItemId, true);
@@ -82,7 +92,9 @@ namespace RentUniversal.api.Controllers
             {
                 UserId = request.UserId,
                 ItemId = request.ItemId,
-                RentalDate = DateTime.UtcNow,
+                RentalDate = request.StartDate,
+                ReturnDate = request.EndDate,
+                PricePerDay = item.PricePerDay,
                 StartCondition = "OK",
                 Price = item.Value
             };

@@ -10,9 +10,22 @@ export default function Cart() {
     const navigate = useNavigate();
 
     const validCartItems = Array.isArray(cartItems) ? cartItems : [];
-    const totalValue = validCartItems.reduce((sum, item) => sum + (item.value || 0), 0);
+   
 
     const [showContract, setShowContract] = useState(false);
+    const today = new Date().toISOString().split("T")[0];
+    const tomorrow = new Date(Date.now() + 86400000).toISOString().split("T")[0];
+
+    const [startDate, setStartDate] = useState(today);
+    const [endDate, setEndDate] = useState(tomorrow);
+
+    const isValid = new Date(endDate) > new Date(startDate);
+
+    const estimatedDays =
+        Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+
+    const estimatedTotal = estimatedDays * (cartItems[0]?.pricePerDay || 0);
+
 
     function openContract() {
         if (!user) {
@@ -26,7 +39,8 @@ export default function Cart() {
     async function confirmContract() {
         try {
             for (const item of cartItems) {
-                await rentItem(user.id, item.id);
+                await rentItem(user.id, item.id, startDate, endDate);
+;
             }
 
             clearCart();
@@ -81,7 +95,8 @@ export default function Cart() {
                     >
                         <div>
                             <strong>{item.name}</strong>
-                            <p>Værdi: {item.value} kr</p>
+                            <p>Depositum: {item.deposit} kr</p>
+                            <p>Pris pr. dag: {item.pricePerDay} kr</p>
                         </div>
 
                         <button
@@ -102,7 +117,7 @@ export default function Cart() {
             </ul>
 
             <div style={{ marginTop: "20px", textAlign: "right" }}>
-                <p><strong>Total værdi:</strong> {totalValue} kr</p>
+                <p><strong>Total Beloeb:</strong> {estimatedTotal} kr</p>
 
                 <button
                     onClick={openContract}
@@ -115,7 +130,7 @@ export default function Cart() {
                         cursor: "pointer"
                     }}
                 >
-                    Bekræft Udlejning
+                    Bekraeft Udlejning
                 </button>
             </div>
 
@@ -124,19 +139,43 @@ export default function Cart() {
                     <div style={modalStyle}>
                         <h3>📄 Lejekontrakt</h3>
 
+                        <label>Startdato:</label>
+                        <input
+                            type="date"
+                            value={startDate}
+                            min={today}
+                            onChange={(e) => setStartDate(e.target.value)}
+                        />
+
+                        <label>Slutdato:</label>
+                        <input
+                            type="date"
+                            value={endDate}
+                            min={startDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                        />
+
+                        <p style={{ marginTop: "10px" }}>
+                            Pris pr. dag: {cartItems[0]?.pricePerDay} kr
+                            <br />
+                            Estimeret total: {estimatedTotal} kr
+                        </p>
+
                         <p>Du accepterer hermed følgende vilkår:</p>
                         <ul>
                             <li>Udstyret skal returneres i samme stand</li>
                             <li>Du hæfter for eventuelle skader</li>
                             <li>Forsinket aflevering kan medføre ekstra omkostninger</li>
-                            <li>Ved Acceptering af disse krav skal du signere med MitID</li>
                         </ul>
 
                         <div style={{ marginTop: "15px", textAlign: "right" }}>
                             <button onClick={() => setShowContract(false)} style={cancelButtonStyle}>Annuller</button>
-                            <button onClick={confirmContract} style={confirmButtonStyle}>Accepter & Lej</button>
+                            <button onClick={confirmContract} style={confirmButtonStyle} disabled={!isValid}>
+                                Accepter & Lej
+                            </button>
                         </div>
                     </div>
+
                 </div>
             )}
         </div>

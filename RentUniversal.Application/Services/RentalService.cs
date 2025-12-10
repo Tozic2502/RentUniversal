@@ -1,4 +1,5 @@
-﻿using RentUniversal.Application.DTOs;
+﻿using MongoDB.Bson;
+using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Application.Mapper;
 using RentUniversal.Domain.Entities;
@@ -56,10 +57,15 @@ namespace RentUniversal.Application.Services
 
         public double CalculatePrice(Rental rental)
         {
-            if (rental.ReturnDate == null) return 0;
-            var hours = (rental.ReturnDate.Value - rental.RentalDate).TotalHours;
-            return Math.Round(hours * 29.00, 2);
+            if (!rental.ReturnDate.HasValue)
+                return 0;
+
+            var rentalDuration = rental.ReturnDate.Value - rental.RentalDate;
+            double duration = rentalDuration.ToBsonDocument().GetValue("Days").ToDouble() + 1; // Include partial days as full days
+            return duration * rental.PricePerDay;
         }
+
+
         public async Task CreateAsync(Rental rental)
         {
             await _rentalRepository.CreateAsync(rental);

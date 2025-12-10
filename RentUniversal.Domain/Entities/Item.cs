@@ -8,11 +8,16 @@ namespace RentUniversal.Domain.Entities;
 
 public class Item
 {
-    public string Id { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public string Category { get; set; } = string.Empty;
-    public string Condition { get; set; } = "New";        // Text description
-    public double Value { get; set; }                     // Price of the item
-    public bool IsAvailable { get; set; } = true;
+    public string Id { get; set; } = "";
+    public string Name { get; set; } = "";
+    public string Category { get; set; } = "";
+    public string Condition { get; set; } = "";
+    public double Value { get; set; }
+    public bool IsAvailable { get; set; }
+    public double Deposit { get; set; }
+    public double PricePerDay { get; set; }
+    public double TotalPrice { get; set; }
+
+
 }
 

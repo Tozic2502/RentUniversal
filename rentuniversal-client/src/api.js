@@ -11,17 +11,17 @@ export async function getItems() {
 // ---------------- Rentals ----------------
 
 // Create a rental
-export async function rentItem(userId, itemId) {
-    const response = await fetch(`${API_BASE}/rentals`, {
+export async function rentItem(userId, itemId, startDate, endDate) {
+    const response = await fetch(`http://localhost:8080/api/rentals`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, itemId }),
+        body: JSON.stringify({ userId, itemId, startDate, endDate }),
     });
 
-    if (!response.ok) {
-        throw new Error("Renting item failed");
-    }
+    if (!response.ok) throw new Error("Renting item failed");
+    return response.json();
 }
+
 
 // Get rentals by user
 export async function getUserRentals(userId) {
