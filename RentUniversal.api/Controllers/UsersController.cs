@@ -52,7 +52,7 @@ namespace RentUniversal.api.Controllers
             if (string.IsNullOrWhiteSpace(register.Password) || register.Password.Length < MinPasswordLength)
                 return BadRequest("Password must be at least 6 characters");
 
-            if (register.IdentificationId.ToString().Length < CprLength || register.IdentificationId.ToString().Length > CprLength)
+            if (register.IdentificationId.ToString().Length != CprLength)
                 return BadRequest("CPR Number required");
             var user = new User
             {
