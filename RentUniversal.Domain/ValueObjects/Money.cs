@@ -20,4 +20,3 @@ public class Money
 
     public override string ToString() => $"{Amount:0.00} DKK";
 }
-

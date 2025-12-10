@@ -7,7 +7,6 @@ public interface IUserService
 {
     Task<UserDTO?> AuthenticateAsync(string email, string password);
     Task<UserDTO> RegisterAsync(User user, string password);
-    Task<bool> VerifyIdentificationAsync(string userId, string identificationId);
     Task<UserDTO?> GetUserByIdAsync(string id);
     Task<UserDTO?> UpdateUserAsync(string id, UserDTO updatedUser);
     Task<bool> ChangePasswordAsync(string id, string oldPassword, string newPassword);

@@ -15,6 +15,7 @@ namespace RentalSystem.AdminClient.ViewModel
         public ICommand NavigateUser { get; }
         public ICommand NavigateAnnoncer { get; }
         public ICommand NavigateStats { get; }
+        public ICommand NavigateUpload { get; }
         public ICommand Logout { get; }
 
         private readonly NavigationService _nav;
@@ -29,6 +30,8 @@ namespace RentalSystem.AdminClient.ViewModel
             NavigateUser = new RelayCommand(_ => CurrentAdminViewModel = new UserViewModel());
             NavigateAnnoncer = new RelayCommand(_ => CurrentAdminViewModel = new AnnoncerViewModel());
             NavigateStats = new RelayCommand(_ => CurrentAdminViewModel = new StatsViewModel());
+
+            NavigateUpload = new RelayCommand(_ => CurrentAdminViewModel = new UploadViewModel());
 
             Logout = new RelayCommand(_ => _nav.Navigate(new LoginViewModel(_nav)));
         }

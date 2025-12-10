@@ -10,6 +10,8 @@ namespace RentUniversal.api.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
+        private const int MinPasswordLength = 6;
+        private const int CprLength = 10;
         private readonly IUserService _userService;
         [HttpGet("ping")]
         public IActionResult Ping()
@@ -39,17 +41,30 @@ namespace RentUniversal.api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> RegisterUser([FromBody] LoginDTO register)
         {
+            // Basic format validation (API boundary)
+            if (string.IsNullOrWhiteSpace(register.Name))
+                return BadRequest("Name is required");
+            
+
+            if (string.IsNullOrWhiteSpace(register.Email) || !register.Email.Contains('@'))
+                return BadRequest("Valid email is required");
+
+            if (string.IsNullOrWhiteSpace(register.Password) || register.Password.Length < MinPasswordLength)
+                return BadRequest("Password must be at least 6 characters");
+
+            if (register.IdentificationId.ToString().Length != CprLength)
+                return BadRequest("CPR Number required");
             var user = new User
             {
                 Name = register.Name,
-                Email = register.Email
+                Email = register.Email,
+                IdentificationId = register.IdentificationId
             };
 
             var createdUser = await _userService.RegisterAsync(user, register.Password);
 
             return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
         }
-
 
 
         [HttpPost("authenticate")]

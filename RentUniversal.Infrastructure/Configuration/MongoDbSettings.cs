@@ -13,4 +13,3 @@ namespace RentUniversal.Infrastructure.Configuration
         public string Database { get; set; } = "RentUniversal";
     }
 }
-

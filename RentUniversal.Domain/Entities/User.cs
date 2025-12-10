@@ -20,10 +20,9 @@ public class User
 
     public UserRole Role { get; set; } = UserRole.Customer;
 
-    public string IdentificationId { get; set; } = string.Empty; 
+    public int IdentificationId { get; set; }
 
     public List<string> RentalIds { get; set; } = new();         
     public string PasswordHash { get; set; } = "";
 
 }
-

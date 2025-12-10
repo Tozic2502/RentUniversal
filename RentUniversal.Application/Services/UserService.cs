@@ -30,22 +30,33 @@ public class UserService : IUserService
 
     public async Task<UserDTO> RegisterAsync(User user, string password)
     {
-        
+        if (user.Name.Length < 2)
+            throw new Exception("Name is too short.");
+
+        if (!user.Email.Contains('@'))
+            throw new Exception("Invalid email format.");
+
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+
+        if (user.PasswordHash.Length < 6)
+            throw new Exception("Password must be at least 6 characters.");
+
+        // Must be unique
+        var existing = await _userRepository.GetByEmailAsync(user.Email);
+        if (existing != null)
+            throw new Exception("Email already registered");
+
+        // Must be unique for IdentificationId if provided
+        if (user.IdentificationId != 0)
+        {
+            var existingById = await _userRepository.GetByIdentificationIdAsync(user.IdentificationId);
+            if (existingById != null)
+                throw new Exception("Identification ID already registered");
+        }
 
         await _userRepository.CreateAsync(user);
 
         return DTOMapper.ToDTO(user);
-    }
-
-
-    public async Task<bool> VerifyIdentificationAsync(string userId, string identificationId)
-    {
-        var user = await _userRepository.GetByIdAsync(userId);
-        if (user == null) return false;
-        user.IdentificationId = identificationId;
-        await _userRepository.UpdateAsync(user);
-        return true;
     }
 
     public async Task<UserDTO?> GetUserByIdAsync(string id)

@@ -109,4 +109,3 @@ namespace RentUniversal.api.Controllers
 
     }
 }
-
