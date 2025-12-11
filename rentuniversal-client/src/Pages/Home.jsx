@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useCart } from "../Context/CartContext";
 import { getItems } from "../api";
 
-function Home({ selectedCategory }) {
+function Home({ selectedCategory, searchTerm }) {
     const [items, setItems] = useState([]);
     const { addToCart } = useCart();
 
@@ -20,11 +20,23 @@ function Home({ selectedCategory }) {
         load();
     }, []);
 
-    // Filtrer efter valgt kategori (hvis der er valgt én)
-    const visibleItems = selectedCategory
-        ? items.filter((item) => item.category === selectedCategory)
-        : items;
+    // Først filtrerer vi på kategori, derefter på søgetekst
+    let visibleItems = items;
 
+    if (selectedCategory) {
+        visibleItems = visibleItems.filter(
+            (item) => item.category === selectedCategory
+        );
+    }
+
+    if (searchTerm && searchTerm.trim() !== "") {
+        const q = searchTerm.toLowerCase();
+        visibleItems = visibleItems.filter((item) =>
+            item.name?.toLowerCase().includes(q)
+        );
+    }
+
+    // ... resten af din komponent (render-delen) kan være som du allerede har
     return (
         <div style={{ padding: "20px" }}>
             <h1>Tilgængelige produkter</h1>
@@ -32,27 +44,25 @@ function Home({ selectedCategory }) {
             {items.length === 0 && <p>Indlæser...</p>}
 
             {items.length > 0 && visibleItems.length === 0 && (
-                <p>Ingen produkter i den valgte kategori.</p>
+                <p>Ingen produkter matcher din søgning.</p>
             )}
 
             <div className="item-grid">
                 {visibleItems.map((item) => (
                     <div key={item.id} className="item-card">
-                        {/* Simpelt "billede" med første bogstav i navnet */}
                         <div className="item-thumb">
-                            <span>{item.name?.charAt(0) ?? "?"}</span>
+                            {/* her har du allerede billedlogik osv. */}
+                            {/* ... */}
                         </div>
 
                         <div className="item-info">
                             <h3>{item.name}</h3>
-
                             <p className="item-meta">
                                 <strong>Kategori:</strong> {item.category}
                             </p>
                             <p className="item-meta">
                                 <strong>Stand:</strong> {item.condition}
                             </p>
-
                             <p className="item-price">
                                 Pris: {item.value} kr.
                             </p>

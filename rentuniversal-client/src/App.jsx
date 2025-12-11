@@ -2,21 +2,24 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
-
 import Home from "./Pages/Home.jsx";
 import Udlejning from "./Pages/Rental.jsx";
 import Kurv from "./Pages/Cart.jsx";
 import Login from "./Pages/Login.jsx";
-import Register from "./Pages/Register.jsx";                      // NY
 import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 import ProfilePage from "./Pages/ProfilePage.jsx";
 import Header from "./Pages/Header.jsx";
 import Footer from "./Pages/Footer.jsx";
 import SideKategori from "./Pages/SideKategori.jsx";
-import SupportPage from "./Pages/Page-Support/Support.jsx";      // SUPPORT
+import Register from "./Pages/Register.jsx";
+import SupportPage from "./Pages/Page-Support/Support.jsx";
 
 export default function App() {
+    // Hvilken kategori er valgt i venstremenuen (null = alle)
     const [selectedCategory, setSelectedCategory] = useState(null);
+
+    // Tekst i søgefeltet
+    const [searchTerm, setSearchTerm] = useState("");
 
     return (
         <div className="app">
@@ -26,17 +29,22 @@ export default function App() {
                 <SideKategori
                     selectedCategory={selectedCategory}
                     onSelectCategory={setSelectedCategory}
+                    searchTerm={searchTerm}
+                    onSearchChange={setSearchTerm}
                 />
 
                 <main className="main">
                     <Routes>
-                        {/* Forside */}
                         <Route
                             path="/"
-                            element={<Home selectedCategory={selectedCategory} />}
+                            element={
+                                <Home
+                                    selectedCategory={selectedCategory}
+                                    searchTerm={searchTerm}
+                                />
+                            }
                         />
 
-                        {/* Profil (beskyttet) */}
                         <Route
                             path="/profile"
                             element={
@@ -46,7 +54,6 @@ export default function App() {
                             }
                         />
 
-                        {/* Udlejning (beskyttet) */}
                         <Route
                             path="/udlejning"
                             element={
@@ -56,7 +63,6 @@ export default function App() {
                             }
                         />
 
-                        {/* Kurv (beskyttet) */}
                         <Route
                             path="/kurv"
                             element={
@@ -66,11 +72,8 @@ export default function App() {
                             }
                         />
 
-                        {/* Login + Register (offentlige) */}
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
-
-                        {/* Support / Om os + kontaktformular */}
                         <Route path="/support" element={<SupportPage />} />
                     </Routes>
                 </main>
