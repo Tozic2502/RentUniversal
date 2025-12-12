@@ -14,15 +14,18 @@ public static class DTOMapper
         IdentificationId = user.IdentificationId
     };
 
-    public static ItemDTO ToDTO(Item item) => new()
+    public static ItemDTO ToDTO(Item item) => new ItemDTO
     {
         Id = item.Id,
         Name = item.Name,
         Category = item.Category,
         Condition = item.Condition,
         Value = item.Value,
-        IsAvailable = item.IsAvailable
+        IsAvailable = item.IsAvailable,
+        Deposit = item.Deposit,
+        PricePerDay = item.PricePerDay
     };
+
 
     public static RentalDTO ToDTO(Rental rental, Item? item = null) => new()
     {
@@ -34,6 +37,8 @@ public static class DTOMapper
         StartCondition = rental.StartCondition,
         ReturnCondition = rental.ReturnCondition,
         Price = rental.Price,
+        PricePerDay = rental.PricePerDay,
+        TotalPrice = rental.TotalPrice,
 
         Item = item != null ? DTOMapper.ToDTO(item) : null
     };

@@ -7,6 +7,8 @@ namespace RentUniversal.Application.Services
 {
     public class ItemService : IItemService
     {
+        const double DEPOSIT_RATE = 0.30;
+        const double PRICE_RATE = 0.10;
         private readonly IItemRepository _itemRepository;
 
         public ItemService(IItemRepository itemRepository)
@@ -28,7 +30,10 @@ namespace RentUniversal.Application.Services
 
         public async Task<ItemDTO> AddItemAsync(Item item)
         {
+            item.Deposit = Math.Round(item.Value * DEPOSIT_RATE, 2);
+            item.PricePerDay = Math.Round(item.Value * PRICE_RATE, 2);
             await _itemRepository.CreateAsync(item);
+            
             return DTOMapper.ToDTO(item);
         }
 
