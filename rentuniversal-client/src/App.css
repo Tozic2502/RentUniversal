@@ -281,15 +281,17 @@ LOGIN CARD
     color: #333333;
 }
 
-.login-card input {
-    width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 16px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.2s ease;
-}
+    .login-card input {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 16px;
+        border: 1px solid #ffffff;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: border-color 0.2s ease;
+        background-color: gainsboro;
+        color: #1a1a1a;
+    }
 
 /*
 FOOTER  
