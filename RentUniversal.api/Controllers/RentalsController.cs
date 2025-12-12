@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Application.Mapper;
-using RentUniversal.Application.Services;
 using RentUniversal.Domain.Entities;
 
 namespace RentUniversal.api.Controllers
@@ -21,7 +19,9 @@ namespace RentUniversal.api.Controllers
             _itemService = itemService;
         }
 
-
+        // ---------------------------------------------------------
+        // GET /api/rentals/{id}
+        // ---------------------------------------------------------
         [HttpGet("{id}")]
         public async Task<ActionResult<RentalDTO>> GetRental(string id)
         {
@@ -30,6 +30,9 @@ namespace RentUniversal.api.Controllers
             return Ok(rental);
         }
 
+        // ---------------------------------------------------------
+        // PUT /api/rentals/return/{id}
+        // ---------------------------------------------------------
         [HttpPut("return/{id}")]
         public async Task<IActionResult> ReturnRental(string id)
         {
@@ -37,44 +40,67 @@ namespace RentUniversal.api.Controllers
             if (rentalDTO == null)
                 return NotFound("Rental not found");
 
+            // Set return timestamp
             rentalDTO.EndDate = DateTime.UtcNow;
 
-            var rentalPeriod = rentalDTO.EndDate - rentalDTO.StartDate;
-            double duration = rentalPeriod.ToBsonDocument().GetValue("Days").ToDouble() + 1; // Include partial days as full days
+            // Start date is non-nullable in DTO
+            DateTime start = rentalDTO.StartDate;
 
-            rentalDTO.TotalPrice = duration * rentalDTO.PricePerDay;
+            // EndDate is nullable, but we just set it
+            DateTime end = rentalDTO.EndDate.Value;
 
+            // Calculate rental period
+            TimeSpan period = end - start;
+            int days = Math.Max(1, (int)Math.Ceiling(period.TotalDays));
 
+            rentalDTO.TotalPrice = days * rentalDTO.PricePerDay;
 
+            // FIX: correct service variable name
             var result = await _rentalService.UpdateRentalAsync(rentalDTO);
-
             if (!result)
                 return BadRequest("Failed to update rental");
 
-            
-
-            // Make item available again
             await _itemService.UpdateAvailabilityAsync(rentalDTO.ItemId, true);
 
             return Ok();
         }
 
-
+        // ---------------------------------------------------------
+        // GET /api/rentals/user/{userId}
+        // ---------------------------------------------------------
         [HttpGet("user/{userId}")]
-        public async Task<IEnumerable<RentalDTO>> GetByUserId(string userId)
+        public async Task<IActionResult> GetByUserId(string userId)
         {
             var rentals = await _rentalService.GetByUserIdAsync(userId);
-            var rentalDTOs = new List<RentalDTO>();
+
+            var result = new List<object>();
 
             foreach (var rental in rentals)
             {
                 var item = await _itemService.GetByIdAsync(rental.ItemId);
-                rentalDTOs.Add(DTOMapper.ToDTO(rental, item));
+
+                result.Add(new
+                {
+                    id = rental.Id,
+
+                    // FIX: cast to nullable so it matches ReturnDate
+                    startDate = (DateTime?)rental.RentalDate,
+
+                    // Rental.ReturnDate is already nullable
+                    endDate = rental.ReturnDate,
+
+                    userId = rental.UserId,
+                    itemId = rental.ItemId,
+                    item = item
+                });
             }
 
-            return rentalDTOs;
+            return Ok(result);
         }
 
+        // ---------------------------------------------------------
+        // POST /api/rentals
+        // ---------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> RentItem([FromBody] RentalCreateDTO request)
         {
@@ -92,8 +118,13 @@ namespace RentUniversal.api.Controllers
             {
                 UserId = request.UserId,
                 ItemId = request.ItemId,
-                RentalDate = request.StartDate,
+
+                // FIX: request.StartDate might be nullable → fallback to now
+                RentalDate = request.StartDate ?? DateTime.UtcNow,
+
+                // FIX: ReturnDate is nullable now, so request.EndDate is OK
                 ReturnDate = request.EndDate,
+
                 PricePerDay = item.PricePerDay,
                 StartCondition = "OK",
                 Price = item.Value
@@ -104,8 +135,6 @@ namespace RentUniversal.api.Controllers
 
             return Ok(DTOMapper.ToDTO(rental, item));
         }
-
-
 
     }
 }

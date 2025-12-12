@@ -18,7 +18,7 @@ public class Rental
     public string UserId { get; set; } = string.Empty;
     public string ItemId { get; set; } = string.Empty;
 
-    public DateTime? RentalDate { get; set; } = DateTime.UtcNow;
+    public DateTime RentalDate { get; set; } = DateTime.UtcNow;
     public DateTime? ReturnDate { get; set; }
 
     public string StartCondition { get; set; } = string.Empty;
