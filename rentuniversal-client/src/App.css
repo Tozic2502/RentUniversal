@@ -1,4 +1,6 @@
-/* App.css */
+/*  
+GLOBAL STYLING  
+*/
 
 * {
     box-sizing: border-box;
@@ -6,7 +8,9 @@
 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: "Inter", Arial, sans-serif;
+    background: #f8fafc;
+    color: #1a1a1a;
 }
 
 .app {
@@ -15,52 +19,46 @@ body {
     flex-direction: column;
 }
 
-/* TOPMENU / HEADER */
+/*
+HEADER  
+*/
+
 .header {
     display: flex;
-    justify-content: space-between; /* venstre ikoner + højre login/profil */
+    justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #ccc;
-    background: #f5f5f5;
+    padding: 6px 16px;
+    background: #ffffff;
+    border-bottom: 1px solid #e3e8ef;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 
-/* venstre række med ikoner */
-.header-left {
-    display: flex;
-}
-
-/* højre side med bruger + logout eller login */
+.header-left,
 .header-right {
     display: flex;
-    align-items: center;
     gap: 8px;
 }
 
-.header-logout {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4pc;
-    background: #d43f2f;
-    color: #fff;
-    cursor: pointer;
+/*  
+Navbar buttons  
+*/
+.nav-button {
+    padding: 10px 14px;
+    background: transparent;
+    color: #0070c0;
+    border-radius: 8px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 6px;
+    transition: background 0.2s, transform 0.1s;
 }
 
-/* Nav-knapper (ikon + tekst) */
-.nav-button {
-    flex: 1;
-    padding: 10px 14px;
-    border: none;
-    background: #f5f5f5;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    flex-direction: column;      /* ikon over tekst */
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    text-decoration: none;
-    color: #0070c0;
-}
+    .nav-button:hover {
+        background: #e6f2ff;
+        transform: translateY(-2px);
+    }
 
 .nav-button-active {
     background: #cde8ff;
@@ -68,252 +66,233 @@ body {
 }
 
 .nav-icon {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
+    width: 36px;
+    height: 36px;
 }
 
-/* brugernavn i header */
-.header-user {
-    color: #000;
-    text-decoration: none;
-    font-weight: 500;
-}
+/*
+SIDEBAR  
+*/
 
-.header-user:hover {
-    text-decoration: underline;
-}
-
-/* logout-knap */
-.header-logout {
-    border: none;
-    background: #d32f2f;
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.header-logout:hover {
-    background: #b71c1c;
-}
-
-/* HOVEDLAYOUT */
-.layout {
-    flex: 1;
-    display: flex;
-}
-
-/* Venstre sidekategori */
 .sidebar {
-    width: 200px;
-    border-right: 1px solid #ccc;
-    padding: 16px;
-    background: #f5f7fb;
-}
-
-.sidebar h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-/* Kategoriknapper i venstremenuen */
-.sidebar li {
-    margin: 6px 0;
-    padding: 0;              /* ingen indre padding – håndteres af knappen */
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-/* selve knappen inde i li */
-.sidebar-btn {
-    width: 100%;
-    padding: 8px 12px;
-    border: none;            /* fjern hvid kant */
-    outline: none;           /* fjern fokus-ring */
-    background: transparent; /* ingen hvid baggrund */
-    color: inherit;
-    font: inherit;
-    text-align: left;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-/* hover-effekt */
-.sidebar li:hover .sidebar-btn {
-    background: #e0ecff;
-}
-
-/* aktiv kategori – blå baggrund og hvid tekst */
-.sidebar li.active {
-    background: #0070c0;
-    color: #fff;
-}
-
-.sidebar li.active .sidebar-btn {
-    font-weight: 600;
-}
-
-/* MAIN-INDHOLD */
-.main {
-    flex: 1;
-    padding: 16px;
-}
-
-/* KORT */
-.card-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px;
-}
-
-.item-card,
-.contract-card {
-    border: 1px solid #ccc;
-    padding: 8px;
-}
-
-.item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* KURV */
-.cart-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 16px;
-}
-
-.cart-table th,
-.cart-table td {
-    border: 1px solid #ccc;
-    padding: 8px;
-}
-
-/* blå baggrund på kolonneoverskrifterne */
-.cart-table thead th {
-    background: #0070c0;
-    color: #fff;
-    font-weight: 600;
-}
-
-.cart-summary {
-    border-top: 1px solid #ccc;
-    padding-top: 8px;
-}
-
-.primary-btn {
-    padding: 8px 16px;
-    border: none;
-    background: #0070c0;
-    color: white;
-    cursor: pointer;
-}
-
-/* LOGIN */
-.login-section {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 40px 16px;
-}
-
-.login-card {
-    background: #eaf4ff;
-    padding: 24px 32px 28px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    max-width: 360px;
-    width: 100%;
+    width: 240px;
+    height: 100vh;
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    overflow-y: auto;
 }
 
-.login-icon {
-    width: 72px;
-    height: 72px;
+
+    .sidebar h3 {
+        color: #003b6f;
+        margin: 0 0 12px;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar li {
+        margin-bottom: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+
+.sidebar-btn {
+    width: 100%;
+    padding: 10px 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+    .sidebar-btn:hover {
+        background: #e8f2ff;
+        border-color: #c3daf8;
+    }
+
+.sidebar li.active .sidebar-btn {
+    background: #0070c0;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/*
+MAIN CONTENT  
+*/
+
+.main {
+    flex: 1;
+    padding: 20px;
+}
+
+/*
+ITEM CARDS  
+*/
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 22px;
+}
+
+.item-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .item-card:nth-child(even) {
+        background: #fdfdfd;
+    }
+
+    .item-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    }
+
+/* Image top placeholder */
+.item-thumb {
+    height: 120px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2196f3, #1565c0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
     margin-bottom: 12px;
 }
 
-.login-title {
-    margin: 0 0 16px;
+    .item-thumb span {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+
+.item-info h3 {
+    margin: 0 0 4px;
+    font-size: 1.1rem;
+    color: #003b6f;
 }
 
-.login-form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+.item-meta {
+    margin: 0 0 4px;
+    color: #555;
+    font-size: 0.9rem;
 }
 
-.login-field label {
-    display: block;
+.item-price {
+    margin-top: 10px;
     font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.login-field input {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #b0cbe8;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.login-field input:focus {
-    outline: none;
-    border-color: #0070c0;
-    box-shadow: 0 0 0 1px #0070c033;
-}
-
-.login-extra {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    margin-top: 4px;
-}
-
-.remember-me {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.forgot-btn {
-    border: none;
-    background: transparent;
-    padding: 0;
     color: #0070c0;
+}
+
+/*
+BUTTONS  
+*/
+
+button,
+.item-button,
+.primary-btn {
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #0070c0;
+    color: white;
     cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s ease, transform 0.1s ease;
 }
 
-.login-btn {
-    margin-top: 12px;
+    button:hover,
+    .item-button:hover,
+    .primary-btn:hover {
+        background: #005fa3;
+        transform: translateY(-2px);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+.header-logout {
+    background: #d43f2f;
+}
+
+    .header-logout:hover {
+        background: #b83228;
+    }
+
+/*
+LOGIN CARD  
+*/
+
+.login-card {
+    background: #ffffff;
+    padding: 28px 32px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    max-width: 400px;
+    margin: 60px auto;
+}
+
+.login-card h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #003b6f;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.login-card label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.login-card input {
     width: 100%;
-    font-size: 16px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
 }
 
-/* FOOTER */
+/*
+FOOTER  
+*/
+
 .footer {
-    border-top: 1px solid #ccc;
-    padding: 10px 16px;
+    border-top: 1px solid #dce3eb;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background: #ffffff;
 }
 
 .footer-links {
@@ -323,90 +302,17 @@ body {
 
 .footer-box {
     border: 1px solid #0070c0;
-    padding: 4px 8px;
-}
-
-/* Logo i footer */
-.footer-logo-img {
-    height: 75px;
-    width: auto;
-    display: block;
-}
-
-/* === Item grid & cards === */
-
-.item-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.item-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 14px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 230px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.item-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-}
-
-/* “Billede”-området */
-.item-thumb {
-    width: 100%;
-    height: 110px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #1e88e5, #42a5f5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-}
-
-.item-thumb span {
-    font-size: 2.4rem;
-    font-weight: 700;
-    color: #ffffff;
-}
-
-/* Teksten på kortet */
-.item-info h3 {
-    margin: 0 0 6px;
-    font-size: 1.05rem;
-}
-
-.item-meta {
-    margin: 0 0 3px;
-    font-size: 0.9rem;
-    color: #555;
-}
-
-.item-price {
-    margin-top: 8px;
-    font-weight: 600;
-}
-
-/* Knap */
-.item-button {
-    margin-top: 14px;
-    padding: 8px 10px;
-    border: none;
+    padding: 6px 10px;
     border-radius: 6px;
-    background: #1976d2;
-    color: white;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: background 0.15s ease;
+    background: #f0f7ff;
 }
 
-.item-button:hover {
-    background: #0d47a1;
+.footer-logo-img {
+    height: 70px;
+}
+
+.layout {
+    flex: 1;
+    display: flex;
+    height: 100vh; /* Make layout fill full screen */
 }
