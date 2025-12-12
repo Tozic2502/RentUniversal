@@ -14,4 +14,8 @@ public class ItemDTO
     public string Condition { get; set; } = "";
     public double Value { get; set; }
     public bool IsAvailable { get; set; }
+    public double Deposit { get; set; }
+    public double PricePerDay { get; set; }
+    public double TotalPrice { get; set; }
+
 }
