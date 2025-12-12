@@ -11,6 +11,8 @@ body {
     font-family: "Inter", Arial, sans-serif;
     background: #f8fafc;
     color: #1a1a1a;
+    background: radial-gradient(
+        circle at 20% 20%, #d9ebff 0%, #f8fafc 70%), radial-gradient(circle at 80% 80%, #e0f7ff 0%, #f8fafc 70%);
 }
 
 .app {
@@ -132,6 +134,13 @@ SIDEBAR
 
 .sidebar li.active .sidebar-btn {
     background: #0070c0;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.sidebar .sidebar-btn {
+    background: #4798D2;
     color: white;
     font-weight: 600;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
