@@ -89,7 +89,7 @@ namespace RentalSystem.AdminClient.ViewModel
                 var query = SearchText.ToLower();
                 FilteredUsers = new ObservableCollection<UserModel>(
                     AllUsers.Where(u =>
-                        u.Name.ToLower().Contains(query) ||
+                        u.FullName.ToLower().Contains(query) ||
                         u.Email.ToLower().Contains(query))
                 );
             }
@@ -110,7 +110,7 @@ namespace RentalSystem.AdminClient.ViewModel
             if (detailed == null)
                 return;
 
-            SelectedUser.Name = detailed.Name;
+            SelectedUser.FullName = detailed.FullName;
             SelectedUser.Email = detailed.Email;
             SelectedUser.Role = detailed.Role;
             SelectedUser.IdentificationId = detailed.IdentificationId;
@@ -174,7 +174,7 @@ namespace RentalSystem.AdminClient.ViewModel
                 return;
 
             var confirm = MessageBox.Show(
-                $"Promote {SelectedUser.Name} to {newRole}?",
+                $"Promote {SelectedUser.FullName} to {newRole}?",
                 "Confirm Promotion",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
@@ -201,7 +201,7 @@ namespace RentalSystem.AdminClient.ViewModel
                 return;
 
             var confirm = MessageBox.Show(
-                $"Demote {SelectedUser.Name} to {newRole}?",
+                $"Demote {SelectedUser.FullName} to {newRole}?",
                 "Confirm Demotion",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);

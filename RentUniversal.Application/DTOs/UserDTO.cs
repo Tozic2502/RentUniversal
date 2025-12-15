@@ -8,7 +8,7 @@ public class UserDTO
     public string Name { get; set; } = "";
     public string Email { get; set; } = "";
     public UserRole Role {  get; set; }
-    public string IdentificationId { get; set; } = "";
+    public int IdentificationId { get; set; }
     public DateTime? RegisteredDate { get; set; }
     public DateTime? LastLogin { get; set; }
 }
