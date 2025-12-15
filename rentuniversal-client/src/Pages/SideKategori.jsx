@@ -1,17 +1,13 @@
-// src/Pages/SideKategori.jsx
+
 import React from "react";
 
-function SideKategori({
-                          selectedCategory,
-                          onSelectCategory,
-                          searchTerm,
-                          onSearchChange,
-                      }) {
+function SideKategori({selectedCategory, onSelectCategory, searchTerm, onSearchChange,}) {
+    
     return (
         <aside className="sidebar">
             <h3>Kategori</h3>
 
-            {/* Søgefelt */}
+            
             <input
                 type="text"
                 className="sidebar-search"

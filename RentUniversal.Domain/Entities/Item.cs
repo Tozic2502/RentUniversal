@@ -14,5 +14,7 @@ public class Item
     public string Condition { get; set; } = "New";        // Text description
     public double Value { get; set; }                     // Price of the item
     public bool IsAvailable { get; set; } = true;
+    
+    public string? ImageUrl { get; set; } 
 }
 

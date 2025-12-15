@@ -1,16 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RentUniversal.Application.DTOs;
 
-    public class UserDTO
-    {
-        public string Id { get; set; } = "";
-        public string Name { get; set; } = "";
-        public string Email { get; set; } = "";
-        public string Role { get; set; } = "";
-        public string IdentificationId { get; set; } = "";
-    }
+/// <summary>
+/// Data Transfer Object (DTO) representing a user in the system.
+/// </summary>
+public class UserDTO
+{
+    /// <summary>
+    /// Unique identifier for the user.
+    /// </summary>
+    public string Id { get; set; } = "";
+
+    /// <summary>
+    /// User's full name or display name.
+    /// </summary>
+    public string Name { get; set; } = "";
+
+    /// <summary>
+    /// User's email address (used as a login identifier and for notifications).
+    /// </summary>
+    public string Email { get; set; } = "";
+
+    /// <summary>
+    /// User role within the system (e.g., Admin, Customer, Owner).
+    /// </summary>
+    public string Role { get; set; } = "";
+
+    /// <summary>
+    /// Reference to the user's identification record.
+    /// </summary>
+    public string IdentificationId { get; set; } = "";
+}
