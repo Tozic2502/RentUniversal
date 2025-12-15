@@ -57,13 +57,21 @@ namespace RentUniversal.Application.Services
 
         public double CalculatePrice(Rental rental)
         {
+            // If no return date → no price
             if (!rental.ReturnDate.HasValue)
                 return 0;
 
-            var rentalDuration = rental.ReturnDate.Value - rental.RentalDate;
-            double duration = rentalDuration.ToBsonDocument().GetValue("Days").ToDouble() + 1; // Include partial days as full days
-            return duration * rental.PricePerDay;
+            DateTime returnDate = rental.ReturnDate.Value;
+            DateTime rentalDate = rental.RentalDate;
+
+            TimeSpan rentalDuration = returnDate - rentalDate;
+
+            int days = Math.Max(1, (int)Math.Ceiling(rentalDuration.TotalDays));
+
+            return days * rental.PricePerDay;
         }
+
+
 
 
         public async Task CreateAsync(Rental rental)
@@ -80,7 +88,7 @@ namespace RentUniversal.Application.Services
                 return false;
 
             // 2. Update allowed fields
-            existingRental.ReturnDate = rentalDto.EndDate ?? DateTime.UtcNow;
+            existingRental.ReturnDate = rentalDto.EndDate;
             existingRental.ReturnCondition = rentalDto.ReturnCondition;
 
             // 3. Recalculate price based on new EndDate
