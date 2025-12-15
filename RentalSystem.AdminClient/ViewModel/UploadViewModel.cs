@@ -6,9 +6,20 @@ using System.Windows.Input;
 
 namespace RentalSystem.AdminClient.ViewModel
 {
+    /// <summary>
+    /// ViewModel responsible for file upload functionality in the Admin Panel.
+    /// </summary>
+    /// <remarks>
+    /// Currently simulates upload progress. Should later integrate with
+    /// backend endpoints and support error handling and validation.
+    /// </remarks>
     public class UploadViewModel : BaseViewModel
     {
         private string _selectedFile;
+
+        /// <summary>
+        /// Full path of the selected file.
+        /// </summary>
         public string SelectedFile
         {
             get => _selectedFile;
@@ -16,6 +27,10 @@ namespace RentalSystem.AdminClient.ViewModel
         }
 
         private string _statusMessage = "Waiting for file...";
+
+        /// <summary>
+        /// Status message shown to the user during upload.
+        /// </summary>
         public string StatusMessage
         {
             get => _statusMessage;
@@ -23,6 +38,10 @@ namespace RentalSystem.AdminClient.ViewModel
         }
 
         private int _progress;
+
+        /// <summary>
+        /// Upload progress percentage (0–100).
+        /// </summary>
         public int Progress
         {
             get => _progress;
@@ -64,7 +83,7 @@ namespace RentalSystem.AdminClient.ViewModel
             StatusMessage = "Uploading...";
             Progress = 0;
 
-            // Simulated upload
+            // Simulated upload progress
             for (int i = 0; i <= 100; i += 8)
             {
                 Progress = i;

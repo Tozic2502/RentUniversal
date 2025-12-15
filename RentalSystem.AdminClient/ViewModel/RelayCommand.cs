@@ -2,21 +2,44 @@
 
 namespace RentalSystem.AdminClient.ViewModel;
 
+/// <summary>
+/// A reusable ICommand implementation for MVVM command bindings.
+/// </summary>
+/// <remarks>
+/// Allows ViewModels to expose commands without code-behind.
+/// Supports optional execution conditions via <c>canExecute</c>.
+/// </remarks>
 public class RelayCommand : ICommand
 {
     private readonly Action<object> _execute;
     private readonly Func<object, bool> _canExecute;
 
+    /// <summary>
+    /// Creates a new RelayCommand.
+    /// </summary>
+    /// <param name="execute">Action to execute when the command is invoked.</param>
+    /// <param name="canExecute">
+    /// Optional predicate that determines whether the command can execute.
+    /// </param>
     public RelayCommand(Action<object> execute, Func<object,bool> canExecute = null)
     {
         _execute = execute ?? throw new ArgumentNullException(nameof(execute));
         _canExecute = canExecute;
     }
 
+    /// <summary>
+    /// Determines whether the command can execute.
+    /// </summary>
     public bool CanExecute(object parameter) => _canExecute?.Invoke(parameter) ?? true;
 
+    /// <summary>
+    /// Executes the command action.
+    /// </summary>
     public void Execute(object parameter) => _execute(parameter);
 
+    /// <summary>
+    /// Raised when WPF needs to re-evaluate CanExecute.
+    /// </summary>
     public event EventHandler CanExecuteChanged
     {
         add => CommandManager.RequerySuggested += value;

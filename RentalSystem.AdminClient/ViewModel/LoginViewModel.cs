@@ -5,16 +5,29 @@ using RentalSystem.AdminClient.ViewModel;
 
 namespace RentalSystem.AdminClient.ViewModel
 {
+    /// <summary>
+    /// ViewModel responsible for handling administrator login.
+    /// </summary>
+    /// <remarks>
+    /// Currently uses a dummy login mechanism. Authentication logic
+    /// should later be replaced with a secure API-based login flow.
+    /// </remarks>
     public class LoginViewModel : INotifyPropertyChanged
     {
         private readonly NavigationService _nav;
 
+        /// <summary>
+        /// Initializes the LoginViewModel with navigation support.
+        /// </summary>
         public LoginViewModel(NavigationService nav)
         {
             _nav = nav;
             LoginCommand = new RelayCommand(_ => Login());
         }
 
+        /// <summary>
+        /// Initializes the LoginViewModel with navigation support.
+        /// </summary>
         private string _username;
         public string Username
         {
@@ -23,6 +36,14 @@ namespace RentalSystem.AdminClient.ViewModel
         }
 
         private string _password;
+
+        /// <summary>
+        /// Password entered by the administrator.
+        /// </summary>
+        /// <remarks>
+        /// Stored as plain text only for demo purposes.
+        /// NEVER do this in production systems.
+        /// </remarks>
         public string Password
         {
             get => _password;
@@ -30,22 +51,36 @@ namespace RentalSystem.AdminClient.ViewModel
         }
 
         private string _loginMessage;
+
+        /// <summary>
+        /// Message displayed to the user after login attempts.
+        /// </summary>
         public string LoginMessage
         {
             get => _loginMessage;
             set { _loginMessage = value; OnPropertyChanged(); }
         }
 
+        /// <summary>
+        /// Message displayed to the user after login attempts.
+        /// </summary>
         public ICommand LoginCommand { get; }
 
-        // Basic dummy login fordi vi ikke har serveren set up 
+        /// <summary>
+        /// Executes the login logic.
+        /// </summary>
+        /// <remarks>
+        /// This method validates input and navigates to the AdminShell
+        /// on success. Authentication is not yet implemented.
+        /// </remarks> 
         private void Login()
         {
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
             {
-                LoginMessage = "Bitte Benutzername und Passwort eingeben.";
+                LoginMessage = "Please enter username and password.";
                 return;
             }
+            // Navigate to admin dashboard
             _nav.Navigate(new AdminShellViewModel(_nav));
         }
 

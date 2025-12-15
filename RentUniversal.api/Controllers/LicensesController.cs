@@ -5,6 +5,12 @@ using RentUniversal.Application.DTOs;
 
 namespace RentUniversal.api.Controllers
 {
+    /// <summary>
+    /// API controller for managing system license information.
+    /// </summary>
+    /// <remarks>
+    /// This controller assumes a single global license instance.
+    /// </remarks>
     [ApiController]
     [Route("api/[controller]")]
     public class LicenseController : ControllerBase
@@ -16,6 +22,9 @@ namespace RentUniversal.api.Controllers
             _licenseService = licenseService;
         }
 
+        /// <summary>
+        /// Retrieves the current license.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<LicenseDTO>> GetLicense()
         {
@@ -24,6 +33,9 @@ namespace RentUniversal.api.Controllers
             return Ok(license);
         }
 
+        /// <summary>
+        /// Updates the license information.
+        /// </summary>
         [HttpPut]
         public async Task<ActionResult<LicenseDTO>> UpdateLicense([FromBody] License license)
         {

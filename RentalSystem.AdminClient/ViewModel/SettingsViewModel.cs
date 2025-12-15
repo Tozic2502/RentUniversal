@@ -5,24 +5,44 @@ using System.Windows.Input;
 
 namespace RentalSystem.AdminClient.ViewModel
 {
+    /// <summary>
+    /// Represents a single settings entry consisting of a label and UI control.
+    /// </summary>
+    /// <remarks>
+    /// Allows flexible definition of settings without hardcoding layout in XAML.
+    /// </remarks>
     public class SettingsItem
     {
+        /// <summary>
+        /// Display label for the setting.
+        /// </summary>
         public string Label { get; set; }
+        /// <summary>
+        /// UI control used to edit or display the setting.
+        /// </summary>
         public object Control { get; set; }
     }
 
+    /// <summary>
+    /// ViewModel responsible for system and admin configuration.
+    /// </summary>
+    /// <remarks>
+    /// Divides settings into Website (API/System) and ACP (Admin Control Panel)
+    /// sections. Uses dummy logic for now.
+    /// </remarks>
     public class SettingsViewModel : BaseViewModel
     {
         public ObservableCollection<SettingsItem> WebsiteSettings { get; }
         public ObservableCollection<SettingsItem> ACPSettings { get; }
 
+        /// <summary>
+        /// Command to save settings.
+        /// </summary>
         public ICommand SaveCommand { get; }
 
         public SettingsViewModel()
         {
-            //
-            // WEBSITE SETTINGS (Server/API)
-            //
+            // Website / API related settings
             WebsiteSettings = new ObservableCollection<SettingsItem>
             {
                 new SettingsItem
@@ -58,10 +78,7 @@ namespace RentalSystem.AdminClient.ViewModel
                 }
             };
 
-
-            //
-            // ACP SETTINGz
-            //
+            // Admin Control Panel settings
             ACPSettings = new ObservableCollection<SettingsItem>
             {
                 new SettingsItem
@@ -76,13 +93,12 @@ namespace RentalSystem.AdminClient.ViewModel
                 }
             };
 
-
-            //
-            // Save Button Dummy
-            //
+            
             SaveCommand = new RelayCommand(_ => ApplyDummy());
         }
-
+        /// <summary>
+        /// Dummy save handler for settings.
+        /// </summary>
         private void ApplyDummy()
         {
             MessageBox.Show(

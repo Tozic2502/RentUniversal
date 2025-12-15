@@ -5,9 +5,19 @@ using System.Windows.Input;
 
 namespace RentalSystem.AdminClient.ViewModel
 {
+    /// <summary>
+    /// ViewModel responsible for managing users in the Admin Panel.
+    /// </summary>
+    /// <remarks>
+    /// Supports searching, selecting, banning, and administrative actions
+    /// on user accounts. Uses dummy data for demonstration.
+    /// </remarks>
     public class UserViewModel : BaseViewModel
     {
         private string _searchText;
+        /// <summary>
+        /// Search text used to filter users by name or email.
+        /// </summary>
         public string SearchText
         {
             get => _searchText;
@@ -20,13 +30,24 @@ namespace RentalSystem.AdminClient.ViewModel
         }
 
         private UserModel _selectedUser;
+
+        /// <summary>
+        /// Currently selected user in the UI.
+        /// </summary>
         public UserModel SelectedUser
         {
             get => _selectedUser;
             set { _selectedUser = value; OnPropertyChanged(); }
         }
 
+        /// <summary>
+        /// Full list of users.
+        /// </summary>
         public ObservableCollection<UserModel> AllUsers { get; set; }
+
+        /// <summary>
+        /// Filtered list of users displayed in the UI.
+        /// </summary>
         public ObservableCollection<UserModel> FilteredUsers { get; set; }
 
         public ICommand ResetPasswordCommand { get; }
@@ -35,7 +56,7 @@ namespace RentalSystem.AdminClient.ViewModel
 
         public UserViewModel()
         {
-            // Dummy
+            // Dummy users for UI testing
             AllUsers = new ObservableCollection<UserModel>
             {
                 new UserModel { Id="1", FullName="Youssef El Soueissi", Email="max@mail.com", RegisteredDate="2025-10-21", ActiveRentals=1, TotalRentals=4, LastLogin="2025-01-10", IsBanned=false },
@@ -52,6 +73,9 @@ namespace RentalSystem.AdminClient.ViewModel
             DeleteUserCommand = new RelayCommand(_ => DeleteUser());
         }
 
+        /// <summary>
+        /// Filters users based on the search text.
+        /// </summary>
         private void FilterUsers()
         {
             if (string.IsNullOrWhiteSpace(SearchText))
