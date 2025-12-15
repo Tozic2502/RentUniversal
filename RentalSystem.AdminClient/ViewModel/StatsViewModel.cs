@@ -1,4 +1,9 @@
-﻿namespace RentalSystem.AdminClient.ViewModel
+﻿using RentalSystem.AdminClient.Services;
+using System;
+using System.Threading.Tasks;
+using System.Windows.Threading;
+
+namespace RentalSystem.AdminClient.ViewModel
 {
     /// <summary>
     /// ViewModel providing system statistics for the Admin dashboard.
@@ -10,33 +15,70 @@
 
     public class StatsViewModel : BaseViewModel
     {
-        /// <summary>
-        /// Total number of registered users.
-        /// </summary>
-        public int UsersCount { get; set; }
+        private readonly ApiService _api = ApiService.Instance;
 
-        /// <summary>
-        /// Number of currently active rentals.
-        /// </summary>
-        public int ActiveRentals { get; set; }
+        // === KPIs ===
+        private int _usersCount;
+        public int UsersCount
+        {
+            get => _usersCount;
+            set { _usersCount = value; OnPropertyChanged(); }
+        }
 
-        /// <summary>
-        /// Revenue generated today.
-        /// </summary>
-        public string RevenueToday { get; set; }
+        private int _activeRentals;
+        public int ActiveRentals
+        {
+            get => _activeRentals;
+            set { _activeRentals = value; OnPropertyChanged(); }
+        }
 
-        /// <summary>
-        /// System uptime percentage.
-        /// </summary>
-        public string SystemUptime { get; set; }
+        private decimal _revenueToday;
+        public decimal RevenueToday
+        {
+            get => _revenueToday;
+            set { _revenueToday = value; OnPropertyChanged(); }
+        }
+
+        private string _systemUptime = "";
+        public string SystemUptime
+        {
+            get => _systemUptime;
+            set { _systemUptime = value; OnPropertyChanged(); }
+        }
+
+        // === INTERNAL ===
+        private readonly DateTime _startTime;
+        private readonly DispatcherTimer _uptimeTimer;
 
         public StatsViewModel()
         {
-            // Dummy data for dashboard preview
-            UsersCount = 1237;
-            ActiveRentals = 34;
-            RevenueToday = "122.465 DKK";
-            SystemUptime = "99.98%";
+            _startTime = DateTime.Now;
+
+            _uptimeTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            _uptimeTimer.Tick += (_, _) => UpdateUptime();
+            _uptimeTimer.Start();
+
+            // 🔥 HIER: echte Daten laden
+            _ = LoadStatsAsync();
+        }
+
+        private async Task LoadStatsAsync()
+        {
+            UsersCount = await _api.GetUsersCountAsync();
+
+            // Platzhalter – kommt als Nächstes
+            ActiveRentals = 0;
+            RevenueToday = 0m;
+        }
+
+        private void UpdateUptime()
+        {
+            var uptime = DateTime.Now - _startTime;
+            SystemUptime =
+                $"{uptime.Days}d {uptime.Hours}h {uptime.Minutes}m {uptime.Seconds}s";
         }
     }
 }

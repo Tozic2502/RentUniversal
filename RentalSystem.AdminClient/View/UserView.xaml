@@ -29,23 +29,28 @@
             <ListBox ItemsSource="{Binding FilteredUsers}"
                      SelectedItem="{Binding SelectedUser}"
                      Width="260"
+                     Height="400"
                      BorderThickness="0"
-                     Background="Transparent">
+                     Background="Transparent"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto">
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border Padding="10" Margin="0 5" Background="White" CornerRadius="8" BorderBrush="#ddd" BorderThickness="1">
-
+                        <Border Padding="10"
+                                Margin="0 5"
+                                Background="White"
+                                CornerRadius="8"
+                                BorderBrush="#ddd"
+                                BorderThickness="1">
                             <StackPanel>
                                 <TextBlock Text="{Binding FullName}" FontWeight="Bold"/>
                                 <TextBlock Text="{Binding Email}" Foreground="#777" FontSize="12"/>
                             </StackPanel>
-
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-
             </ListBox>
+
 
         </StackPanel>
 
@@ -60,9 +65,12 @@
             <!-- Selected User Content -->
             <StackPanel DataContext="{Binding SelectedUser}">
 
-                <TextBlock Text="{Binding FullName}" FontSize="22" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Name}" FontSize="22" FontWeight="Bold"/>
                 <TextBlock Text="{Binding Email}" FontSize="16" Foreground="#666" Margin="0 5 0 20"/>
 
+                <TextBlock Text="User ID:" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Id}" Margin="0 0 0 10"/>
+                
                 <TextBlock Text="Registered:" FontWeight="Bold"/>
                 <TextBlock Text="{Binding RegisteredDate}" Margin="0 0 0 10"/>
 
@@ -70,14 +78,15 @@
                 <TextBlock Text="{Binding ActiveRentals}" Margin="0 0 0 10"/>
 
                 <TextBlock Text="Total Rentals:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding TotalRentals}" Margin="0 0 0 10"/>
+                <TextBlock Text="{Binding TotalRentals}" Margin="0 0 0 5"/>
 
                 <TextBlock Text="Last Login:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding LastLogin}" Margin="0 0 0 20"/>
-
-                <TextBlock Text="Status:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding IsBanned, Converter={StaticResource BoolToStatusConverter}}" Margin="0 0 0 20"/>
-
+                <TextBlock Text="{Binding LastLogin}" Margin="0 0 0 5"/>
+                
+                <TextBlock Text="Role:" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Role}" Margin="0 0 0 5"/>
+                
+                
                 <!-- BUTTONS -->
                 <StackPanel Orientation="Horizontal" Margin="0 20 0 0" HorizontalAlignment="Left">
                     <Button Content="Reset Password"
@@ -85,10 +94,23 @@
                             Margin="0 0 10 0"
                             Command="{Binding DataContext.ResetPasswordCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
 
-                    <Button Content="Ban / Unban"
+                    <Button Content="Promote"
                             Width="120"
                             Margin="0 0 10 0"
-                            Command="{Binding DataContext.ToggleBanCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            Background="#4CAF50"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Command="{Binding DataContext.PromoteUserCommand,
+                              RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
+                    <Button Content="Demote"
+                            Width="120"
+                            Margin="0 0 10 0"
+                            Background="#F44336"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Command="{Binding DataContext.DemoteUserCommand,
+                              RelativeSource={RelativeSource AncestorType=UserControl}}"/>
 
                     <Button Content="Delete"
                             Width="120"

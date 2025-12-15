@@ -2,19 +2,9 @@
 
 namespace RentalSystem.AdminClient.ViewModel
 {
-    /// <summary>
-    /// ViewModel for the main Admin dashboard shell.
-    /// </summary>
-    /// <remarks>
-    /// Hosts navigation commands for all admin sections and manages
-    /// which section ViewModel is currently active.
-    /// </remarks>
     public class AdminShellViewModel : BaseViewModel
     {
         private object _currentAdminViewModel;
-        /// <summary>
-        /// Currently active admin section ViewModel.
-        /// </summary>
         public object CurrentAdminViewModel
         {
             get => _currentAdminViewModel;
@@ -25,7 +15,6 @@ namespace RentalSystem.AdminClient.ViewModel
         public ICommand NavigateUser { get; }
         public ICommand NavigateAnnoncer { get; }
         public ICommand NavigateStats { get; }
-        public ICommand NavigateUpload { get; }
         public ICommand Logout { get; }
 
         private readonly NavigationService _nav;
@@ -33,8 +22,7 @@ namespace RentalSystem.AdminClient.ViewModel
         public AdminShellViewModel(NavigationService nav)
         {
             _nav = nav;
-
-            // Default admin landing page
+            
             CurrentAdminViewModel = new SettingsViewModel();
             
             NavigateSettings = new RelayCommand(_ => CurrentAdminViewModel = new SettingsViewModel());
@@ -42,9 +30,6 @@ namespace RentalSystem.AdminClient.ViewModel
             NavigateAnnoncer = new RelayCommand(_ => CurrentAdminViewModel = new AnnoncerViewModel());
             NavigateStats = new RelayCommand(_ => CurrentAdminViewModel = new StatsViewModel());
 
-            NavigateUpload = new RelayCommand(_ => CurrentAdminViewModel = new UploadViewModel());
-
-            // Return to login
             Logout = new RelayCommand(_ => _nav.Navigate(new LoginViewModel(_nav)));
         }
     }

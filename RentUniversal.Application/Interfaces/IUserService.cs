@@ -1,5 +1,6 @@
 ﻿using RentUniversal.Application.DTOs;
 using RentUniversal.Domain.Entities;
+using RentUniversal.Domain.Enums;
 
 namespace RentUniversal.Application.Interfaces;
 
@@ -11,5 +12,8 @@ public interface IUserService
     Task<UserDTO?> UpdateUserAsync(string id, UserDTO updatedUser);
     Task<bool> ChangePasswordAsync(string id, string oldPassword, string newPassword);
     Task<IEnumerable<UserDTO>> GetAllUsersAsync();
+    
+    Task<bool> UpdateUserRoleAsync(string id, UserRole role);
+    
 
 }

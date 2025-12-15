@@ -10,8 +10,10 @@ public static class DTOMapper
         Id = user.Id,
         Name = user.Name,
         Email = user.Email,
-        Role = user.Role.ToString(),
-        IdentificationId = user.IdentificationId
+        Role = user.Role,
+        IdentificationId = user.IdentificationId,
+        RegisteredDate = user.RegisteredDate,
+        LastLogin = user.LastLogin
     };
 
     public static ItemDTO ToDTO(Item item) => new ItemDTO

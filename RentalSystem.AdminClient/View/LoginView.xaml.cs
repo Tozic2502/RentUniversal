@@ -1,21 +1,22 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using RentalSystem.AdminClient.ViewModel;
 
-namespace RentalSystem.AdminClient.View;
-
-public partial class LoginView
+namespace RentalSystem.AdminClient.View
 {
-    public LoginView()
+    public partial class LoginView : UserControl
     {
-        InitializeComponent();
-    }
-    
-    private void PasswordBox_OnChanged(object sender, RoutedEventArgs e)
-    {
-        if (DataContext is LoginViewModel vm)
+        public LoginView()
         {
-            vm.Password = ((PasswordBox)sender).Password;
+            InitializeComponent();
+        }
+
+        private void PasswordBox_OnPasswordChanged(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (DataContext is LoginViewModel vm &&
+                sender is PasswordBox pb)
+            {
+                vm.Password = pb.Password;
+            }
         }
     }
 }

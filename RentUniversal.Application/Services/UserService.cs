@@ -3,6 +3,7 @@ using RentUniversal.Application.Interfaces;
 using RentUniversal.Application.Mapper;
 using RentUniversal.Domain.Entities;
 using BCrypt.Net;
+using RentUniversal.Domain.Enums;
 
 namespace RentUniversal.Application.Services;
 
@@ -23,6 +24,7 @@ public class UserService : IUserService
         bool passwordMatches = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
         if (!passwordMatches) return null;
 
+        user.LastLogin = DateTime.UtcNow;
         return DTOMapper.ToDTO(user);
     }
 
@@ -37,6 +39,7 @@ public class UserService : IUserService
             throw new Exception("Invalid email format.");
 
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        user.RegisteredDate = DateTime.UtcNow;
 
         if (user.PasswordHash.Length < 6)
             throw new Exception("Password must be at least 6 characters.");
@@ -96,6 +99,18 @@ public class UserService : IUserService
     {
         var users = await _userRepository.GetAllAsync();
         return users.Select(DTOMapper.ToDTO);
+    }
+
+    public async Task<bool> UpdateUserRoleAsync(string id, UserRole role)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user == null)
+            return false;
+
+        user.Role = role;
+
+        await _userRepository.UpdateAsync(user);
+        return true;
     }
 
 

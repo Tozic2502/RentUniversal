@@ -1,23 +1,34 @@
 ﻿using RentalSystem.AdminClient.Models;
+using RentalSystem.AdminClient.Services;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace RentalSystem.AdminClient.ViewModel
 {
-    /// <summary>
-    /// ViewModel responsible for managing users in the Admin Panel.
-    /// </summary>
-    /// <remarks>
-    /// Supports searching, selecting, banning, and administrative actions
-    /// on user accounts. Uses dummy data for demonstration.
-    /// </remarks>
     public class UserViewModel : BaseViewModel
     {
+        private readonly ApiService _api = ApiService.Instance;
+
+        public ObservableCollection<UserModel> AllUsers { get; set; }
+        public ObservableCollection<UserModel> FilteredUsers { get; set; }
+
+        private UserModel _selectedUser;
+        public UserModel SelectedUser
+        {
+            get => _selectedUser;
+            set
+            {
+                _selectedUser = value;
+                OnPropertyChanged();
+                LoadSelectedUserDetails();
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
+
         private string _searchText;
-        /// <summary>
-        /// Search text used to filter users by name or email.
-        /// </summary>
         public string SearchText
         {
             get => _searchText;
@@ -29,53 +40,44 @@ namespace RentalSystem.AdminClient.ViewModel
             }
         }
 
-        private UserModel _selectedUser;
-
-        /// <summary>
-        /// Currently selected user in the UI.
-        /// </summary>
-        public UserModel SelectedUser
-        {
-            get => _selectedUser;
-            set { _selectedUser = value; OnPropertyChanged(); }
-        }
-
-        /// <summary>
-        /// Full list of users.
-        /// </summary>
-        public ObservableCollection<UserModel> AllUsers { get; set; }
-
-        /// <summary>
-        /// Filtered list of users displayed in the UI.
-        /// </summary>
-        public ObservableCollection<UserModel> FilteredUsers { get; set; }
-
-        public ICommand ResetPasswordCommand { get; }
-        public ICommand ToggleBanCommand { get; }
-        public ICommand DeleteUserCommand { get; }
+        // Commands
+        public ICommand RefreshCommand { get; }
+        public ICommand PromoteUserCommand { get; }
+        public ICommand DemoteUserCommand { get; }
 
         public UserViewModel()
         {
-            // Dummy users for UI testing
-            AllUsers = new ObservableCollection<UserModel>
-            {
-                new UserModel { Id="1", FullName="Youssef El Soueissi", Email="max@mail.com", RegisteredDate="2025-10-21", ActiveRentals=1, TotalRentals=4, LastLogin="2025-01-10", IsBanned=false },
-                new UserModel { Id="2", FullName="Mikkel Doe", Email="mikkel@mail.com", RegisteredDate="2025-11-04", ActiveRentals=0, TotalRentals=2, LastLogin="2025-01-09", IsBanned=false },
-                new UserModel { Id="3", FullName="Sebastian Doe", Email="seb@mail.com", RegisteredDate="2025-05-11", ActiveRentals=2, TotalRentals=8, LastLogin="2025-01-10", IsBanned=true },
-                new UserModel { Id="4", FullName="Thommy Hansen", Email="thommy@easv365.dk", RegisteredDate="2025-05-11", ActiveRentals=8, TotalRentals=8, LastLogin="2025-01-10", IsBanned=true },
+            AllUsers = new ObservableCollection<UserModel>();
+            FilteredUsers = new ObservableCollection<UserModel>();
 
-            };
+            RefreshCommand = new RelayCommand(async _ => await LoadUsersAsync());
 
-            FilteredUsers = new ObservableCollection<UserModel>(AllUsers);
+            PromoteUserCommand = new RelayCommand(
+                async _ => await PromoteUser(),
+                _ => CanPromote());
 
-            ResetPasswordCommand = new RelayCommand(_ => ResetPassword());
-            ToggleBanCommand = new RelayCommand(_ => ToggleBan());
-            DeleteUserCommand = new RelayCommand(_ => DeleteUser());
+            DemoteUserCommand = new RelayCommand(
+                async _ => await DemoteUser(),
+                _ => CanDemote());
+
+            _ = LoadUsersAsync();
         }
 
-        /// <summary>
-        /// Filters users based on the search text.
-        /// </summary>
+        // =========================
+        // LOAD USERS
+        // =========================
+
+        private async Task LoadUsersAsync()
+        {
+            var users = await _api.GetAllUsersAsync();
+
+            AllUsers.Clear();
+            foreach (var u in users)
+                AllUsers.Add(u);
+
+            FilterUsers();
+        }
+
         private void FilterUsers()
         {
             if (string.IsNullOrWhiteSpace(SearchText))
@@ -84,43 +86,149 @@ namespace RentalSystem.AdminClient.ViewModel
             }
             else
             {
-                var search = SearchText.ToLower();
+                var query = SearchText.ToLower();
                 FilteredUsers = new ObservableCollection<UserModel>(
                     AllUsers.Where(u =>
-                        u.FullName.ToLower().Contains(search) ||
-                        u.Email.ToLower().Contains(search)
-                    ));
+                        u.Name.ToLower().Contains(query) ||
+                        u.Email.ToLower().Contains(query))
+                );
             }
 
             OnPropertyChanged(nameof(FilteredUsers));
         }
 
-        private void ResetPassword()
+        // =========================
+        // USER DETAILS
+        // =========================
+
+        private async void LoadSelectedUserDetails()
         {
-            if (SelectedUser == null) return;
+            if (SelectedUser == null)
+                return;
 
-            System.Windows.MessageBox.Show(
-                $"Password reset initiated for {SelectedUser.FullName} (Dummy).",
-                "Reset Password"
-            );
-        }
+            var detailed = await _api.GetUserByIdAsync(SelectedUser.Id);
+            if (detailed == null)
+                return;
 
-        private void ToggleBan()
-        {
-            if (SelectedUser == null) return;
+            SelectedUser.Name = detailed.Name;
+            SelectedUser.Email = detailed.Email;
+            SelectedUser.Role = detailed.Role;
+            SelectedUser.IdentificationId = detailed.IdentificationId;
 
-            SelectedUser.IsBanned = !SelectedUser.IsBanned;
             OnPropertyChanged(nameof(SelectedUser));
+            CommandManager.InvalidateRequerySuggested();
         }
 
-        private void DeleteUser()
-        {
-            if (SelectedUser == null) return;
+        // =========================
+        // ROLE LOGIC
+        // =========================
 
-            System.Windows.MessageBox.Show(
-                $"Deleting user {SelectedUser.FullName} is not implemented (Dummy).",
-                "Delete User"
-            );
+        private bool IsCurrentUserSelected =>
+            SelectedUser != null &&
+            _api.CurrentUser != null &&
+            SelectedUser.Id == _api.CurrentUser.Id;
+
+        private bool CanPromote()
+        {
+            if (SelectedUser == null) return false;
+            if (IsCurrentUserSelected) return false;
+
+            return SelectedUser.Role switch
+            {
+                "Customer" => true,
+                "Admin" => true,
+                _ => false // Owner
+            };
+        }
+
+        private bool CanDemote()
+        {
+            if (SelectedUser == null) return false;
+            if (IsCurrentUserSelected) return false;
+
+            return SelectedUser.Role switch
+            {
+                "Owner" => true,
+                "Admin" => true,
+                _ => false // Customer
+            };
+        }
+
+        // =========================
+        // PROMOTE / DEMOTE ACTIONS
+        // =========================
+
+        private async Task PromoteUser()
+        {
+            if (SelectedUser == null)
+                return;
+
+            string newRole = SelectedUser.Role switch
+            {
+                "Customer" => "Admin",
+                "Admin" => "Owner",
+                _ => SelectedUser.Role
+            };
+
+            if (newRole == SelectedUser.Role)
+                return;
+
+            var confirm = MessageBox.Show(
+                $"Promote {SelectedUser.Name} to {newRole}?",
+                "Confirm Promotion",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (confirm != MessageBoxResult.Yes)
+                return;
+
+            await UpdateUserRoleAsync(newRole);
+        }
+
+        private async Task DemoteUser()
+        {
+            if (SelectedUser == null)
+                return;
+
+            string newRole = SelectedUser.Role switch
+            {
+                "Owner" => "Admin",
+                "Admin" => "Customer",
+                _ => SelectedUser.Role
+            };
+
+            if (newRole == SelectedUser.Role)
+                return;
+
+            var confirm = MessageBox.Show(
+                $"Demote {SelectedUser.Name} to {newRole}?",
+                "Confirm Demotion",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (confirm != MessageBoxResult.Yes)
+                return;
+
+            await UpdateUserRoleAsync(newRole);
+        }
+
+        private async Task UpdateUserRoleAsync(string newRole)
+        {
+            var success = await _api.UpdateUserRoleAsync(SelectedUser.Id, newRole);
+
+            if (!success)
+            {
+                MessageBox.Show(
+                    "Failed to update user role.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+
+            SelectedUser.Role = newRole;
+            OnPropertyChanged(nameof(SelectedUser));
+            CommandManager.InvalidateRequerySuggested();
         }
     }
 }

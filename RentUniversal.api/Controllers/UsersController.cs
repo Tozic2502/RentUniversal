@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
-using RentUniversal.Application.Mapper;
+using RentUniversal.Application.Mappers;
 using RentUniversal.Domain.Entities;
 
 namespace RentUniversal.api.Controllers
@@ -80,7 +80,7 @@ namespace RentUniversal.api.Controllers
             {
                 Name = register.Name,
                 Email = register.Email,
-                IdentificationId = register.IdentificationId
+                RegisteredDate = DateTime.UtcNow
             };
 
             var createdUser = await _userService.RegisterAsync(user, register.Password);
@@ -88,9 +88,8 @@ namespace RentUniversal.api.Controllers
             return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
         }
 
-        /// <summary>
-        /// Authenticates a user.
-        /// </summary>
+
+
         [HttpPost("authenticate")]
         public async Task<ActionResult<UserDTO>> Authenticate([FromBody] LoginDTO login)
         {
@@ -98,13 +97,12 @@ namespace RentUniversal.api.Controllers
 
             if (user == null)
                 return Unauthorized("Invalid email or password");
-
+            
+            user.LastLogin = DateTime.UtcNow;
             return Ok(user);
         }
 
-        /// <summary>
-        /// Updates user profile information.
-        /// </summary>
+
         [HttpPut("{id}")]
         public async Task<ActionResult<UserDTO>> UpdateUser(string id, [FromBody] UserDTO updatedUser)
         {
@@ -114,9 +112,6 @@ namespace RentUniversal.api.Controllers
             return Ok(user);
         }
 
-        /// <summary>
-        /// Changes a user's password.
-        /// </summary>
         [HttpPut("{id}/password")]
         public async Task<ActionResult> ChangePassword(string id, [FromBody] ChangePasswordDTO dto)
         {
@@ -127,6 +122,18 @@ namespace RentUniversal.api.Controllers
 
             return Ok("Password opdateret");
         }
+        
+        [HttpPut("{id}/role")]
+        public async Task<IActionResult> UpdateRole(string id, [FromBody] UserDTO dto)
+        {
+            var success = await _userService.UpdateUserRoleAsync(id, dto.Role);
+
+            if (!success)
+                return NotFound();
+
+            return NoContent();
+        }
+
 
     }
 }

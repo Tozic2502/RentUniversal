@@ -59,10 +59,10 @@ namespace RentalSystem.AdminClient.ViewModel
                 new SettingsItem
                 {
                     Label = "API Base URL:",
-                    Control = new TextBox
+                    Control = new TextBlock()
                     {
                         Width = 300,
-                        Text = "https://localhost:5000"
+                        Text = "https://localhost:8080"
                     }
                 },
 

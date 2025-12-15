@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using RentalSystem.AdminClient.ViewModel;
+using RentalSystem.AdminClient.Services;
 
 namespace RentalSystem.AdminClient.ViewModel
 {
@@ -15,77 +16,91 @@ namespace RentalSystem.AdminClient.ViewModel
     public class LoginViewModel : INotifyPropertyChanged
     {
         private readonly NavigationService _nav;
-
+        private readonly ApiService _api;
         /// <summary>
         /// Initializes the LoginViewModel with navigation support.
         /// </summary>
+
         public LoginViewModel(NavigationService nav)
         {
             _nav = nav;
-            LoginCommand = new RelayCommand(_ => Login());
+            _api = ApiService.Instance;
+
+            // WICHTIG: Passwort über CommandParameter reinholen
+            LoginCommand = new RelayCommand(async _ => await LoginAsync());
+
         }
 
-        /// <summary>
-        /// Initializes the LoginViewModel with navigation support.
-        /// </summary>
-        private string _username;
-        public string Username
+        // === INPUTS ===
+
+        private string _email = "";
+        public string Email
         {
-            get => _username;
-            set { _username = value; OnPropertyChanged(); }
+            get => _email;
+            set { _email = value; OnPropertyChanged(); }
         }
 
-        private string _password;
-
-        /// <summary>
-        /// Password entered by the administrator.
-        /// </summary>
-        /// <remarks>
-        /// Stored as plain text only for demo purposes.
-        /// NEVER do this in production systems.
-        /// </remarks>
+        private string _password = "";
         public string Password
         {
             get => _password;
             set { _password = value; OnPropertyChanged(); }
         }
 
-        private string _loginMessage;
-
-        /// <summary>
-        /// Message displayed to the user after login attempts.
-        /// </summary>
+        private string _loginMessage = "";
         public string LoginMessage
         {
             get => _loginMessage;
             set { _loginMessage = value; OnPropertyChanged(); }
         }
 
-        /// <summary>
-        /// Message displayed to the user after login attempts.
-        /// </summary>
         public ICommand LoginCommand { get; }
 
-        /// <summary>
-        /// Executes the login logic.
-        /// </summary>
-        /// <remarks>
-        /// This method validates input and navigates to the AdminShell
-        /// on success. Authentication is not yet implemented.
-        /// </remarks> 
-        private void Login()
+        // === LOGIN LOGIK ===
+
+        private async Task LoginAsync()
         {
-            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
+            // Nur zum Debuggen – kannst du auch wieder entfernen
+            System.Diagnostics.Debug.WriteLine($"[LOGIN] Email='{Email}', Password.Length={Password?.Length ?? 0}");
+
+            LoginMessage = "";
+            OnPropertyChanged(nameof(LoginMessage));
+
+            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
-                LoginMessage = "Please enter username and password.";
+                LoginMessage = "Bitte Email und Passwort eingeben.";
+                OnPropertyChanged(nameof(LoginMessage));
                 return;
             }
-            // Navigate to admin dashboard
+
+            // API erwartet name + email + password -> name lassen wir leer
+            var success = await _api.LoginAsync("", Email, Password);
+            if (!success || _api.CurrentUser == null)
+            {
+                LoginMessage = "Login fehlgeschlagen. Bitte Daten prüfen.";
+                OnPropertyChanged(nameof(LoginMessage));
+                return;
+            }
+
+            var role = _api.CurrentUser.Role; // string
+
+            if (!string.Equals(role, "Admin", System.StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(role, "Owner", System.StringComparison.OrdinalIgnoreCase))
+            {
+                LoginMessage = "Zugriff verweigert. Nur Admin oder Owner erlaubt.";
+                _api.Logout();
+                OnPropertyChanged(nameof(LoginMessage));
+                return;
+            }
+
+            // ✅ Erfolgreich -> AdminShell
             _nav.Navigate(new AdminShellViewModel(_nav));
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        // === INotifyPropertyChanged ===
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

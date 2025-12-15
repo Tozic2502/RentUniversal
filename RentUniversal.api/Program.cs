@@ -1,6 +1,8 @@
+using System.Text.Json.Serialization;
 using RentUniversal.Infrastructure.DependencyInjection;
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Application.Services;
+// Add this using if you are using Swashbuckle or NSwag for OpenAPI/Swagger
 using Microsoft.OpenApi.Models;
 
 namespace RentUniversal.api
@@ -18,13 +20,11 @@ namespace RentUniversal.api
             builder.Services.AddInfrastructure(builder.Configuration);
 
 
-            // Application services (business logic)
+            // Application services
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<IRentalService, RentalService>();
             builder.Services.AddScoped<ILicenseService, LicenseService>();
-            
-            // CORS configuration
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", policy =>
@@ -37,19 +37,33 @@ namespace RentUniversal.api
             });
 
 
-            // Controllers & Swagger
-            builder.Services.AddControllers();
+            // Controllers + OpenAPI
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(
+                        new JsonStringEnumConverter()
+                    );
+                });
             builder.Services.AddEndpointsApiExplorer();
+            // Replace AddOpenApi() with AddSwaggerGen() if using Swashbuckle
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RentUniversal API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "RentUniversal API",
+                    Version = "v1"
+                });
+
+                c.UseAllOfToExtendReferenceSchemas();
             });
+
 
             var app = builder.Build();
 
-            // Middleware pipeline
             if (app.Environment.IsDevelopment())
             {
+                // Replace UseOpenApi() with UseSwagger() and UseSwaggerUI()
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
@@ -60,7 +74,6 @@ namespace RentUniversal.api
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");
             app.UseAuthorization();
-
             app.MapControllers();
             app.Run();
 

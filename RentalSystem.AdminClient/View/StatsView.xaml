@@ -10,7 +10,7 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Text="RentHub Stats"
+        <TextBlock Text="Statistics"
                    FontSize="32"
                    FontWeight="Bold"
                    Foreground="#333"
@@ -87,6 +87,16 @@
                                Foreground="#777"/>
                 </StackPanel>
             </Border>
+            <!-- USER REGISTRATION CHART -->
+            <Border Grid.Row="2"
+                    Margin="0 40 0 0"
+                    Padding="20"
+                    Background="White"
+                    CornerRadius="10"
+                    BorderBrush="#ddd"
+                    BorderThickness="1">
+            </Border>
+
 
         </UniformGrid>
     </Grid>
