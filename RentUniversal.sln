@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36717.8 d17.14
+VisualStudioVersion = 17.14.36717.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentUniversal.api", "RentUniversal.api\RentUniversal.api.csproj", "{43AC3514-72D1-4411-98DA-15A95B21E02A}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentUniversal.Infrastructure", "RentUniversal.Infrastructure\RentUniversal.Infrastructure.csproj", "{E9FF420E-EA78-4ACC-9C9A-61B0B9D415F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalSystem.AdminClient", "RentalSystem.AdminClient\RentalSystem.AdminClient.csproj", "{B93496B5-183E-474A-9BFD-E81EE41EA739}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentUniversal.Tests", "RentUniversal.Tests\RentUniversal.Tests.csproj", "{27198CD5-7E6B-1BE3-D6FE-E7B1F88D2011}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{B93496B5-183E-474A-9BFD-E81EE41EA739}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B93496B5-183E-474A-9BFD-E81EE41EA739}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B93496B5-183E-474A-9BFD-E81EE41EA739}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27198CD5-7E6B-1BE3-D6FE-E7B1F88D2011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27198CD5-7E6B-1BE3-D6FE-E7B1F88D2011}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27198CD5-7E6B-1BE3-D6FE-E7B1F88D2011}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27198CD5-7E6B-1BE3-D6FE-E7B1F88D2011}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

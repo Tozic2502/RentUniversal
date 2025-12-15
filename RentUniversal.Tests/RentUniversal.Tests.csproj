@@ -17,6 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RentUniversal.api\RentUniversal.api.csproj" />
+    <ProjectReference Include="..\RentUniversal.Application\RentUniversal.Application.csproj" />
+    <ProjectReference Include="..\RentUniversal.Domain\RentUniversal.Domain.csproj" />
+    <ProjectReference Include="..\RentUniversal.Infrastructure\RentUniversal.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 

@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-public class RentalsControllerTests
+
+    public class RentalsControllerTests
 {
     private readonly Mock<IRentalService> _rentalServiceMock;
     private readonly Mock<IItemService> _itemServiceMock;
