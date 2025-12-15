@@ -63,9 +63,7 @@ namespace RentalSystem.AdminClient.ViewModel
             _ = LoadUsersAsync();
         }
 
-        // =========================
         // LOAD USERS
-        // =========================
 
         private async Task LoadUsersAsync()
         {
@@ -97,9 +95,7 @@ namespace RentalSystem.AdminClient.ViewModel
             OnPropertyChanged(nameof(FilteredUsers));
         }
 
-        // =========================
         // USER DETAILS
-        // =========================
 
         private async void LoadSelectedUserDetails()
         {
@@ -119,9 +115,7 @@ namespace RentalSystem.AdminClient.ViewModel
             CommandManager.InvalidateRequerySuggested();
         }
 
-        // =========================
         // ROLE LOGIC
-        // =========================
 
         private bool IsCurrentUserSelected =>
             SelectedUser != null &&
@@ -137,7 +131,7 @@ namespace RentalSystem.AdminClient.ViewModel
             {
                 "Customer" => true,
                 "Admin" => true,
-                _ => false // Owner
+                _ => false
             };
         }
 
@@ -154,9 +148,7 @@ namespace RentalSystem.AdminClient.ViewModel
             };
         }
 
-        // =========================
-        // PROMOTE / DEMOTE ACTIONS
-        // =========================
+        // Promote / Demote handlers
 
         private async Task PromoteUser()
         {

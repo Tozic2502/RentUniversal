@@ -17,7 +17,6 @@ namespace RentalSystem.AdminClient.ViewModel
     {
         private readonly ApiService _api = ApiService.Instance;
 
-        // === KPIs ===
         private int _usersCount;
         public int UsersCount
         {
@@ -46,7 +45,6 @@ namespace RentalSystem.AdminClient.ViewModel
             set { _systemUptime = value; OnPropertyChanged(); }
         }
 
-        // === INTERNAL ===
         private readonly DateTime _startTime;
         private readonly DispatcherTimer _uptimeTimer;
 
@@ -61,7 +59,6 @@ namespace RentalSystem.AdminClient.ViewModel
             _uptimeTimer.Tick += (_, _) => UpdateUptime();
             _uptimeTimer.Start();
 
-            // 🔥 HIER: echte Daten laden
             _ = LoadStatsAsync();
         }
 
@@ -69,7 +66,6 @@ namespace RentalSystem.AdminClient.ViewModel
         {
             UsersCount = await _api.GetUsersCountAsync();
 
-            // Platzhalter – kommt als Nächstes
             ActiveRentals = 0;
             RevenueToday = 0m;
         }

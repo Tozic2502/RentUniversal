@@ -50,7 +50,7 @@ namespace RentalSystem.AdminClient.ViewModel
             }
         }
 
-        // === FORM FIELDS ===
+        // form fields
         private string _name = "";
         public string Name
         {
@@ -86,7 +86,7 @@ namespace RentalSystem.AdminClient.ViewModel
             set { _isAvailable = value; OnPropertyChanged(); }
         }
 
-        // === COMMANDS ===
+        // Commands
         public ICommand RefreshCommand { get; }
         public ICommand CreateCommand { get; }
         public ICommand UpdateCommand { get; }
@@ -111,9 +111,9 @@ namespace RentalSystem.AdminClient.ViewModel
             _ = LoadItemsAsync();
         }
 
-        // =========================
-        // LOAD
-        // =========================
+        // 
+        // Load
+        // 
 
         private async Task LoadItemsAsync()
         {
@@ -135,9 +135,9 @@ namespace RentalSystem.AdminClient.ViewModel
             IsAvailable = SelectedItem.IsAvailable;
         }
 
-        // =========================
-        // CREATE / UPDATE / DELETE
-        // =========================
+        // 
+        // CRUD
+        //
 
         private bool CanCreate()
         {
@@ -209,9 +209,9 @@ namespace RentalSystem.AdminClient.ViewModel
             ClearForm();
         }
 
-        // =========================
-        // HELPERS
-        // =========================
+        // 
+        // Util / helpers
+        // 
 
         private void ClearForm()
         {
@@ -220,8 +220,6 @@ namespace RentalSystem.AdminClient.ViewModel
             Condition = "";
             Value = 0;
             IsAvailable = true;
-
-            // ❗ WICHTIG: NICHT SelectedItem setzen
         }
     }
 }

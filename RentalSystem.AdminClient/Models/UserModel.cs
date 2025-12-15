@@ -49,6 +49,6 @@
         /// (e.g., "2 days ago"), the server may already provide the formatted value.
         /// </remarks>
         public DateTime? LastLogin { get; set; } 
-        public string IdentificationId { get; set; }  // identificationId
+        public int IdentificationId { get; set; }  // identificationId
     }
 }

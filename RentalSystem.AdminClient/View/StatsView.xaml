@@ -87,7 +87,6 @@
                                Foreground="#777"/>
                 </StackPanel>
             </Border>
-            <!-- USER REGISTRATION CHART -->
             <Border Grid.Row="2"
                     Margin="0 40 0 0"
                     Padding="20"

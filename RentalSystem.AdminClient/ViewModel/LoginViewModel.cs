@@ -31,7 +31,7 @@ namespace RentalSystem.AdminClient.ViewModel
 
         }
 
-        // === INPUTS ===
+        // Input
 
         private string _email = "";
         public string Email
@@ -56,13 +56,10 @@ namespace RentalSystem.AdminClient.ViewModel
 
         public ICommand LoginCommand { get; }
 
-        // === LOGIN LOGIK ===
+        // Login logic
 
         private async Task LoginAsync()
         {
-            // Nur zum Debuggen – kannst du auch wieder entfernen
-            System.Diagnostics.Debug.WriteLine($"[LOGIN] Email='{Email}', Password.Length={Password?.Length ?? 0}");
-
             LoginMessage = "";
             OnPropertyChanged(nameof(LoginMessage));
 
@@ -72,8 +69,7 @@ namespace RentalSystem.AdminClient.ViewModel
                 OnPropertyChanged(nameof(LoginMessage));
                 return;
             }
-
-            // API erwartet name + email + password -> name lassen wir leer
+            
             var success = await _api.LoginAsync("", Email, Password);
             if (!success || _api.CurrentUser == null)
             {
@@ -87,17 +83,15 @@ namespace RentalSystem.AdminClient.ViewModel
             if (!string.Equals(role, "Admin", System.StringComparison.OrdinalIgnoreCase) &&
                 !string.Equals(role, "Owner", System.StringComparison.OrdinalIgnoreCase))
             {
-                LoginMessage = "Zugriff verweigert. Nur Admin oder Owner erlaubt.";
+                LoginMessage = "Access Denied: Wrong User Role";
                 _api.Logout();
                 OnPropertyChanged(nameof(LoginMessage));
                 return;
             }
 
-            // ✅ Erfolgreich -> AdminShell
             _nav.Navigate(new AdminShellViewModel(_nav));
         }
 
-        // === INotifyPropertyChanged ===
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
