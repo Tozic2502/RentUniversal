@@ -6,6 +6,12 @@ using RentUniversal.Domain.Entities;
 
 namespace RentUniversal.api.Controllers
 {
+    /// <summary>
+    /// API controller responsible for user management and authentication.
+    /// </summary>
+    /// <remarks>
+    /// Handles registration, authentication, updates, and password changes.
+    /// </remarks
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
@@ -13,6 +19,10 @@ namespace RentUniversal.api.Controllers
         private const int MinPasswordLength = 6;
         private const int CprLength = 10;
         private readonly IUserService _userService;
+
+        /// <summary>
+        /// Health check endpoint.
+        /// </summary>
         [HttpGet("ping")]
         public IActionResult Ping()
         {
@@ -23,13 +33,19 @@ namespace RentUniversal.api.Controllers
         {
             _userService = userService;
         }
-        
+
+        /// <summary>
+        /// Retrieves all users.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllItems()
         {
             return Ok(await _userService.GetAllUsersAsync());
         }
 
+        /// <summary>
+        /// Retrieves a user by ID.
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetUserById(string id)
         {
@@ -38,6 +54,12 @@ namespace RentUniversal.api.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Registers a new user.
+        /// </summary>
+        /// <remarks>
+        /// Performs basic validation at the API boundary.
+        /// </remarks>
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> RegisterUser([FromBody] LoginDTO register)
         {
@@ -66,7 +88,9 @@ namespace RentUniversal.api.Controllers
             return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
         }
 
-
+        /// <summary>
+        /// Authenticates a user.
+        /// </summary>
         [HttpPost("authenticate")]
         public async Task<ActionResult<UserDTO>> Authenticate([FromBody] LoginDTO login)
         {
@@ -78,7 +102,9 @@ namespace RentUniversal.api.Controllers
             return Ok(user);
         }
 
-
+        /// <summary>
+        /// Updates user profile information.
+        /// </summary>
         [HttpPut("{id}")]
         public async Task<ActionResult<UserDTO>> UpdateUser(string id, [FromBody] UserDTO updatedUser)
         {
@@ -88,6 +114,9 @@ namespace RentUniversal.api.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Changes a user's password.
+        /// </summary>
         [HttpPut("{id}/password")]
         public async Task<ActionResult> ChangePassword(string id, [FromBody] ChangePasswordDTO dto)
         {
