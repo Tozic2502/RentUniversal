@@ -55,5 +55,7 @@ public class Item
     /// Gets or sets the total price for renting the item, which may be calculated based on the rental duration.
     /// </summary>
     public double TotalPrice { get; set; }
+    
+    public List<string> ImageUrls { get; set; } = new();
 }
 

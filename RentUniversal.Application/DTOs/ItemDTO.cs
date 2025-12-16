@@ -44,5 +44,7 @@ public class ItemDTO
     public double Deposit { get; set; }
     public double PricePerDay { get; set; }
     public double TotalPrice { get; set; }
+    // Images
+    public List<string> ImageUrls { get; set; } = new();
 
 }
