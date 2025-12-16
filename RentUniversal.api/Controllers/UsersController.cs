@@ -1,16 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
-using RentUniversal.Application.Mappers;
 using RentUniversal.Domain.Entities;
 
 namespace RentUniversal.api.Controllers
 {
+    /// <summary>
+    /// API controller responsible for user management and authentication.
+    /// </summary>
+    /// <remarks>
+    /// Handles registration, authentication, updates, and password changes.
+    /// </remarks
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
+        private const int MinPasswordLength = 6;
+        private const int CprLength = 10;
         private readonly IUserService _userService;
+
+        /// <summary>
+        /// Health check endpoint.
+        /// </summary>
         [HttpGet("ping")]
         public IActionResult Ping()
         {
@@ -22,6 +33,18 @@ namespace RentUniversal.api.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Retrieves all users.
+        /// </summary>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllItems()
+        {
+            return Ok(await _userService.GetAllUsersAsync());
+        }
+
+        /// <summary>
+        /// Retrieves a user by ID.
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetUserById(string id)
         {
@@ -30,13 +53,33 @@ namespace RentUniversal.api.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Registers a new user.
+        /// </summary>
+        /// <remarks>
+        /// Performs basic validation at the API boundary.
+        /// </remarks>
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> RegisterUser([FromBody] LoginDTO register)
         {
+            // Basic format validation (API boundary)
+            if (string.IsNullOrWhiteSpace(register.Name))
+                return BadRequest("Name is required");
+            
+
+            if (string.IsNullOrWhiteSpace(register.Email) || !register.Email.Contains('@'))
+                return BadRequest("Valid email is required");
+
+            if (string.IsNullOrWhiteSpace(register.Password) || register.Password.Length < MinPasswordLength)
+                return BadRequest("Password must be at least 6 characters");
+
+            if (register.IdentificationId.ToString().Length != CprLength)
+                return BadRequest("CPR Number required");
             var user = new User
             {
                 Name = register.Name,
-                Email = register.Email
+                Email = register.Email,
+                RegisteredDate = DateTime.UtcNow
             };
 
             var createdUser = await _userService.RegisterAsync(user, register.Password);
@@ -53,7 +96,8 @@ namespace RentUniversal.api.Controllers
 
             if (user == null)
                 return Unauthorized("Invalid email or password");
-
+            
+            user.LastLogin = DateTime.UtcNow;
             return Ok(user);
         }
 
@@ -77,6 +121,18 @@ namespace RentUniversal.api.Controllers
 
             return Ok("Password opdateret");
         }
+        
+        [HttpPut("{id}/role")]
+        public async Task<IActionResult> UpdateRole(string id, [FromBody] UserDTO dto)
+        {
+            var success = await _userService.UpdateUserRoleAsync(id, dto.Role);
+
+            if (!success)
+                return NotFound();
+
+            return NoContent();
+        }
+
 
     }
 }

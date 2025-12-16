@@ -1,6 +1,7 @@
-﻿using System;
+using RentUniversal.Domain.Enums;
 
 namespace RentUniversal.Application.DTOs;
+
 
 /// <summary>
 /// Data Transfer Object (DTO) representing a user in the system.
@@ -31,4 +32,7 @@ public class UserDTO
     /// Reference to the user's identification record.
     /// </summary>
     public string IdentificationId { get; set; } = "";
+    
+    public DateTime? RegisteredDate { get; set; }
+    public DateTime? LastLogin { get; set; }
 }

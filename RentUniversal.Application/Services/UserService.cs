@@ -1,8 +1,9 @@
 ﻿using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
-using RentUniversal.Application.Mappers;
+using RentUniversal.Application.Mapper;
 using RentUniversal.Domain.Entities;
 using BCrypt.Net;
+using RentUniversal.Domain.Enums;
 
 namespace RentUniversal.Application.Services;
 
@@ -35,17 +36,13 @@ public class UserService : IUserService
     /// <returns>The authenticated user as <see cref="UserDTO"/> or null.</returns>
     public async Task<UserDTO?> AuthenticateAsync(string email, string password)
     {
-        // Look up the user by email.
         var user = await _userRepository.GetByEmailAsync(email);
-        if (user == null)
-            return null;
+        if (user == null) return null;
 
-        // Verify the supplied password against the stored BCrypt hash.
         bool passwordMatches = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
-        if (!passwordMatches)
-            return null;
+        if (!passwordMatches) return null;
 
-        // Return a DTO to avoid exposing domain entity internals.
+        user.LastLogin = DateTime.UtcNow;
         return DTOMapper.ToDTO(user);
     }
 
@@ -57,41 +54,36 @@ public class UserService : IUserService
     /// <returns>The created user as <see cref="UserDTO"/>.</returns>
     public async Task<UserDTO> RegisterAsync(User user, string password)
     {
-        // Hash the password before persisting the user (never store plain-text passwords).
+        if (user.Name.Length < 2)
+            throw new Exception("Name is too short.");
+
+        if (!user.Email.Contains('@'))
+            throw new Exception("Invalid email format.");
+
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        user.RegisteredDate = DateTime.UtcNow;
+
+        if (user.PasswordHash.Length < 6)
+            throw new Exception("Password must be at least 6 characters.");
+
+        // Must be unique
+        var existing = await _userRepository.GetByEmailAsync(user.Email);
+        if (existing != null)
+            throw new Exception("Email already registered");
+
+        // Must be unique for IdentificationId if provided
+        if (user.IdentificationId != 0)
+        {
+            var existingById = await _userRepository.GetByIdentificationIdAsync(user.IdentificationId);
+            if (existingById != null)
+                throw new Exception("Identification ID already registered");
+        }
 
         await _userRepository.CreateAsync(user);
 
-        // Return the created user as a DTO (without sensitive fields).
         return DTOMapper.ToDTO(user);
     }
 
-    /// <summary>
-    /// Stores a reference to an identification record for a user (verification step).
-    /// Returns false if the user does not exist.
-    /// </summary>
-    /// <param name="userId">Identifier of the user to update.</param>
-    /// <param name="identificationId">Identifier of the identification record to link.</param>
-    /// <returns>True if the update succeeded; otherwise false.</returns>
-    public async Task<bool> VerifyIdentificationAsync(string userId, string identificationId)
-    {
-        var user = await _userRepository.GetByIdAsync(userId);
-        if (user == null)
-            return false;
-
-        // Link the identification record to the user.
-        user.IdentificationId = identificationId;
-
-        await _userRepository.UpdateAsync(user);
-        return true;
-    }
-
-    /// <summary>
-    /// Retrieves a user by id and maps it to a DTO.
-    /// Returns null if the user does not exist.
-    /// </summary>
-    /// <param name="id">The user identifier.</param>
-    /// <returns>A <see cref="UserDTO"/> or null.</returns>
     public async Task<UserDTO?> GetUserByIdAsync(string id)
     {
         var user = await _userRepository.GetByIdAsync(id);
@@ -108,10 +100,8 @@ public class UserService : IUserService
     public async Task<UserDTO?> UpdateUserAsync(string id, UserDTO updatedUser)
     {
         var existingUser = await _userRepository.GetByIdAsync(id);
-        if (existingUser == null)
-            return null;
+        if (existingUser == null) return null;
 
-        // Only update allowed fields (avoid blindly copying role/security fields from client input).
         existingUser.Name = updatedUser.Name;
         existingUser.Email = updatedUser.Email;
 
@@ -131,17 +121,37 @@ public class UserService : IUserService
     public async Task<bool> ChangePasswordAsync(string id, string oldPassword, string newPassword)
     {
         var user = await _userRepository.GetByIdAsync(id);
-        if (user == null)
-            return false;
+        if (user == null) return false;
 
-        // Verify the old password to prevent unauthorized password changes.
+        // Check old password matches
         if (!BCrypt.Net.BCrypt.Verify(oldPassword, user.PasswordHash))
             return false;
 
-        // Hash and store the new password.
+        // Hash new password & save
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
         await _userRepository.UpdateAsync(user);
 
         return true;
     }
+    
+    public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
+    {
+        var users = await _userRepository.GetAllAsync();
+        return users.Select(DTOMapper.ToDTO);
+    }
+
+    public async Task<bool> UpdateUserRoleAsync(string id, UserRole role)
+    {
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user == null)
+            return false;
+
+        user.Role = role;
+
+        await _userRepository.UpdateAsync(user);
+        return true;
+    }
+
+
+
 }

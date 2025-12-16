@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using RentUniversal.Infrastructure.DependencyInjection;
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Application.Services;
@@ -6,13 +7,16 @@ using Microsoft.OpenApi.Models;
 
 namespace RentUniversal.api
 {
+    /// <summary>
+    /// Application entry point for the RentUniversal API.
+    /// </summary>
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Infrastructure (MongoDB)
+            // Infrastructure layer (MongoDB, repositories)
             builder.Services.AddInfrastructure(builder.Configuration);
 
 
@@ -34,13 +38,26 @@ namespace RentUniversal.api
 
 
             // Controllers + OpenAPI
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(
+                        new JsonStringEnumConverter()
+                    );
+                });
             builder.Services.AddEndpointsApiExplorer();
             // Replace AddOpenApi() with AddSwaggerGen() if using Swashbuckle
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RentUniversal API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "RentUniversal API",
+                    Version = "v1"
+                });
+
+                c.UseAllOfToExtendReferenceSchemas();
             });
+
 
             var app = builder.Build();
 

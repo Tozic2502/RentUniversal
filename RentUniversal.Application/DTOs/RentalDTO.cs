@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace RentUniversal.Application.DTOs;
+
 
 /// <summary>
 /// Data Transfer Object (DTO) representing a rental agreement/transaction.
@@ -48,4 +53,8 @@ public class RentalDTO
     /// Total price for the rental (or agreed price at creation time, depending on your model).
     /// </summary>
     public double Price { get; set; }
+    
+    public ItemDTO? Item { get; set; }
+    public double PricePerDay { get; set; }
+    public double TotalPrice { get; set; }
 }

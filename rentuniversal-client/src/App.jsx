@@ -1,18 +1,18 @@
-﻿// src/App.jsx
-import "./App.css";
+﻿import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Home from "./Pages/Home.jsx";
-import Udlejning from "./Pages/Rental.jsx";
+import Rental from "./Pages/Rental.jsx"; // Browse & add to cart
 import Kurv from "./Pages/Cart.jsx";
 import Login from "./Pages/Login.jsx";
-import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 import ProfilePage from "./Pages/ProfilePage.jsx";
 import Header from "./Pages/Header.jsx";
 import Footer from "./Pages/Footer.jsx";
 import SideKategori from "./Pages/SideKategori.jsx";
 import Register from "./Pages/Register.jsx";
 import SupportPage from "./Pages/Page-Support/Support.jsx";
+import Udlejning from "./Pages/Udlejning.jsx"; // My rentals
+import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 
 export default function App() {
     // Hvilken kategori er valgt i venstremenuen (null = alle)
@@ -44,7 +44,9 @@ export default function App() {
                                 />
                             }
                         />
+                        <Route path="/login" element={<Login />} />
 
+                        {/* 🔒 Protected pages */}
                         <Route
                             path="/profile"
                             element={
@@ -71,6 +73,7 @@ export default function App() {
                                 </ProtectedRoute>
                             }
                         />
+                       
 
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />

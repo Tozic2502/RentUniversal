@@ -10,17 +10,45 @@ function Rental() {
     useEffect(() => {
         if (!user) return; // Prevent fetching if not logged in
 
-        async function loadRentals() {
+        async function loadItems() {
             try {
-                const data = await getUserRentals(user.id);
-                setRentals(data);
-            } catch (err) {
-                console.error("Failed to load rentals", err);
+                const data = await getAllItems();
+
+                const availableItems = data.filter(item => item.isAvailable === true);
+
+                setItems(availableItems);
+            } catch (error) {
+                console.error(error);
             }
         }
 
+
         loadRentals();
     }, [user]);
+    async function rentItem(itemId) {
+        if (!user) {
+            alert("Du skal være logget ind for at leje!");
+            navigate("/login");
+            return;
+        }
+
+        const response = await fetch("http://localhost:8080/api/rentals", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userId: user.id,
+                itemId: itemId
+            })
+        });
+
+        if (!response.ok) {
+            alert("Der opstod en fejl ved udlejning.");
+            return;
+        }
+
+        alert("Tillykke! Du har lejet varen!");
+        loadItems(); // Refresh list to hide the rented item
+    }
 
 
     return (
@@ -49,6 +77,10 @@ function Rental() {
                         <p><strong>Slut stand:</strong> {r.returnCondition ?? "Ikke afleveret"}</p>
 
                         <p><strong>Pris:</strong> {r.price} kr.</p>
+                        <button onClick={() => rentItem(item.id)}>
+                            Rent
+                        </button>
+
                     </div>
                 ))}
             </div>

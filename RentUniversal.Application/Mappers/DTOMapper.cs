@@ -1,7 +1,7 @@
 ﻿using RentUniversal.Application.DTOs;
 using RentUniversal.Domain.Entities;
 
-namespace RentUniversal.Application.Mappers;
+namespace RentUniversal.Application.Mapper;
 
 /// <summary>
 /// Central mapper for converting domain entities to DTOs.
@@ -19,9 +19,10 @@ public static class DTOMapper
         Id = user.Id,
         Name = user.Name,
         Email = user.Email,
-        // Role is converted to string to avoid exposing domain enums/types to external layers.
-        Role = user.Role.ToString(),
-        IdentificationId = user.IdentificationId
+        Role = user.Role,
+        IdentificationId = user.IdentificationId,
+        RegisteredDate = user.RegisteredDate,
+        LastLogin = user.LastLogin
     };
 
     /// <summary>
@@ -29,15 +30,17 @@ public static class DTOMapper
     /// </summary>
     /// <param name="item">The domain item entity.</param>
     /// <returns>A DTO representation of the item.</returns>
-    public static ItemDTO ToDTO(Item item) => new()
+    public static ItemDTO ToDTO(Item item) => new ItemDTO
     {
         Id = item.Id,
         Name = item.Name,
         Category = item.Category,
         Condition = item.Condition,
         Value = item.Value,
-        IsAvailable = item.IsAvailable,
         ImageUrl = item.ImageUrl,
+        IsAvailable = item.IsAvailable,
+        Deposit = item.Deposit,
+        PricePerDay = item.PricePerDay
     };
 
     /// <summary>
@@ -45,17 +48,22 @@ public static class DTOMapper
     /// </summary>
     /// <param name="rental">The domain rental entity.</param>
     /// <returns>A DTO representation of the rental.</returns>
-    public static RentalDTO ToDTO(Rental rental) => new()
+    public static RentalDTO ToDTO(Rental rental, Item? item = null) => new()
     {
         Id = rental.Id,
         UserId = rental.UserId,
         ItemId = rental.ItemId,
-        StartDate = rental.StartDate,
-        EndDate = rental.EndDate,
+        StartDate = rental.RentalDate,
+        EndDate = rental.ReturnDate,
         StartCondition = rental.StartCondition,
         ReturnCondition = rental.ReturnCondition,
-        Price = rental.Price
+        Price = rental.Price,
+        PricePerDay = rental.PricePerDay,
+        TotalPrice = rental.TotalPrice,
+
+        Item = item != null ? DTOMapper.ToDTO(item) : null
     };
+
 
     /// <summary>
     /// Maps a domain <see cref="License"/> entity to a <see cref="LicenseDTO"/>.

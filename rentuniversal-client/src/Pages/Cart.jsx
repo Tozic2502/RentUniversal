@@ -1,93 +1,226 @@
-﻿import { useCart } from "../Context/CartContext";
+﻿import { useState } from "react";
+import { useCart } from "../Context/CartContext.jsx";
+import { useUser } from "../Context/UserContext.jsx";
+import { useNavigate } from "react-router-dom";
+import { rentItem } from "../api.js";
 
-function Cart() {
-    const { cart, removeFromCart, clearCart } = useCart();
+export default function Cart() {
+    const { cartItems, clearCart } = useCart();
+    const { user } = useUser();
+    const navigate = useNavigate();
+
+    const validCartItems = Array.isArray(cartItems) ? cartItems : [];
+   
+
+    const [showContract, setShowContract] = useState(false);
+    const today = new Date().toISOString().split("T")[0];
+    const tomorrow = new Date(Date.now() + 86400000).toISOString().split("T")[0];
+
+    const [startDate, setStartDate] = useState(today);
+    const [endDate, setEndDate] = useState(tomorrow);
+
+    const isValid = new Date(endDate) > new Date(startDate);
+
+    const estimatedDays =
+        Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+
+    const estimatedTotal = estimatedDays * (cartItems[0]?.pricePerDay || 0);
 
 
-    // Total price
-    const total = cart.reduce((sum, item) => sum + item.value, 0);
+    function openContract() {
+        if (!user) {
+            alert("Du skal være logget ind for at leje dine varer!");
+            navigate("/login");
+            return;
+        }
+        setShowContract(true);
+    }
 
-    async function handleCheckout() {
+    async function confirmContract() {
         try {
-            // 1. For hver item i kurven → lav en rental i backend
-            for (const item of cart) {
-                await fetch("http://localhost:8080/api/rentals/start", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        userId: "1",       // TODO: replace with login user
-                        itemId: item.id,
-                        startCondition: item.condition
-                    })
-                });
+            for (const item of cartItems) {
+                await rentItem(user.id, item.id, startDate, endDate);
+;
             }
 
-            alert("Udlejning gennemført!");
-
-            // 2. Tøm kurven
             clearCart();
-
-            // 3. Redirect til udlejning
-            window.location.href = "/udlejning";
-
-        } catch (err) {
-            console.error("Checkout failed", err);
-            alert("Der skete en fejl under udlejningen.");
+            setShowContract(false);
+            navigate("/udlejning");
+            alert("Udlejning gennemført!");
+        } catch (error) {
+            console.error("Checkout failed:", error);
+            alert("Fejl! Prøv igen senere.");
         }
+    }
+
+    if (validCartItems.length === 0) {
+        return (
+            <div style={{ padding: "20px", textAlign: "center" }}>
+                <h2>Din kurv er tom 🛒</h2>
+                <button
+                    style={{
+                        marginTop: "10px",
+                        padding: "10px 15px",
+                        background: "#007bff",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "6px",
+                        cursor: "pointer"
+                    }}
+                    onClick={() => navigate("/")}
+                >
+                    Gå til Home
+                </button>
+            </div>
+        );
     }
 
     return (
         <div style={{ padding: "20px" }}>
-            <h1>Din kurv</h1>
+            <h2>Din kurv 🛒</h2>
 
-            {cart.length === 0 && <p>Din kurv er tom.</p>}
-
-            <div>
-                {cart.map((item) => (
-                    <div
+            <ul style={{ listStyle: "none", padding: 0 }}>
+                {cartItems.map((item) => (
+                    <li
                         key={item.id}
                         style={{
-                            border: "1px solid #ddd",
+                            marginBottom: "10px",
                             padding: "10px",
-                            marginBottom: "10px"
+                            border: "1px solid #ccc",
+                            borderRadius: "6px",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center"
                         }}
                     >
-                        <h3>{item.name}</h3>
-                        <p>Kategori: {item.category}</p>
-                        <p>Stand: {item.condition}</p>
-                        <p>Pris: {item.value} kr.</p>
+                        <div>
+                            <strong>{item.name}</strong>
+                            <p>Depositum: {item.deposit} kr</p>
+                            <p>Pris pr. dag: {item.pricePerDay} kr</p>
+                        </div>
 
                         <button
-                            onClick={() => removeFromCart(item.id)}
-                            style={{ background: "red", color: "white", padding: "5px 10px" }}
+                            onClick={() => clearCart(item.id)}
+                            style={{
+                                background: "crimson",
+                                color: "white",
+                                border: "none",
+                                padding: "6px 10px",
+                                borderRadius: "4px",
+                                cursor: "pointer"
+                            }}
                         >
                             Fjern
                         </button>
-                    </div>
+                    </li>
                 ))}
-            </div>
+            </ul>
 
-            {cart.length > 0 && (
-                <><h2>Total pris: {total} kr.</h2>
-                    <button
+            <div style={{ marginTop: "20px", textAlign: "right" }}>
+                <p><strong>Total Beloeb:</strong> {estimatedTotal} kr</p>
+
+                <button
+                    onClick={openContract}
                     style={{
-                        marginTop: "20px",
-                        padding: "10px 20px",
-                        background: "#0066ff",
+                        background: "#28a745",
                         color: "white",
-                        fontSize: "18px",
                         border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "6px",
                         cursor: "pointer"
                     }}
-                    onClick={handleCheckout}
                 >
-                    Bekræft udlejning
-                </button></>
-            )}
-            
+                    Bekraeft Udlejning
+                </button>
+            </div>
 
+            {showContract && (
+                <div style={modalOverlayStyle}>
+                    <div style={modalStyle}>
+                        <h3>📄 Lejekontrakt</h3>
+
+                        <label>Startdato:</label>
+                        <input
+                            type="date"
+                            value={startDate}
+                            min={today}
+                            onChange={(e) => setStartDate(e.target.value)}
+                        />
+
+                        <label>Slutdato:</label>
+                        <input
+                            type="date"
+                            value={endDate}
+                            min={startDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                        />
+
+                        <p style={{ marginTop: "10px" }}>
+                            Pris pr. dag: {cartItems[0]?.pricePerDay} kr
+                            <br />
+                            Estimeret total: {estimatedTotal} kr
+                        </p>
+
+                        <p>Du accepterer hermed følgende vilkår:</p>
+                        <ul>
+                            <li>Udstyret skal returneres i samme stand</li>
+                            <li>Du hæfter for eventuelle skader</li>
+                            <li>Forsinket aflevering kan medføre ekstra omkostninger</li>
+                        </ul>
+
+                        <div style={{ marginTop: "15px", textAlign: "right" }}>
+                            <button onClick={() => setShowContract(false)} style={cancelButtonStyle}>Annuller</button>
+                            <button onClick={confirmContract} style={confirmButtonStyle} disabled={!isValid}>
+                                Accepter & Lej
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            )}
         </div>
     );
 }
 
-export default Cart;
+// ───────── Modal Style ─────────
+
+const modalOverlayStyle = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    background: "rgba(0,0,0,0.6)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    animation: "fadeIn 0.3s",
+    zIndex: 999,
+};
+
+const modalStyle = {
+    background: "white",
+    padding: "20px 30px",
+    borderRadius: "8px",
+    minWidth: "350px",
+    animation: "popup 0.25s ease-out",
+};
+
+const cancelButtonStyle = {
+    background: "gray",
+    border: "none",
+    padding: "8px 15px",
+    marginRight: "10px",
+    borderRadius: "6px",
+    cursor: "pointer",
+    color: "white"
+};
+
+const confirmButtonStyle = {
+    background: "#28a745",
+    border: "none",
+    padding: "8px 15px",
+    borderRadius: "6px",
+    cursor: "pointer",
+    color: "white"
+};

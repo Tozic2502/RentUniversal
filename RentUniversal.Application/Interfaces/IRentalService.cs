@@ -35,14 +35,15 @@ public interface IRentalService
     /// <param name="returnCondition">Recorded condition of the item on return.</param>
     /// <returns>The updated rental as a <see cref="RentalDTO"/>.</returns>
     Task<RentalDTO> EndRentalAsync(string rentalId, string returnCondition);
+    Task<bool> UpdateRentalAsync(RentalDTO rental);
+    Task CreateAsync(Rental rental);
 
     /// <summary>
     /// Retrieves all rentals for a specific user as DTOs.
     /// </summary>
     /// <param name="userId">The user's identifier.</param>
     /// <returns>A collection of <see cref="RentalDTO"/> for the user.</returns>
-    Task<IEnumerable<RentalDTO>> GetRentalsByUserAsync(string userId);
-
+    Task<IEnumerable<Rental>> GetByUserIdAsync(string userId);
     /// <summary>
     /// Calculates the rental price based on the provided rental data and pricing rules.
     /// The returned value may be used when ending a rental or for previews/estimates.

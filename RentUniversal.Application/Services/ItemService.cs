@@ -1,6 +1,6 @@
 ﻿using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
-using RentUniversal.Application.Mappers;
+using RentUniversal.Application.Mapper;
 using RentUniversal.Domain.Entities;
 
 namespace RentUniversal.Application.Services
@@ -11,6 +11,8 @@ namespace RentUniversal.Application.Services
     /// </summary>
     public class ItemService : IItemService
     {
+        const double DEPOSIT_RATE = 0.30;
+        const double PRICE_RATE = 0.10;
         /// <summary>
         /// Repository used for item persistence and retrieval.
         /// </summary>
@@ -58,6 +60,8 @@ namespace RentUniversal.Application.Services
         /// <returns>The created item as <see cref="ItemDTO"/>.</returns>
         public async Task<ItemDTO> AddItemAsync(Item item)
         {
+            item.Deposit = Math.Round(item.Value * DEPOSIT_RATE, 2);
+            item.PricePerDay = Math.Round(item.Value * PRICE_RATE, 2);
             await _itemRepository.CreateAsync(item);
 
             // Assumes the repository either persists the same instance or the instance already contains the correct id.
@@ -80,6 +84,19 @@ namespace RentUniversal.Application.Services
             await _itemRepository.UpdateAsync(item);
             return true;
         }
+        public async Task UpdateAvailabilityAsync(string itemId, bool available)
+        {
+            var item = await _itemRepository.GetByIdAsync(itemId);
+            if (item == null) return;
+
+            item.IsAvailable = available;
+            await _itemRepository.UpdateAsync(item);
+        }
+        public async Task<Item?> GetByIdAsync(string id)
+        {
+            return await _itemRepository.GetByIdAsync(id);
+        }
+
 
         /// <summary>
         /// Deletes an item by id.

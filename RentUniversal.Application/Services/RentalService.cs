@@ -1,6 +1,7 @@
-﻿using RentUniversal.Application.DTOs;
+﻿using MongoDB.Bson;
+using RentUniversal.Application.DTOs;
 using RentUniversal.Application.Interfaces;
-using RentUniversal.Application.Mappers;
+using RentUniversal.Application.Mapper;
 using RentUniversal.Domain.Entities;
 
 namespace RentUniversal.Application.Services
@@ -54,9 +55,7 @@ namespace RentUniversal.Application.Services
                 UserId = userId,
                 ItemId = itemId,
                 StartCondition = startCondition,
-
-                // Use UTC timestamps to avoid timezone ambiguity across clients/servers.
-                StartDate = DateTime.UtcNow
+                RentalDate = DateTime.UtcNow
             };
 
             await _rentalRepository.CreateAsync(rental);
@@ -74,10 +73,9 @@ namespace RentUniversal.Application.Services
         public async Task<RentalDTO> EndRentalAsync(string rentalId, string returnCondition)
         {
             var rental = await _rentalRepository.GetByIdAsync(rentalId);
-            if (rental == null)
-                throw new Exception("Rental not found");
+            if (rental == null) throw new Exception("Rental not found");
 
-            rental.EndDate = DateTime.UtcNow;
+            rental.ReturnDate = DateTime.UtcNow;
             rental.ReturnCondition = returnCondition;
 
             // Price is derived from duration (start -> end) according to current pricing rules.
@@ -86,16 +84,14 @@ namespace RentUniversal.Application.Services
             await _rentalRepository.UpdateAsync(rental);
             return DTOMapper.ToDTO(rental);
         }
-
         /// <summary>
         /// Retrieves all rentals belonging to a specific user and maps them to DTOs.
         /// </summary>
         /// <param name="userId">The user's identifier.</param>
         /// <returns>A collection of <see cref="RentalDTO"/>.</returns>
-        public async Task<IEnumerable<RentalDTO>> GetRentalsByUserAsync(string userId)
+        public async Task<IEnumerable<Rental>> GetByUserIdAsync(string userId)
         {
-            var rentals = await _rentalRepository.GetByUserIdAsync(userId);
-            return rentals.Select(DTOMapper.ToDTO);
+            return await _rentalRepository.GetByUserIdAsync(userId);
         }
 
         /// <summary>
@@ -107,15 +103,48 @@ namespace RentUniversal.Application.Services
         /// <returns>The calculated price.</returns>
         public double CalculatePrice(Rental rental)
         {
-            // Without an end date, the rental is still active and cannot be priced/finalized.
-            if (rental.EndDate == null)
+            // If no return date → no price
+            if (!rental.ReturnDate.HasValue)
                 return 0;
 
-            // TotalHours returns a double, allowing partial hours 
-            var hours = (rental.EndDate.Value - rental.StartDate).TotalHours;
+            DateTime returnDate = rental.ReturnDate.Value;
+            DateTime rentalDate = rental.RentalDate;
 
-            // Rounds to 2 decimals to represent typical currency precision.
-            return Math.Round(hours * 29.00, 2);
+            TimeSpan rentalDuration = returnDate - rentalDate;
+
+            int days = Math.Max(1, (int)Math.Ceiling(rentalDuration.TotalDays));
+
+            return days * rental.PricePerDay;
         }
+
+
+
+
+        public async Task CreateAsync(Rental rental)
+        {
+            await _rentalRepository.CreateAsync(rental);
+        }
+
+        public async Task<bool> UpdateRentalAsync(RentalDTO rentalDto)
+        {
+            // 1. Find existing rental in DB
+            var existingRental = await _rentalRepository.GetByIdAsync(rentalDto.Id);
+
+            if (existingRental == null)
+                return false;
+
+            // 2. Update allowed fields
+            existingRental.ReturnDate = rentalDto.EndDate;
+            existingRental.ReturnCondition = rentalDto.ReturnCondition;
+
+            // 3. Recalculate price based on new EndDate
+            existingRental.Price = CalculatePrice(existingRental);
+
+            // 4. Save back to DB
+            await _rentalRepository.UpdateAsync(existingRental);
+
+            return true;
+        }
+
     }
 }

@@ -20,5 +20,6 @@
         /// password provided by the user for authentication.
         /// </summary>
         public string Password { get; set; } = "";
+        public int IdentificationId { get; set; }
     }
 }

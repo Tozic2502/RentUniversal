@@ -41,5 +41,6 @@ namespace RentUniversal.Application.Interfaces
         /// </summary>
         /// <returns>A collection of all <see cref="User"/> entities.</returns>
         Task<IEnumerable<User>> GetAllAsync();
+        Task<User?> GetByIdentificationIdAsync(int identificationId);
     }
 }

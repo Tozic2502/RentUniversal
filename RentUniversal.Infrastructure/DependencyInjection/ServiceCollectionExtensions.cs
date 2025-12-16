@@ -10,6 +10,14 @@ namespace RentUniversal.Infrastructure.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Configures and registers the infrastructure services for the application.
+        /// This includes setting up MongoDB settings, creating a MongoDB client, and registering
+        /// the necessary repositories and context for dependency injection.
+        /// </summary>
+        /// <param name="services">The IServiceCollection to which the services will be added.</param>
+        /// <param name="configuration">The application configuration containing MongoDB settings.</param>
+        /// <returns>The updated IServiceCollection with the registered infrastructure services.</returns>
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             // Load Mongo settings

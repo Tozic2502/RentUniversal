@@ -1,5 +1,6 @@
 ﻿using RentUniversal.Application.DTOs;
 using RentUniversal.Domain.Entities;
+using RentUniversal.Domain.Enums;
 
 namespace RentUniversal.Application.Interfaces;
 
@@ -25,16 +26,6 @@ public interface IUserService
     /// <param name="password">The initial plain-text password (should never be stored as-is).</param>
     /// <returns>The created user as <see cref="UserDTO"/>.</returns>
     Task<UserDTO> RegisterAsync(User user, string password);
-
-    /// <summary>
-    /// Links and verifies a user's identification record (KYC verification).
-    /// Returns true if verification succeeded; otherwise false.
-    /// </summary>
-    /// <param name="userId">Identifier of the user to verify.</param>
-    /// <param name="identificationId">Identifier of the identification record.</param>
-    /// <returns>True if verification succeeded; otherwise false.</returns>
-    Task<bool> VerifyIdentificationAsync(string userId, string identificationId);
-
     /// <summary>
     /// Retrieves a user by identifier as a DTO.
     /// Returns null if the user does not exist.
@@ -61,4 +52,9 @@ public interface IUserService
     /// <param name="newPassword">The new password to set.</param>
     /// <returns>True if the password change succeeded; otherwise false.</returns>
     Task<bool> ChangePasswordAsync(string id, string oldPassword, string newPassword);
+    Task<IEnumerable<UserDTO>> GetAllUsersAsync();
+    
+    Task<bool> UpdateUserRoleAsync(string id, UserRole role);
+    
+
 }
