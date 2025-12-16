@@ -26,12 +26,12 @@ public class UserDTO
     /// <summary>
     /// User role within the system (e.g., Admin, Customer, Owner).
     /// </summary>
-    public string Role { get; set; } = "";
+    public UserRole Role { get; set; }
 
     /// <summary>
     /// Reference to the user's identification record.
     /// </summary>
-    public string IdentificationId { get; set; } = "";
+    public int IdentificationId { get; set; }
     
     public DateTime? RegisteredDate { get; set; }
     public DateTime? LastLogin { get; set; }

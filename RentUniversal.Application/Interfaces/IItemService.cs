@@ -47,5 +47,9 @@ namespace RentUniversal.Application.Interfaces
         /// <param name="id">The item identifier.</param>
         /// <returns>True if the item was deleted; otherwise false.</returns>
         Task<bool> DeleteItemAsync(string id);
+        
+        Task<Item?> GetByIdAsync(string id);
+        Task UpdateAvailabilityAsync(string itemId, bool available);
+        
     }
 }

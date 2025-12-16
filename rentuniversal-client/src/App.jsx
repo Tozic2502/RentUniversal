@@ -2,16 +2,15 @@
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Home from "./Pages/Home.jsx";
-import Rental from "./Pages/Rental.jsx"; // Browse & add to cart
 import Kurv from "./Pages/Cart.jsx";
 import Login from "./Pages/Login.jsx";
 import ProfilePage from "./Pages/ProfilePage.jsx";
-import Header from "./Pages/Header.jsx";
-import Footer from "./Pages/Footer.jsx";
-import SideKategori from "./Pages/SideKategori.jsx";
+import Header from "./Pages/Page-Support/Header.jsx";
+import Footer from "./Pages/Page-Support/Footer.jsx";
+import SideKategori from "./Pages/Page-Support/SideKategori.jsx";
 import Register from "./Pages/Register.jsx";
 import SupportPage from "./Pages/Page-Support/Support.jsx";
-import Udlejning from "./Pages/Udlejning.jsx"; // My rentals
+import Udlejning from "./Pages/Udlejning.jsx"; 
 import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 
 export default function App() {

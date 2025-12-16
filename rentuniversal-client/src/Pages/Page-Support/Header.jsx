@@ -1,10 +1,10 @@
 // src/Pages/Header.jsx
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useUser } from "../Context/UserContext.jsx";
-import HomeImg from "../assets/HomeIcon.svg";
-import UdlejningImg from "../assets/RentIcon.svg";
-import IndkobsvognImg from "../assets/BasketIcon.svg";
-import LoginImg from "../assets/ProfileIcon.svg";
+import HomeImg from "../../assets/HomeIcon.svg";
+import UdlejningImg from "../../assets/RentIcon.svg";
+import IndkobsvognImg from "../../assets/BasketIcon.svg";
+import LoginImg from "../../assets/ProfileIcon.svg";
+import {useUser} from "../../Context/UserContext.jsx";
 
 function Header() {
     const { user, logout } = useUser();

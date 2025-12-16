@@ -3,40 +3,56 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-    const [name, setName] = useState("");
+    const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
+    const [identification, setIdentification] = useState("");
     const [password, setPassword] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
-    async function handleRegister(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        setErrorMessage("");
-        setSuccessMessage("");
+        setError("");
+
+        // 1) Valider identifikation: præcis 10 cifre
+        if (!/^\d{10}$/.test(identification)) {
+            setError("Identifikation skal være præcis 10 cifre.");
+            return;
+        }
+
+        // 2) Tjek at adgangskoderne er ens
+        if (password !== confirmPassword) {
+            setError("Adgangskoderne matcher ikke.");
+            return;
+        }
+
+        // 3) Payload til dit API (tilpas URL hvis nødvendigt)
+        const payload = {
+            name: fullName,
+            email: email,
+            password: password,
+            identificationId: identification
+        };
 
         try {
             const response = await fetch("http://localhost:8080/api/users/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, password }),
+                body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
-                const body = await response.json().catch(() => null);
-                const msg = body?.message || "Der skete en fejl under oprettelse.";
-                setErrorMessage(msg);
+                setError("Kunne ikke oprette bruger. Prøv igen.");
                 return;
             }
 
-            setSuccessMessage("Konto oprettet. Du kan nu logge ind.");
-            setTimeout(() => {
-                navigate("/login");
-            }, 1000);
+            // Ved succes: send brugeren tilbage til login
+            navigate("/login");
         } catch (err) {
-            console.error(err);
-            setErrorMessage("Serverfejl – prøv igen senere.");
+            console.error("Register error", err);
+            setError("Der skete en fejl. Prøv igen.");
         }
     }
 
@@ -45,26 +61,16 @@ export default function Register() {
             <div className="login-card">
                 <h2 className="login-title">Opret konto</h2>
 
-                {errorMessage && (
-                    <p className="login-error" style={{ color: "red", fontSize: "0.9rem" }}>
-                        {errorMessage}
-                    </p>
-                )}
+                {error && <p className="login-error">{error}</p>}
 
-                {successMessage && (
-                    <p className="login-success" style={{ color: "green", fontSize: "0.9rem" }}>
-                        {successMessage}
-                    </p>
-                )}
-
-                <form className="login-form" onSubmit={handleRegister}>
+                <form className="login-form" onSubmit={handleSubmit}>
                     <div className="login-field">
                         <label>Fulde navn</label>
                         <input
                             type="text"
                             placeholder="Dit fulde navn"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={fullName}
+                            onChange={e => setFullName(e.target.value)}
                             required
                         />
                     </div>
@@ -73,9 +79,26 @@ export default function Register() {
                         <label>Email</label>
                         <input
                             type="email"
-                            placeholder="Email"
+                            placeholder="din@email.dk"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={e => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="login-field">
+                        <label>Identifikation (10 cifre)</label>
+                        <input
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={10}
+                            placeholder="F.eks. 1234567890"
+                            value={identification}
+                            onChange={e => {
+                                // tillad kun tal og max 10 tegn
+                                const value = e.target.value.replace(/\D/g, "").slice(0, 10);
+                                setIdentification(value);
+                            }}
                             required
                         />
                     </div>
@@ -86,7 +109,18 @@ export default function Register() {
                             type="password"
                             placeholder="Adgangskode"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={e => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="login-field">
+                        <label>Bekræft adgangskode</label>
+                        <input
+                            type="password"
+                            placeholder="Gentag adgangskode"
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
                             required
                         />
                     </div>

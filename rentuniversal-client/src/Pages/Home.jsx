@@ -57,27 +57,27 @@ function Home({ selectedCategory, searchTerm }) {
     // ... resten af din komponent (render-delen) kan være som du allerede har
     return (
         <div style={{ padding: "20px" }}>
-            <h1>Tilgængelige produkter</h1>
+            <h1>Tilgaengelige produkter</h1>
 
             {items.length === 0 && <p>Indlæser...</p>}
 
             {items.length > 0 && visibleItems.length === 0 && (
-                <p>Ingen produkter matcher din søgning.</p>
+                <p>Ingen produkter matcher din soegning.</p>
             )}
 
             <div className="item-grid">
                 {visibleItems.map((item) => (
                     <div key={item.id} className="item-card">
                         <div className="item-thumb">
-                            {/* her har du allerede billedlogik osv. */}
-                            {/* ... */}
+                            {item.image}
+                            
                         </div>
 
                         <div className="item-info">
                             <h3>{item.name}</h3>
                             <p className="item-meta">
                                 <strong>Kategori:</strong> {item.category}
-                            </p>
+                            </p> 
                             <p className="item-meta">
                                 <strong>Stand:</strong> {item.condition}
                             </p>

@@ -37,7 +37,6 @@ public static class DTOMapper
         Category = item.Category,
         Condition = item.Condition,
         Value = item.Value,
-        ImageUrl = item.ImageUrl,
         IsAvailable = item.IsAvailable,
         Deposit = item.Deposit,
         PricePerDay = item.PricePerDay
