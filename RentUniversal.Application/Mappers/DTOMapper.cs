@@ -25,7 +25,8 @@ public static class DTOMapper
         Value = item.Value,
         IsAvailable = item.IsAvailable,
         Deposit = item.Deposit,
-        PricePerDay = item.PricePerDay
+        PricePerDay = item.PricePerDay,
+        ImageUrls = item.ImageUrls
     };
 
 

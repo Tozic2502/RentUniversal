@@ -69,5 +69,32 @@ namespace RentUniversal.Application.Services
             await _itemRepository.DeleteAsync(id);
             return true;
         }
+        
+        public async Task<string?> AddItemImageAsync(string itemId, string imageUrl)
+        {
+            var item = await _itemRepository.GetByIdAsync(itemId);
+            if (item == null)
+                return null;
+
+            if (!item.ImageUrls.Contains(imageUrl))
+                item.ImageUrls.Add(imageUrl);
+
+            await _itemRepository.UpdateAsync(item);
+            return imageUrl;
+        }
+
+        public async Task<bool> RemoveItemImageAsync(string itemId, string imageUrl)
+        {
+            var item = await _itemRepository.GetByIdAsync(itemId);
+            if (item == null)
+                return false;
+
+            var removed = item.ImageUrls.Remove(imageUrl);
+            if (!removed)
+                return false;
+
+            await _itemRepository.UpdateAsync(item);
+            return true;
+        }
     }
 }
