@@ -18,13 +18,15 @@ namespace RentUniversal.api.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly IItemService _itemService;
+        private readonly IWebHostEnvironment _env;
 
         /// <summary>
         /// Constructor with dependency injection of the item service.
         /// </summary>
-        public ItemsController(IItemService itemService)
+        public ItemsController(IItemService itemService , IWebHostEnvironment env)
         {
             _itemService = itemService;
+            _env = env;
         }
 
         /// <summary>
@@ -107,23 +109,31 @@ namespace RentUniversal.api.Controllers
             if (item == null)
                 return NotFound();
 
-            var uploadsPath = Path.Combine("wwwroot", "uploads", "items", itemId);
+            // Brug WebRootPath (peger på projekt-rod/wwwroot)
+            var webRoot = _env.WebRootPath 
+                          ?? Path.Combine(_env.ContentRootPath, "wwwroot");
+
+            var uploadsPath = Path.Combine(webRoot, "uploads", "items", itemId);
             Directory.CreateDirectory(uploadsPath);
 
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             var filePath = Path.Combine(uploadsPath, fileName);
 
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await file.CopyToAsync(stream);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
 
+            // URL som klienten kan bruge
             var url = $"/uploads/items/{itemId}/{fileName}";
+
+            item.ImageUrls ??= new List<string>();
             item.ImageUrls.Add(url);
-
             await _itemService.UpdateItemAsync(item);
-
 
             return Ok(new { url });
         }
+    
         
         [HttpDelete("{itemId}/images")]
         public async Task<IActionResult> DeleteImage(string itemId, [FromBody] string fileName)
@@ -143,8 +153,7 @@ namespace RentUniversal.api.Controllers
             return NoContent();
         }
 
-
-
+        
         /// <summary>
         /// Deletes an item by ID.
         /// </summary>

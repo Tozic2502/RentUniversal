@@ -70,12 +70,12 @@ namespace RentUniversal.api
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "RentUniversal API v1");
                 });
             }
-
+            
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseCors("AllowAll");
             app.UseAuthorization();
             app.MapControllers();
-            app.UseStaticFiles();
             app.Run();
 
         }
