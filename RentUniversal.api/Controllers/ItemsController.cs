@@ -96,6 +96,54 @@ namespace RentUniversal.api.Controllers
 
             return NoContent();
         }
+        
+        [HttpPost("{itemId}/images")]
+        public async Task<IActionResult> UploadImage(string itemId, IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded");
+
+            var item = await _itemService.GetByIdAsync(itemId);
+            if (item == null)
+                return NotFound();
+
+            var uploadsPath = Path.Combine("wwwroot", "uploads", "items", itemId);
+            Directory.CreateDirectory(uploadsPath);
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var filePath = Path.Combine(uploadsPath, fileName);
+
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(stream);
+
+            var url = $"/uploads/items/{itemId}/{fileName}";
+            item.ImageUrls.Add(url);
+
+            await _itemService.UpdateItemAsync(item);
+
+
+            return Ok(new { url });
+        }
+        
+        [HttpDelete("{itemId}/images")]
+        public async Task<IActionResult> DeleteImage(string itemId, [FromBody] string fileName)
+        {
+            var item = await _itemService.GetByIdAsync(itemId);
+            if (item == null)
+                return NotFound();
+
+            var path = Path.Combine("wwwroot", "uploads", "items", itemId, fileName);
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            item.ImageUrls.RemoveAll(x => x.EndsWith(fileName));
+            await _itemService.UpdateItemAsync(item);
+
+
+            return NoContent();
+        }
+
+
 
         /// <summary>
         /// Deletes an item by ID.
