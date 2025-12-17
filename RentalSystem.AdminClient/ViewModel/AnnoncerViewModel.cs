@@ -166,6 +166,7 @@ namespace RentalSystem.AdminClient.ViewModel
                 Name = Name,
                 Category = Category,
                 Condition = Condition,
+                IsAvailable = IsAvailable,
                 Value = Value,
             };
 
