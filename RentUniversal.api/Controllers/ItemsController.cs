@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Domain.Entities;
 using RentUniversal.Application.DTOs;
@@ -109,27 +110,30 @@ namespace RentUniversal.api.Controllers
             if (item == null)
                 return NotFound();
 
-            // Brug WebRootPath (peger på projekt-rod/wwwroot)
-            var webRoot = _env.WebRootPath 
-                          ?? Path.Combine(_env.ContentRootPath, "wwwroot");
-
-            var uploadsPath = Path.Combine(webRoot, "uploads", "items", itemId);
+            var uploadsPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "uploads",
+                "items",
+                itemId
+            );
+            
             Directory.CreateDirectory(uploadsPath);
 
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             var filePath = Path.Combine(uploadsPath, fileName);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(stream);
 
             // URL som klienten kan bruge
             var url = $"/uploads/items/{itemId}/{fileName}";
 
             item.ImageUrls ??= new List<string>();
             item.ImageUrls.Add(url);
+
             await _itemService.UpdateItemAsync(item);
+
 
             return Ok(new { url });
         }

@@ -110,6 +110,17 @@ namespace RentalSystem.AdminClient.ViewModel
             SelectedUser.Email = detailed.Email;
             SelectedUser.Role = detailed.Role;
             SelectedUser.IdentificationId = detailed.IdentificationId;
+            
+            var rentals = await _api.GetRentalsByUserAsync(SelectedUser.Id);
+
+            var now = DateTime.UtcNow;
+
+            SelectedUser.TotalRentals = rentals.Count;
+
+            SelectedUser.ActiveRentals = rentals.Count(r =>
+                r.StartDate <= now &&
+                r.EndDate >= now
+            );
 
             OnPropertyChanged(nameof(SelectedUser));
             CommandManager.InvalidateRequerySuggested();

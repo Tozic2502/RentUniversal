@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +16,9 @@ public class Item
     /// <summary>
     /// Gets or sets the unique identifier for the item.
     /// </summary>
-    public string Id { get; set; } = "";
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
 
     /// <summary>
     /// Gets or sets the name of the item.
