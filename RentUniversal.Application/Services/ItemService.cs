@@ -63,8 +63,6 @@ namespace RentUniversal.Application.Services
             item.Deposit = Math.Round(item.Value * DEPOSIT_RATE, 2);
             item.PricePerDay = Math.Round(item.Value * PRICE_RATE, 2);
             await _itemRepository.CreateAsync(item);
-
-            // Assumes the repository either persists the same instance or the instance already contains the correct id.
             return DTOMapper.ToDTO(item);
         }
 

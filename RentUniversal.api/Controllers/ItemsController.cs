@@ -64,12 +64,22 @@ namespace RentUniversal.api.Controllers
         /// this would usually be a CreateItemDTO.
         /// </remarks>
         [HttpPost]
-        public async Task<ActionResult<ItemDTO>> CreateItem([FromBody] Item item)
+        public async Task<ActionResult<ItemDTO>> CreateItem([FromBody] ItemDTO itemDTO)
         {
-            if (item == null)
+            if (itemDTO == null)
                 return BadRequest();
 
-            
+            var item = new Item
+            {
+                Name = itemDTO.Name,
+                Category = itemDTO.Category,
+                Condition = itemDTO.Condition,
+                Value = itemDTO.Value,
+                IsAvailable = itemDTO.IsAvailable,
+                Deposit = itemDTO.Deposit,
+                PricePerDay = itemDTO.PricePerDay,
+                ImageUrls = itemDTO.ImageUrls
+            };
             var created = await _itemService.AddItemAsync(item);
 
             return CreatedAtAction(
