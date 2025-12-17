@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using RentUniversal.Application.Interfaces;
 using RentUniversal.Domain.Entities;
 using RentUniversal.Application.DTOs;
@@ -107,7 +108,14 @@ namespace RentUniversal.api.Controllers
             if (item == null)
                 return NotFound();
 
-            var uploadsPath = Path.Combine("wwwroot", "uploads", "items", itemId);
+            var uploadsPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "uploads",
+                "items",
+                itemId
+            );
+            
             Directory.CreateDirectory(uploadsPath);
 
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";

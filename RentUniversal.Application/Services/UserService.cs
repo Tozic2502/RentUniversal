@@ -22,9 +22,9 @@ public class UserService : IUserService
         if (user == null) return null;
 
         bool passwordMatches = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
-        if (!passwordMatches) return null;
-
         user.LastLogin = DateTime.UtcNow;
+        if (!passwordMatches) return null;
+        
         return DTOMapper.ToDTO(user);
     }
 

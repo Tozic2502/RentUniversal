@@ -4,6 +4,11 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Win32;
+using RentalSystem.AdminClient.Models;
+using RentalSystem.AdminClient.Services;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace RentalSystem.AdminClient.ViewModel
 {
@@ -31,6 +36,7 @@ namespace RentalSystem.AdminClient.ViewModel
 
         public ObservableCollection<ItemModel> Items { get; } = new();
 
+        
         private ItemModel? _selectedItem;
         public ItemModel? SelectedItem
         {
@@ -91,6 +97,9 @@ namespace RentalSystem.AdminClient.ViewModel
         public ICommand CreateCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
+        
+        public ICommand UploadImageCommand { get; }
+        public ICommand DeleteImageCommand { get; }
 
         public AnnoncerViewModel()
         {
@@ -108,6 +117,9 @@ namespace RentalSystem.AdminClient.ViewModel
                 async _ => await DeleteItem(),
                 _ => SelectedItem != null);
 
+            UploadImageCommand = new RelayCommand(_ => UploadImage());
+            DeleteImageCommand = new RelayCommand(img => DeleteImage(img as string));
+            
             _ = LoadItemsAsync();
         }
 
@@ -155,7 +167,6 @@ namespace RentalSystem.AdminClient.ViewModel
                 Category = Category,
                 Condition = Condition,
                 Value = Value,
-                IsAvailable = IsAvailable
             };
 
             var success = await _api.CreateItemAsync(item);
@@ -208,11 +219,62 @@ namespace RentalSystem.AdminClient.ViewModel
             await LoadItemsAsync();
             ClearForm();
         }
+        
+        
 
+        private async void UploadImage()
+        {
+            if (SelectedItem == null)
+                return;
+
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Images|*.jpg;*.jpeg;*.png",
+                Multiselect = false
+            };
+
+            if (dialog.ShowDialog() != true)
+                return;
+
+            var success = await _api.UploadItemImageAsync(
+                SelectedItem.Id,
+                dialog.FileName
+            );
+
+            if (success)
+            {
+                await RefreshSelectedItemAsync();
+            }
+        }
+
+        private async void DeleteImage(string? imageUrl)
+        {
+            if (SelectedItem == null || string.IsNullOrEmpty(imageUrl))
+                return;
+
+            var success = await _api.DeleteItemImageAsync(
+                SelectedItem.Id,
+                imageUrl
+            );
+
+            if (success)
+            {
+                await RefreshSelectedItemAsync();
+            }
+        }
+        
         // 
         // Util / helpers
         // 
 
+        private async Task RefreshSelectedItemAsync()
+        {
+            var updated = await _api.GetItemByIdAsync(SelectedItem!.Id);
+            if (updated == null) return;
+
+            SelectedItem.ImageUrls = updated.ImageUrls;
+            OnPropertyChanged(nameof(SelectedItem));
+        }
         private void ClearForm()
         {
             Name = "";
