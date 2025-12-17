@@ -49,15 +49,13 @@ function Home({ selectedCategory }) {
                     return (
                         <div key={item.id} className="item-card">
                             <div className="item-thumb">
-                                {imgSrc ? (
+                                
                                     <img
                                         src={imgSrc}
-                                        alt={item.name}
+                                        
                                         className="item-thumb-img"
                                     />
-                                ) : (
-                                    <span>{item.name?.charAt(0) ?? "?"}</span>
-                                )}
+                                
                             </div>
 
                             <div className="item-info">
