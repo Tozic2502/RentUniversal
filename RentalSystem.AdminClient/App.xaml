@@ -37,13 +37,6 @@
         <DataTemplate DataType="{x:Type vm:StatsViewModel}">
             <view:StatsView />
         </DataTemplate>
-
-		<!-- UPLOAD -->
-		<DataTemplate DataType="{x:Type vm:UploadViewModel}">
-			<view:UploadView />
-		</DataTemplate>
-
-
 		<converters:BoolToStatusConv x:Key="BoolToStatusConverter"/>
         
     </Application.Resources>
