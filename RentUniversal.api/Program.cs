@@ -75,7 +75,9 @@ namespace RentUniversal.api
             app.UseCors("AllowAll");
             app.UseAuthorization();
             app.MapControllers();
+            
             app.UseStaticFiles();
+            
             app.Run();
 
         }

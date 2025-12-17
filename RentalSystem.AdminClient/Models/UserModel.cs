@@ -50,5 +50,9 @@
         /// </remarks>
         public DateTime? LastLogin { get; set; } 
         public int IdentificationId { get; set; }  // identificationId
+        
+        public int ActiveRentals { get; set; }
+        public int TotalRentals { get; set; }
+
     }
 }

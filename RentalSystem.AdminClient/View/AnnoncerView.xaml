@@ -36,7 +36,7 @@
                                 <TextBlock Text="{Binding Category}"
                                            Foreground="#777"/>
 
-                                <TextBlock Text="{Binding Value, StringFormat={}{0} €}"
+                                <TextBlock Text="{Binding Value, StringFormat={}{0} DKK}"
                                            Foreground="#555"/>
 
                                 <TextBlock Text="{Binding IsAvailable}"
@@ -67,11 +67,65 @@
             <TextBlock Text="Condition" FontWeight="Bold"/>
             <TextBox Text="{Binding Condition}" Margin="0 0 0 10"/>
 
-            <TextBlock Text="Price" FontWeight="Bold"/>
+            <TextBlock Text="Value" FontWeight="Bold"/>
             <TextBox Text="{Binding Value}" Margin="0 0 0 10"/>
             
             <TextBlock Text="Available?" FontWeight="Bold" />
             <TextBlock Text="{Binding IsAvailable}" Margin="0 0 0 10"/>
+
+            <TextBlock Text="Images"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Margin="0 30 0 10"/>
+
+            <!-- IMAGE GALLERY -->
+            <ItemsControl ItemsSource="{Binding SelectedItem.ImageUrls}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Width="140"
+                                Margin="5"
+                                Padding="5"
+                                Background="White"
+                                BorderBrush="#ddd"
+                                BorderThickness="1"
+                                CornerRadius="6">
+
+                            <StackPanel>
+                                <!-- IMAGE -->
+                                <Image Width="120"
+                                       Height="120"
+                                       Stretch="UniformToFill"
+                                       Source="{Binding}" />
+
+                                <!-- DELETE  -->
+                                <Button Content="Delete"
+                                        Margin="0 5 0 0"
+                                        Height="28"
+                                        Background="#ffdddd"
+                                        Command="{Binding DataContext.DeleteImageCommand,
+                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}" />
+                            </StackPanel>
+
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- addimg -->
+            <Button Content="Add Image"
+                    Width="120"
+                    Height="28"
+                    Margin="0 15 0 15"
+                    HorizontalAlignment="Left"
+                    Command="{Binding UploadImageCommand}" />
+            
 
             <StackPanel Orientation="Horizontal">
 

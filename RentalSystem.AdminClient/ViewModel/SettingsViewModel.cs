@@ -102,8 +102,8 @@ namespace RentalSystem.AdminClient.ViewModel
         private void ApplyDummy()
         {
             MessageBox.Show(
-                "Settings saved (dummy).\n\n" +
-                "Once api is implemented there will be something here",
+                "Applied changes.\n\n" +
+                "You might have to restart for a few things to work.",
                 "Success",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information
