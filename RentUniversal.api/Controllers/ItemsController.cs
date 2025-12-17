@@ -113,6 +113,11 @@ namespace RentUniversal.api.Controllers
         [HttpPost("{itemId}/images")]
         public async Task<IActionResult> UploadImage(string itemId, IFormFile file)
         {
+            
+            Console.WriteLine("=== IMAGE UPLOAD ENDPOINT HIT ===");
+            Console.WriteLine($"ItemId = {itemId}");
+            Console.WriteLine($"File null? {file == null}");
+            
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded");
 
@@ -128,7 +133,11 @@ namespace RentUniversal.api.Controllers
                 itemId
             );
             
+            Console.WriteLine($"UPLOAD PATH = {uploadsPath}");
+            
             Directory.CreateDirectory(uploadsPath);
+            
+            Console.WriteLine($"DIR EXISTS AFTER CREATE? {Directory.Exists(uploadsPath)}");
 
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             var filePath = Path.Combine(uploadsPath, fileName);

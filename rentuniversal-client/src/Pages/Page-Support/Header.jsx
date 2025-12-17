@@ -4,6 +4,7 @@ import HomeImg from "../../assets/HomeIcon.svg";
 import UdlejningImg from "../../assets/RentIcon.svg";
 import IndkobsvognImg from "../../assets/BasketIcon.svg";
 import LoginImg from "../../assets/ProfileIcon.svg";
+import SupImg from "../../assets/SupportIcon.svg";
 import {useUser} from "../../Context/UserContext.jsx";
 
 function Header() {
@@ -17,14 +18,14 @@ function Header() {
                 <NavIcon to="/udlejning" label="Udlejning" icon={UdlejningImg} />
                 <NavIcon to="/kurv" label="Kurv" icon={IndkobsvognImg} />
                 {/* Nyt menupunkt */}
-                <NavIcon to="/support" label="Support" />
+                <NavIcon to="/support" label="Support" icon={SupImg} />
             </div>
 
             <div className="header-right">
                 {user ? (
                     <>
                         <Link to="/profile" className="header-user">
-                            {user.name || user.email}
+                            <NavIcon to="/login" label={user.name || user.email} icon={LoginImg} />
                         </Link>
 
                         <button
