@@ -118,14 +118,7 @@ export default function Cart() {
                             <button
                                 onClick={() => removeFromCart(item.id)}
                                 style={{
-                                    background: "orange",
-                                    color: "white",
-                                    border: "none",
-                                    padding: "4px 8px",
-                                    borderRadius: "4px",
-                                    cursor: "pointer",
-                                    marginTop: "6px",
-                                    marginRight: "6px"
+                                    background: "blue"
                                 }}
                             >
                                 Fjern fra kurv
