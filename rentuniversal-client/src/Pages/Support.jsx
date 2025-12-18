@@ -48,16 +48,16 @@ export default function SupportPage() {
                     <h2>Om os</h2>
 
                     <p>
-                        RentAll er en udlejningsplatform udviklet af et team på fire
+                        RentAll er en udlejningsplatform udviklet af et team p&aring; fire
                         softwareudviklere. Platformen samler forskelligt udstyr ét sted –
-                        fra værktøj og udendørsudstyr til festartikler – så brugerne nemt
+                        fra værktøj og udendørsudstyr til festartikler – s&aring; brugerne nemt
                         kan finde og reservere det, de har brug for.
                     </p>
 
                     <p>
                         Idéen bag løsningen er, at du kun betaler for det udstyr, du
                         anvender, og kun i den periode, hvor du faktisk har behov for det.
-                        På den måde kan både private og mindre virksomheder undgå
+                        P&aring; den m&aring;de kan b&aring;de private og mindre virksomheder undg&aring;
                         unødvendige køb og i stedet leje fleksibelt efter behov.
                     </p>
 
@@ -86,7 +86,7 @@ export default function SupportPage() {
                 </div>
 
                 <p className="contact-text">
-                    Har du spørgsmål eller efterspørgsel til udlejning? Skriv en besked her:
+                    Har du spørgsm&aring;l eller efterspørgsel til udlejning? Skriv en besked her:
                 </p>
 
                 {/* Kontaktformular */}

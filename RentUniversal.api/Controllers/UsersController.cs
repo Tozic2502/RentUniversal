@@ -117,7 +117,7 @@ namespace RentUniversal.api.Controllers
             var result = await _userService.ChangePasswordAsync(id, dto.OldPassword, dto.NewPassword);
 
             if (!result)
-                return Unauthorized("Forkert nuværende password");
+                return Unauthorized("Forkert nuv&aelig;rende password");
 
             return Ok("Password opdateret");
         }

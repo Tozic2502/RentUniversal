@@ -17,8 +17,8 @@ function Footer() {
                     <h4>Om os</h4> {/* Section heading */}
                     <p>
                         RentAll er en udlejningsplatform, der samler forskelligt udstyr ét sted –
-                        fra værktøj og udendørsudstyr til festartikler. Du betaler kun for det,
-                        du bruger, når du har brug for det.
+                        fra v&aelig;rktøj og udendørsudstyr til festartikler. Du betaler kun for det,
+                        du bruger, n&aring;r du har brug for det.
                     </p>
                 </div>
 
@@ -27,8 +27,8 @@ function Footer() {
                     <h4>Privatliv</h4> {/* Section heading */}
                     <p>
                         Vi behandler dine personoplysninger fortroligt og bruger dem kun til
-                        at håndtere dine bookinger, betalinger og din konto. Alle oplysninger bliver håndteret efter GDPR.
-                        Du kan altid kontakte os for indsigt, rettelse eller tilbagekaldelse af Samtykkeerklæring.
+                        at h&aring;ndtere dine bookinger, betalinger og din konto. Alle oplysninger bliver h&aring;ndteret efter GDPR.
+                        Du kan altid kontakte os for indsigt, rettelse eller tilbagekaldelse af Samtykkeerkl&aelig;ring.
                     </p>
                 </div>
 
@@ -36,7 +36,7 @@ function Footer() {
                 <div className="footer-box">
                     <h4>Support</h4> {/* Section heading */}
                     <p>
-                        Har du spørgsmål vedrørende en booking eller udfordringer med din konto, er du velkommen til at kontakte vores support via formularen ovenfor.
+                        Har du spørgsm&aring;l vedrørende en booking eller udfordringer med din konto, er du velkommen til at kontakte vores support via formularen ovenfor.
                     </p>
                 </div>
             </div>

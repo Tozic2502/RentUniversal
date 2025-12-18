@@ -27,7 +27,7 @@ export default function Register() {
 
         // 1) Validate identification: must be exactly 10 digits
         if (!/^\d{10}$/.test(identification)) {
-            setError("Identifikation skal være præcis 10 cifre.");
+            setError("Identifikation skal v&aelig;re pr&aelig;cis 10 cifre.");
             return;
         }
 
@@ -133,7 +133,7 @@ export default function Register() {
                     </div>
 
                     <div className="login-field">
-                        <label>Bekræft adgangskode</label>
+                        <label>Bekr&aelig;ft adgangskode</label>
                         <input
                             type="password"
                             placeholder="Gentag adgangskode"

@@ -32,12 +32,12 @@ function SideKategori({ selectedCategory, onSelectCategory, searchTerm, onSearch
                     <button className="sidebar-btn">Alle</button>
                 </li>
 
-                {/* "Værktøj" (Tools) category option */}
+                {/* "V&aelig;rktøj" (Tools) category option */}
                 <li
-                    className={selectedCategory === "Værktøj" ? "active" : ""} // Highlight if "Værktøj" is selected
-                    onClick={() => onSelectCategory("Værktøj")} // Select "Værktøj" category
+                    className={selectedCategory === "V&aelig;rktøj" ? "active" : ""} // Highlight if "Værktøj" is selected
+                    onClick={() => onSelectCategory("V&aelig;rktøj")} // Select "Værktøj" category
                 >
-                    <button className="sidebar-btn">Værktøj</button>
+                    <button className="sidebar-btn">V&aelig;rktøj</button>
                 </li>
 
                 {/* "Mekanik" (Mechanics) category option */}
