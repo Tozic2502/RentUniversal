@@ -41,10 +41,24 @@ public class ItemDTO
     /// Indicates whether the item is currently available for rent.
     /// </summary>
     public bool IsAvailable { get; set; }
-    public double Deposit { get; set; }
-    public double PricePerDay { get; set; }
-    public double TotalPrice { get; set; }
-    // Images
-    public List<string> ImageUrls { get; set; } = new();
 
+    /// <summary>
+    /// Security deposit required to rent the item.
+    /// </summary>
+    public double Deposit { get; set; }
+
+    /// <summary>
+    /// Rental price per day for the item.
+    /// </summary>
+    public double PricePerDay { get; set; }
+
+    /// <summary>
+    /// Total price for renting the item, calculated based on the rental duration.
+    /// </summary>
+    public double TotalPrice { get; set; }
+
+    /// <summary>
+    /// List of URLs pointing to images of the item.
+    /// </summary>
+    public List<string> ImageUrls { get; set; } = new();
 }

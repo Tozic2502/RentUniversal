@@ -41,6 +41,13 @@ namespace RentUniversal.Application.Interfaces
         /// </summary>
         /// <returns>A collection of all <see cref="User"/> entities.</returns>
         Task<IEnumerable<User>> GetAllAsync();
+
+        /// <summary>
+        /// Retrieves a user by their identification ID.
+        /// Returns null if no user exists with the provided identification ID.
+        /// </summary>
+        /// <param name="identificationId">The user's identification ID.</param>
+        /// <returns>The matching <see cref="User"/> or null.</returns>
         Task<User?> GetByIdentificationIdAsync(int identificationId);
     }
 }

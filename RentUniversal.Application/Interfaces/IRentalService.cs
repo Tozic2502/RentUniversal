@@ -19,7 +19,7 @@ public interface IRentalService
 
     /// <summary>
     /// Starts a new rental for the given user and item.
-    /// creates a rental record, sets <c>StartDate</c>, and stores the initial item condition.
+    /// Creates a rental record, sets <c>StartDate</c>, and stores the initial item condition.
     /// </summary>
     /// <param name="userId">Identifier of the user starting the rental.</param>
     /// <param name="itemId">Identifier of the item being rented.</param>
@@ -29,21 +29,33 @@ public interface IRentalService
 
     /// <summary>
     /// Ends an existing rental.
-    /// Typically, sets <c>EndDate</c>, stores the return condition.
+    /// Typically, sets <c>EndDate</c>, stores the return condition, and finalizes the rental process.
     /// </summary>
     /// <param name="rentalId">Identifier of the rental to close.</param>
     /// <param name="returnCondition">Recorded condition of the item on return.</param>
     /// <returns>The updated rental as a <see cref="RentalDTO"/>.</returns>
     Task<RentalDTO> EndRentalAsync(string rentalId, string returnCondition);
+
+    /// <summary>
+    /// Updates an existing rental record with new data.
+    /// </summary>
+    /// <param name="rental">The rental data to update.</param>
+    /// <returns>A boolean indicating whether the update was successful.</returns>
     Task<bool> UpdateRentalAsync(RentalDTO rental);
+
+    /// <summary>
+    /// Creates a new rental record in the system.
+    /// </summary>
+    /// <param name="rental">The rental entity to create.</param>
     Task CreateAsync(Rental rental);
 
     /// <summary>
     /// Retrieves all rentals for a specific user as DTOs.
     /// </summary>
     /// <param name="userId">The user's identifier.</param>
-    /// <returns>A collection of <see cref="RentalDTO"/> for the user.</returns>
+    /// <returns>A collection of <see cref="Rental"/> for the user.</returns>
     Task<IEnumerable<Rental>> GetByUserIdAsync(string userId);
+
     /// <summary>
     /// Calculates the rental price based on the provided rental data and pricing rules.
     /// The returned value may be used when ending a rental or for previews/estimates.

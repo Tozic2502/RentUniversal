@@ -47,11 +47,39 @@ namespace RentUniversal.Application.Interfaces
         /// <param name="id">The item identifier.</param>
         /// <returns>True if the item was deleted; otherwise false.</returns>
         Task<bool> DeleteItemAsync(string id);
-        
+
+        /// <summary>
+        /// Retrieves an item entity by its identifier.
+        /// This method is typically used internally for operations requiring the domain entity.
+        /// </summary>
+        /// <param name="id">The item identifier.</param>
+        /// <returns>The matching <see cref="Item"/> or null if not found.</returns>
         Task<Item?> GetByIdAsync(string id);
+
+        /// <summary>
+        /// Updates the availability status of an item.
+        /// </summary>
+        /// <param name="itemId">The identifier of the item to update.</param>
+        /// <param name="available">The new availability status.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
         Task UpdateAvailabilityAsync(string itemId, bool available);
-        
+
+        /// <summary>
+        /// Adds an image URL to an item.
+        /// Returns the added image URL if successful, or null if the operation failed.
+        /// </summary>
+        /// <param name="itemId">The identifier of the item to update.</param>
+        /// <param name="imageUrl">The URL of the image to add.</param>
+        /// <returns>The added image URL, or null if the operation failed.</returns>
         Task<string?> AddItemImageAsync(string itemId, string imageUrl);
+
+        /// <summary>
+        /// Removes an image URL from an item.
+        /// Returns true if the image was successfully removed; otherwise false.
+        /// </summary>
+        /// <param name="itemId">The identifier of the item to update.</param>
+        /// <param name="imageUrl">The URL of the image to remove.</param>
+        /// <returns>True if the image was removed; otherwise false.</returns>
         Task<bool> RemoveItemImageAsync(string itemId, string imageUrl);
     }
 }

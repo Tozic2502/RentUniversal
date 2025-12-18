@@ -4,22 +4,39 @@ import { getUserRentals, returnRental } from "../api.js";
 import { jsPDF } from "jspdf";
 
 export default function Udlejning() {
+
+    // Access logged-in user from global context
     const { user } = useUser();
+
+    // State for rentals and UI handling
     const [rentals, setRentals] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    // Track which rentals are currently being returned (for button disable)
     const [returningIds, setReturningIds] = useState(new Set());
+
+    // State for error handling
     const [error, setError] = useState(null);
 
+    /**
+     * Load rentals when user changes or logs in
+     */
     useEffect(() => {
         if (!user) {
             setRentals([]);
             setLoading(false);
             return;
         }
+
         loadRentals();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
+    /**
+     * Fetch the user's rentals from the backend
+     * Filters only active rentals
+     */
     async function loadRentals() {
         setLoading(true);
         setError(null);
@@ -27,15 +44,16 @@ export default function Udlejning() {
         try {
             const data = await getUserRentals(user.id);
 
+            // Only show active rentals
             const active = data.filter(r => {
-                if (!r.endDate || r.endDate === "" || r.endDate === null) return true;
+                if (!r.endDate || r.endDate === "") return true;
 
                 const endDate = new Date(r.endDate);
                 const now = new Date();
 
-                return endDate > now;  // treat future endDate as active
+                // Treat future endDate as still active
+                return endDate > now;
             });
-
 
             setRentals(active);
         } catch (err) {
@@ -46,7 +64,9 @@ export default function Udlejning() {
         }
     }
 
-
+    /**
+     * Generates a PDF receipt after returning an item
+     */
     function generatePDFReceipt(rentItem) {
         const doc = new jsPDF();
 
@@ -54,18 +74,33 @@ export default function Udlejning() {
         doc.text("Kvittering for aflevering", 15, 20);
 
         doc.setFontSize(12);
-        doc.text(`Bruger: ${user?.name ?? "Ukendt"} (${user?.email ?? "-"})`, 15, 35);
+        doc.text(
+            `Bruger: ${user?.name ?? "Ukendt"} (${user?.email ?? "-"})`,
+            15,
+            35
+        );
 
         const itemName = rentItem?.item?.name ?? "Ukendt vare";
-        const value = rentItem?.item?.value ?? rentItem?.price ?? 0;
+
         doc.text(`Produkt: ${itemName}`, 15, 45);
-        doc.text(`Pris pr. dag: ${rentItem?.item?.pricePerDay ?? rentItem?.pricePerDay ?? 0} kr.`, 15, 55);
+        doc.text(
+            `Pris pr. dag: ${rentItem?.item?.pricePerDay ?? rentItem?.pricePerDay ?? 0} kr.`,
+            15,
+            55
+        );
         doc.text(`Depositum: ${rentItem?.item?.deposit ?? 0} kr.`, 15, 65);
 
-        doc.text(`Udlejet d.: ${rentItem?.startDate ? new Date(rentItem.startDate).toLocaleDateString() : "-"}`, 15, 80);
+        doc.text(
+            `Udlejet d.: ${rentItem?.startDate
+                ? new Date(rentItem.startDate).toLocaleDateString()
+                : "-"
+            }`,
+            15,
+            80
+        );
         doc.text(`Afleveret d.: ${new Date().toLocaleDateString()}`, 15, 90);
 
-        // If TotalPrice exists show it
+        // Display total price if available
         if (rentItem?.totalPrice || rentItem?.totalPrice === 0) {
             doc.text(`Total pris: ${rentItem.totalPrice} kr.`, 15, 100);
         }
@@ -79,8 +114,13 @@ export default function Udlejning() {
         }
     }
 
+    /**
+     * Handles returning a rental
+     * Calls backend, generates receipt, and refreshes rentals
+     */
     async function handleReturn(rentalId) {
-        // find rental snapshot (may be null-safe)
+
+        // Find a snapshot of the rental before returning
         const rentItem = rentals.find(r => r.id === rentalId);
 
         if (!rentItem) {
@@ -91,12 +131,13 @@ export default function Udlejning() {
         if (!confirm("Er du sikker på, at du vil aflevere denne vare?")) return;
 
         try {
-            // mark as returning for UI
+            // Mark rental as being returned (disable button)
             setReturningIds(prev => new Set(prev).add(rentalId));
 
+            // Call backend to return rental
             await returnRental(rentalId);
 
-            // Generate receipt (use the snapshot we had before return)
+            // Generate PDF receipt using snapshot data
             generatePDFReceipt(rentItem);
 
             alert("Varen er afleveret!");
@@ -105,7 +146,7 @@ export default function Udlejning() {
             console.error("Return failed", err);
             alert("Fejl ved aflevering af varen. Prøv igen.");
         } finally {
-            // remove id from returning set
+            // Remove rental from returning state
             setReturningIds(prev => {
                 const copy = new Set(prev);
                 copy.delete(rentalId);
@@ -114,14 +155,19 @@ export default function Udlejning() {
         }
     }
 
-    // Helpers
+    /**
+     * Helper: checks if rental has already been returned
+     */
     const isReturned = (r) => {
         if (!r.endDate) return false;
+
         const end = new Date(r.endDate);
         const now = new Date();
-        return end <= now; // returned if the endDate has passed
+
+        return end <= now;
     };
 
+    // ----- Conditional rendering -----
 
     if (!user) {
         return <p>Du skal være logget ind for at se dine udlejninger.</p>;
@@ -151,51 +197,74 @@ export default function Udlejning() {
         );
     }
 
+    // ----- UI rendering -----
+
     return (
         <div className="rental-container" style={{ padding: 20 }}>
             <h1>Mine aktive udlejninger</h1>
 
-            <div className="rental-grid" style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-                gap: 16,
-                marginTop: 16
-            }}>
+            <div
+                className="rental-grid"
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+                    gap: 16,
+                    marginTop: 16
+                }}
+            >
                 {rentals.map(r => (
-                    <div key={r.id} className="item-card" style={{
-                        border: "1px solid #ddd",
-                        borderRadius: 8,
-                        padding: 12,
-                        background: "#fff"
-                    }}>
-                        <h3 style={{ marginTop: 0 }}>{r.item?.name ?? "Ukendt vare"}</h3>
+                    <div
+                        key={r.id}
+                        className="item-card"
+                        style={{
+                            border: "1px solid #ddd",
+                            borderRadius: 8,
+                            padding: 12,
+                            background: "#fff"
+                        }}
+                    >
+                        <h3 style={{ marginTop: 0 }}>
+                            {r.item?.name ?? "Ukendt vare"}
+                        </h3>
 
                         <p><strong>Kategori:</strong> {r.item?.category ?? "-"}</p>
                         <p><strong>Stand:</strong> {r.item?.condition ?? "-"}</p>
-                        <p><strong>Værdi:</strong> {r.item?.value ?? r.item?.value ?? 0} kr</p>
-
+                        <p><strong>Værdi:</strong> {r.item?.value ?? 0} kr</p>
                         <p><strong>Pris pr. dag:</strong> {r.item?.pricePerDay ?? r.pricePerDay ?? 0} kr</p>
                         <p><strong>Depositum:</strong> {r.item?.deposit ?? 0} kr</p>
 
-                        <p><strong>Udlejet d.:</strong> {r.startDate ? new Date(r.startDate).toLocaleDateString() : "Ukendt"}</p>
+                        <p>
+                            <strong>Udlejet d.:</strong>{" "}
+                            {r.startDate
+                                ? new Date(r.startDate).toLocaleDateString()
+                                : "Ukendt"}
+                        </p>
 
                         {isReturned(r) ? (
-                            <p style={{ color: "green", fontWeight: "600" }}>Returneret ✔</p>
+                            <p style={{ color: "green", fontWeight: "600" }}>
+                                Returneret ✔
+                            </p>
                         ) : (
                             <div style={{ marginTop: 10 }}>
                                 <button
                                     onClick={() => handleReturn(r.id)}
                                     disabled={returningIds.has(r.id)}
                                     style={{
-                                        background: returningIds.has(r.id) ? "#aaa" : "#28a745",
+                                        background: returningIds.has(r.id)
+                                            ? "#aaa"
+                                            : "#28a745",
                                         color: "white",
                                         border: "none",
                                         padding: "8px 12px",
                                         borderRadius: 6,
-                                        cursor: returningIds.has(r.id) ? "not-allowed" : "pointer"
+                                        cursor: returningIds.has(r.id)
+                                            ? "not-allowed"
+                                            : "pointer"
                                     }}
                                 >
-                                    {returningIds.has(r.id) ? "Behandler..." : "Aflever vare"}
+                                    {returningIds.has(r.id)
+                                        ? "Behandler..."
+                                        : "Aflever vare"}
                                 </button>
                             </div>
                         )}

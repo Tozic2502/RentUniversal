@@ -3,30 +3,37 @@ import { useState } from "react";
 import CityImage from "../../assets/City.jpg";
 import RentAllLogo from "../../assets/logo.png";
 
+// Defining the SupportPage functional component
 export default function SupportPage() {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
-    const [status, setStatus] = useState("");
+    // State variables for form inputs and submission status
+    const [name, setName] = useState(""); // Stores the user's name
+    const [email, setEmail] = useState(""); // Stores the user's email
+    const [message, setMessage] = useState(""); // Stores the user's message
+    const [status, setStatus] = useState(""); // Stores the status message after form submission
 
+    // Handles form submission
     async function handleSubmit(e) {
-        e.preventDefault();
-        setStatus("");
+        e.preventDefault(); // Prevents the default form submission behavior
+        setStatus(""); // Resets the status message
 
         try {
+            // Sends a POST request to the support messages API
             const response = await fetch("http://localhost:8080/api/support-messages", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, message }),
+                body: JSON.stringify({ name, email, message }), // Sends form data as JSON
             });
 
+            // Checks if the response is not successful
             if (!response.ok) throw new Error("Request failed");
 
+            // Resets form fields and sets a success message
             setName("");
             setEmail("");
             setMessage("");
             setStatus("Tak for din besked. Vi vender tilbage hurtigst muligt.");
         } catch (err) {
+            // Logs the error and sets an error message
             console.error(err);
             setStatus("Der skete en fejl. Prøv igen.");
         }
@@ -54,6 +61,7 @@ export default function SupportPage() {
                         unødvendige køb og i stedet leje fleksibelt efter behov.
                     </p>
 
+                    {/* Firmaoplysninger */}
                     <p><strong>Navn:</strong> RentAll ApS</p>
                     <p><strong>Telefon:</strong> +45 12 34 56 78</p>
                     <p><strong>Email:</strong> support@rentall.dk</p>
@@ -81,7 +89,9 @@ export default function SupportPage() {
                     Har du spørgsmål eller efterspørgsel til udlejning? Skriv en besked her:
                 </p>
 
+                {/* Kontaktformular */}
                 <form className="contact-form" onSubmit={handleSubmit}>
+                    {/* Navn inputfelt */}
                     <label>
                         Navn
                         <input
@@ -92,6 +102,7 @@ export default function SupportPage() {
                         />
                     </label>
 
+                    {/* Email inputfelt */}
                     <label>
                         Email
                         <input
@@ -102,6 +113,7 @@ export default function SupportPage() {
                         />
                     </label>
 
+                    {/* Besked inputfelt */}
                     <label>
                         Besked
                         <textarea
@@ -112,10 +124,12 @@ export default function SupportPage() {
                         />
                     </label>
 
+                    {/* Send knap */}
                     <button type="submit" className="primary-btn contact-btn">
                         Send besked
                     </button>
 
+                    {/* Statusbesked */}
                     {status && <p className="contact-status">{status}</p>}
                 </form>
             </section>

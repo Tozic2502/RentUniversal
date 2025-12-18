@@ -2,42 +2,58 @@ import { useUser } from "../Context/UserContext.jsx";
 import { useState } from "react";
 
 export default function Profile() {
+
+    // Access user data and authentication functions from UserContext
     const { user, login, logout } = useUser();
 
+    // Local state for editable profile fields
     const [nameInput, setNameInput] = useState(user?.name || "");
     const [emailInput, setEmailInput] = useState(user?.email || "");
+
+    // Local state for password change fields
     const [oldPass, setOldPass] = useState("");
     const [newPass, setNewPass] = useState("");
 
+    /**
+     * Handles updating the user's profile information (name and email)
+     */
     async function handleProfileUpdate(e) {
-        e.preventDefault();
+        e.preventDefault(); // Prevent page reload
 
+        // Create updated user object
         const updatedUser = {
             id: user.id,
             name: nameInput,
             email: emailInput
         };
 
+        // Send updated profile data to backend
         const response = await fetch(`http://localhost:8080/api/users/${user.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedUser),
         });
 
+        // Show error if update fails
         if (!response.ok) {
             alert("Failed to update profile");
             return;
         }
 
+        // Update user data in global context
         const updatedData = await response.json();
         login(updatedData);
 
         alert("Profil opdateret!");
     }
 
+    /**
+     * Handles changing the user's password
+     */
     async function handleChangePassword(e) {
-        e.preventDefault();
+        e.preventDefault(); // Prevent page reload
 
+        // Send password change request to backend
         const response = await fetch(`http://localhost:8080/api/users/${user.id}/password`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -47,19 +63,23 @@ export default function Profile() {
             }),
         });
 
+        // Show error if old password is incorrect
         if (!response.ok) {
             alert("Forkert nuværende password");
             return;
         }
 
+        // Clear password fields after successful update
         setOldPass("");
         setNewPass("");
+
         alert("Password ændret!");
     }
 
     return (
         <div className="profile-page">
-            {/* Sektion: profiloplysninger */}
+
+            {/* Section: Profile information */}
             <section className="profile-section">
                 <h2>Min profil</h2>
 
@@ -80,13 +100,14 @@ export default function Profile() {
                         onChange={(e) => setEmailInput(e.target.value)}
                     />
 
+                    {/* Save profile changes */}
                     <button type="submit" className="primary-btn profile-btn">
                         Gem ændringer
                     </button>
                 </form>
             </section>
 
-            {/* Sektion: skift password */}
+            {/* Section: Change password */}
             <section className="profile-section">
                 <h3>Skift password</h3>
 
@@ -107,13 +128,14 @@ export default function Profile() {
                         onChange={(e) => setNewPass(e.target.value)}
                     />
 
+                    {/* Submit password update */}
                     <button type="submit" className="primary-btn profile-btn">
                         Opdater password
                     </button>
                 </form>
             </section>
 
-            {/* Log ud-knap */}
+            {/* Logout button */}
             <button
                 className="primary-btn profile-logout-btn"
                 onClick={() => logout()}

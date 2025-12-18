@@ -18,13 +18,15 @@ namespace RentUniversal.api.Controllers
     [Route("api/[controller]")]
     public class ItemsController : ControllerBase
     {
-        private readonly IItemService _itemService;
-        private readonly IWebHostEnvironment _env;
+        private readonly IItemService _itemService; // Service layer abstraction for item operations
+        private readonly IWebHostEnvironment _env; // Provides information about the web hosting environment
 
         /// <summary>
-        /// Constructor with dependency injection of the item service.
+        /// Constructor with dependency injection of the item service and hosting environment.
         /// </summary>
-        public ItemsController(IItemService itemService , IWebHostEnvironment env)
+        /// <param name="itemService">Service for item-related operations</param>
+        /// <param name="env">Web hosting environment</param>
+        public ItemsController(IItemService itemService, IWebHostEnvironment env)
         {
             _itemService = itemService;
             _env = env;
@@ -37,8 +39,9 @@ namespace RentUniversal.api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItemDTO>>> GetAllItems()
         {
+            // Fetch all items from the service layer
             var items = await _itemService.GetAllItemsAsync();
-            return Ok(items);
+            return Ok(items); // Return the items as an HTTP 200 response
         }
 
         /// <summary>
@@ -49,11 +52,12 @@ namespace RentUniversal.api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ItemDTO>> GetItem(string id)
         {
+            // Fetch the item by ID
             var item = await _itemService.GetItemAsync(id);
             if (item == null)
-                return NotFound();
+                return NotFound(); // Return 404 if the item does not exist
 
-            return Ok(item);
+            return Ok(item); // Return the item as an HTTP 200 response
         }
 
         /// <summary>
@@ -63,12 +67,15 @@ namespace RentUniversal.api.Controllers
         /// Accepts a domain Item entity. In a production system,
         /// this would usually be a CreateItemDTO.
         /// </remarks>
+        /// <param name="itemDTO">Data transfer object representing the item to create</param>
+        /// <returns>The created item</returns>
         [HttpPost]
         public async Task<ActionResult<ItemDTO>> CreateItem([FromBody] ItemDTO itemDTO)
         {
             if (itemDTO == null)
-                return BadRequest();
+                return BadRequest(); // Return 400 if the request body is null
 
+            // Map the DTO to a domain entity
             var item = new Item
             {
                 Name = itemDTO.Name,
@@ -80,8 +87,11 @@ namespace RentUniversal.api.Controllers
                 PricePerDay = itemDTO.PricePerDay,
                 ImageUrls = itemDTO.ImageUrls
             };
+
+            // Add the item using the service layer
             var created = await _itemService.AddItemAsync(item);
 
+            // Return the created item with a 201 response
             return CreatedAtAction(
                 nameof(GetItem),
                 new { id = created.Id },
@@ -94,22 +104,30 @@ namespace RentUniversal.api.Controllers
         /// </summary>
         /// <param name="id">Item ID from route</param>
         /// <param name="item">Updated item data</param>
+        /// <returns>No content if successful, 404 if the item does not exist</returns>
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateItem(string id, [FromBody] Item item)
         {
             if (item == null)
-                return BadRequest();
+                return BadRequest(); // Return 400 if the request body is null
 
             // Ensure route ID and body ID match
             item.Id = id;
 
+            // Update the item using the service layer
             var updated = await _itemService.UpdateItemAsync(item);
             if (!updated)
-                return NotFound();
+                return NotFound(); // Return 404 if the item does not exist
 
-            return NoContent();
+            return NoContent(); // Return 204 if the update was successful
         }
-        
+
+        /// <summary>
+        /// Uploads an image for a specific item.
+        /// </summary>
+        /// <param name="itemId">ID of the item</param>
+        /// <param name="file">Image file to upload</param>
+        /// <returns>URL of the uploaded image</returns>
         [HttpPost("{itemId}/images")]
         public async Task<IActionResult> UploadImage(string itemId, IFormFile file)
         {
@@ -156,8 +174,13 @@ namespace RentUniversal.api.Controllers
 
             return Ok(new { url });
         }
-    
-        
+
+        /// <summary>
+        ///  Deletes an image associated with an item.
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         [HttpDelete("{itemId}/images")]
         public async Task<IActionResult> DeleteImage(string itemId, [FromBody] string fileName)
         {
@@ -176,7 +199,7 @@ namespace RentUniversal.api.Controllers
             return NoContent();
         }
 
-        
+
         /// <summary>
         /// Deletes an item by ID.
         /// </summary>

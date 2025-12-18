@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace RentUniversal.Application.DTOs;
 
-
 /// <summary>
 /// Data Transfer Object (DTO) representing a rental agreement/transaction.
 /// </summary>
@@ -33,7 +32,7 @@ public class RentalDTO
     public DateTime StartDate { get; set; }
 
     /// <summary>
-    /// Date/time when the rental ends.
+    /// Date/time when the rental ends. Nullable to allow open-ended rentals.
     /// </summary>
     public DateTime? EndDate { get; set; }
 
@@ -53,8 +52,19 @@ public class RentalDTO
     /// Total price for the rental (or agreed price at creation time, depending on your model).
     /// </summary>
     public double Price { get; set; }
-    
+
+    /// <summary>
+    /// The item being rented, represented as an optional related DTO.
+    /// </summary>
     public ItemDTO? Item { get; set; }
+
+    /// <summary>
+    /// The price per day for renting the item.
+    /// </summary>
     public double PricePerDay { get; set; }
+
+    /// <summary>
+    /// The total price for the rental, calculated based on the rental duration and price per day.
+    /// </summary>
     public double TotalPrice { get; set; }
 }

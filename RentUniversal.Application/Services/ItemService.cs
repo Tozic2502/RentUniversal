@@ -11,8 +11,10 @@ namespace RentUniversal.Application.Services
     /// </summary>
     public class ItemService : IItemService
     {
+        // Constants for calculating deposit and price rates based on item value.
         const double DEPOSIT_RATE = 0.30;
         const double PRICE_RATE = 0.10;
+
         /// <summary>
         /// Repository used for item persistence and retrieval.
         /// </summary>
@@ -55,6 +57,7 @@ namespace RentUniversal.Application.Services
 
         /// <summary>
         /// Creates a new item in the repository and returns it as a DTO.
+        /// Calculates deposit and price per day based on item value.
         /// </summary>
         /// <param name="item">The domain item to create.</param>
         /// <returns>The created item as <see cref="ItemDTO"/>.</returns>
@@ -82,6 +85,13 @@ namespace RentUniversal.Application.Services
             await _itemRepository.UpdateAsync(item);
             return true;
         }
+
+        /// <summary>
+        /// Updates the availability status of an item.
+        /// Does nothing if the item does not exist.
+        /// </summary>
+        /// <param name="itemId">The item identifier.</param>
+        /// <param name="available">The new availability status.</param>
         public async Task UpdateAvailabilityAsync(string itemId, bool available)
         {
             var item = await _itemRepository.GetByIdAsync(itemId);
@@ -90,11 +100,16 @@ namespace RentUniversal.Application.Services
             item.IsAvailable = available;
             await _itemRepository.UpdateAsync(item);
         }
+
+        /// <summary>
+        /// Retrieves an item by id without mapping it to a DTO.
+        /// </summary>
+        /// <param name="id">The item identifier.</param>
+        /// <returns>The domain item or null if not found.</returns>
         public async Task<Item?> GetByIdAsync(string id)
         {
             return await _itemRepository.GetByIdAsync(id);
         }
-
 
         /// <summary>
         /// Deletes an item by id.
@@ -112,7 +127,14 @@ namespace RentUniversal.Application.Services
             await _itemRepository.DeleteAsync(id);
             return true;
         }
-        
+
+        /// <summary>
+        /// Adds an image URL to an item's image collection.
+        /// Returns the added image URL or null if the item does not exist.
+        /// </summary>
+        /// <param name="itemId">The item identifier.</param>
+        /// <param name="imageUrl">The image URL to add.</param>
+        /// <returns>The added image URL or null.</returns>
         public async Task<string?> AddItemImageAsync(string itemId, string imageUrl)
         {
             var item = await _itemRepository.GetByIdAsync(itemId);
@@ -126,6 +148,13 @@ namespace RentUniversal.Application.Services
             return imageUrl;
         }
 
+        /// <summary>
+        /// Removes an image URL from an item's image collection.
+        /// Returns false if the item does not exist or the image URL was not found.
+        /// </summary>
+        /// <param name="itemId">The item identifier.</param>
+        /// <param name="imageUrl">The image URL to remove.</param>
+        /// <returns>True if the image URL was removed; otherwise false.</returns>
         public async Task<bool> RemoveItemImageAsync(string itemId, string imageUrl)
         {
             var item = await _itemRepository.GetByIdAsync(itemId);
