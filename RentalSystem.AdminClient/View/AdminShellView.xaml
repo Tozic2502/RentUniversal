@@ -58,6 +58,11 @@
                 <Button Content="Annoncer"
                         Command="{Binding NavigateAnnoncer}"
                         Style="{StaticResource NavButton}"/>
+                
+                <Button Content="Support"
+                        Command="{Binding NavigateSupport}"
+                        Style="{StaticResource NavButton}"/>
+
 
                 <Button Content="Stats"
                         Command="{Binding NavigateStats}"

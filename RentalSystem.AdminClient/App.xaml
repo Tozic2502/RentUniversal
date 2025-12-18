@@ -33,6 +33,11 @@
             <view:AnnoncerView />
         </DataTemplate>
 
+        <!-- Support -->
+        <DataTemplate DataType="{x:Type vm:SupportViewModel}">
+            <view:SupportView />
+        </DataTemplate>
+        
         <!-- STATS -->
         <DataTemplate DataType="{x:Type vm:StatsViewModel}">
             <view:StatsView />

@@ -20,6 +20,8 @@ namespace RentalSystem.AdminClient.ViewModel
         public ICommand NavigateSettings { get; }
         public ICommand NavigateUser { get; }
         public ICommand NavigateAnnoncer { get; }
+        
+        public ICommand NavigateSupport { get; }
         public ICommand NavigateStats { get; }
         public ICommand Logout { get; }
 
@@ -40,6 +42,9 @@ namespace RentalSystem.AdminClient.ViewModel
 
             NavigateAnnoncer = new RelayCommand(_ =>
                 CurrentAdminViewModel = new AnnoncerViewModel());
+            
+            NavigateSupport = new RelayCommand(_ =>
+                CurrentAdminViewModel = new SupportViewModel());
 
             NavigateStats = new RelayCommand(_ =>
                 CurrentAdminViewModel = new StatsViewModel());
