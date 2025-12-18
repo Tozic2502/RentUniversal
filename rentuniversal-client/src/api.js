@@ -38,3 +38,12 @@ export async function returnRental(rentalId) {
 
     if (!response.ok) throw new Error("Failed to return rental");
 }
+
+// -------------------Contact---------------------
+
+// Post contact message
+const response = await fetch("http://localhost:8080/api/support-messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, message }), 
+});

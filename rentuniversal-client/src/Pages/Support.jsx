@@ -1,7 +1,7 @@
-// src/Pages/Page-Support/Support.jsx
+
 import { useState } from "react";
-import CityImage from "../../assets/City.jpg";
-import RentAllLogo from "../../assets/logo.png";
+import CityImage from "../assets/City.jpg";
+import RentAllLogo from "../assets/logo.png";
 
 // Defining the SupportPage functional component
 export default function SupportPage() {
@@ -17,16 +17,7 @@ export default function SupportPage() {
         setStatus(""); // Resets the status message
 
         try {
-            // Sends a POST request to the support messages API
-            const response = await fetch("http://localhost:8080/api/support-messages", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, message }), // Sends form data as JSON
-            });
-
-            // Checks if the response is not successful
-            if (!response.ok) throw new Error("Request failed");
-
+            
             // Resets form fields and sets a success message
             setName("");
             setEmail("");

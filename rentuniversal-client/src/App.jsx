@@ -8,7 +8,7 @@ import Kurv from "./Pages/Cart.jsx";
 import Login from "./Pages/Login.jsx";
 import ProfilePage from "./Pages/ProfilePage.jsx";
 import Register from "./Pages/Register.jsx";
-import SupportPage from "./Pages/Page-Support/Support.jsx";
+import SupportPage from "./Pages/Support.jsx";
 import Udlejning from "./Pages/Udlejning.jsx";
 
 // Layout components

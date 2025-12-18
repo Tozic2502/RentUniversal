@@ -1,50 +1,73 @@
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using RentUniversal.Domain.Entities;
-using RentUniversal.Infrastructure.Data;   
+using RentUniversal.Infrastructure.Data;
 using RentUniversal.Application.DTOs;
 
 namespace RentUniversal.api.Controllers
 {
+    // Marks this class as an API controller (automatic model validation, etc.)
     [ApiController]
+
+    // Base route: /api/Contact
     [Route("api/[controller]")]
     public class ContactController : ControllerBase
     {
-        // MongoDB collection for storing contact messages
+        // MongoDB collection used to store contact messages
         private readonly IMongoCollection<ContactMessage> _messages;
 
-        // Constructor to initialize the MongoDB collection
+        // Constructor
+        // The MongoContext is injected via dependency injection
+        // and used to access the MongoDB database
         public ContactController(MongoContext context)
         {
             _messages = context.Database.GetCollection<ContactMessage>("ContactMessages");
         }
 
-        // Handles HTTP POST requests to /api/contact
-        // Accepts a ContactMessageDto object in the request body
-        // Validates the input and saves the contact message to the database
+        // POST: /api/Contact
+        // Used by the frontend contact form to submit a new message
         [HttpPost]
         public async Task<IActionResult> PostContact([FromBody] ContactMessageDto dto)
         {
-            // Check if the model state is valid
+            // Automatic model validation via [ApiController]
+            // This checks required fields, email format, etc.
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // Return 400 Bad Request if validation fails
+                return BadRequest(ModelState);
             }
 
-            // Create a new ContactMessage entity from the DTO
+            // Map DTO to domain entity
+            // DTO is used to avoid exposing the database model directly
             var msg = new ContactMessage
             {
-                Name = dto.Name, // Name of the sender
-                Email = dto.Email, // Email of the sender
-                Message = dto.Message, // Message content
-                CreatedAt = DateTime.UtcNow // Timestamp of message creation
+                Name = dto.Name,             
+                Email = dto.Email,            
+                Message = dto.Message,        
+                CreatedAt = DateTime.UtcNow   
             };
 
-            // Insert the new message into the MongoDB collection
+            // Save the message to MongoDB
             await _messages.InsertOneAsync(msg);
 
-            // Return 200 OK response
+            // Return HTTP 200 OK when successful
             return Ok();
+        }
+
+        // GET: /api/Contact
+        // Returns all contact messages
+        // Typically used for admin/support overview
+        [HttpGet]
+        public async Task<IActionResult> GetAllContacts()
+        {
+            // Fetch all messages from MongoDB
+            // Sorted so the newest messages appear first
+            var messages = await _messages
+                .Find(_ => true)
+                .SortByDescending(m => m.CreatedAt)
+                .ToListAsync();
+
+            // Return the list as JSON
+            return Ok(messages);
         }
     }
 }
