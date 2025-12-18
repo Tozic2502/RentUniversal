@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { rentItem } from "../api.js";
 
 export default function Cart() {
-    // Access cart items and clearCart function from CartContext
-    const { cartItems, clearCart } = useCart();
+    // Access cart items and clearCart and removeFromCart function from CartContext
+    const { cartItems, clearCart, removeFromCart } = useCart();
     // Access user information from UserContext
     const { user } = useUser();
     // Hook for navigation between routes
@@ -114,24 +114,44 @@ export default function Cart() {
                             <strong>{item.name}</strong>
                             <p>Depositum: {item.deposit} kr</p>
                             <p>Pris pr. dag: {item.pricePerDay} kr</p>
-                        </div>
 
-                        <button
-                            onClick={() => clearCart(item.id)}
-                            style={{
-                                background: "crimson",
-                                color: "white",
-                                border: "none",
-                                padding: "6px 10px",
-                                borderRadius: "4px",
-                                cursor: "pointer"
-                            }}
-                        >
-                            Fjern
-                        </button>
+                            <button
+                                onClick={() => removeFromCart(item.id)}
+                                style={{
+                                    background: "orange",
+                                    color: "white",
+                                    border: "none",
+                                    padding: "4px 8px",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    marginTop: "6px",
+                                    marginRight: "6px"
+                                }}
+                            >
+                                Fjern fra kurv
+                            </button>
+                        </div>
                     </li>
                 ))}
+
             </ul>
+
+            <div style={{ marginTop: "20px", textAlign: "right" }}>
+            <button
+                onClick={clearCart}
+                style={{
+                    background: "crimson",
+                    color: "white",
+                    border: "none",
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    marginTop: "6px"
+                }}
+            >
+                Clear cart
+                </button>
+            </div>
 
             <div style={{ marginTop: "20px", textAlign: "right" }}>
                 <p><strong>Total Bel&oslash;b:</strong> {estimatedTotal} kr</p>

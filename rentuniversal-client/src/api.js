@@ -5,8 +5,13 @@ const API_BASE = "http://localhost:8080/api";
 export async function getItems() {
     const response = await fetch(`${API_BASE}/items`);
     if (!response.ok) throw new Error("Failed to load items");
-    return response.json();
+
+    const items = await response.json();
+
+    // Only return available items
+    return items.filter(item => item.isAvailable === true);
 }
+
 
 // ---------------- Rentals ----------------
 
