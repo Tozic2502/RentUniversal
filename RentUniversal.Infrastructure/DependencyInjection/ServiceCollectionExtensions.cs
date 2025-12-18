@@ -43,6 +43,7 @@ namespace RentUniversal.Infrastructure.DependencyInjection
             services.AddScoped<IItemRepository, MongoItemRepository>();
             services.AddScoped<IRentalRepository, MongoRentalRepository>();
             services.AddScoped<ILicenseRepository, MongoLicenseRepository>();
+            services.AddScoped<IContactRepository, MongoContactRepository>();
 
             return services;
         }
