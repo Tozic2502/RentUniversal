@@ -21,6 +21,7 @@ namespace RentUniversal.api
 
 
             // Application services
+            builder.Services.AddScoped<IContactService, ContactService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<IRentalService, RentalService>();

@@ -72,8 +72,22 @@ export async function loginUser(email, password) {
 // -------------------Contact---------------------
 
 // Post contact message
-const response = await fetch("http://localhost:8080/api/support-messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, message }), 
-});
+export async function supportMessage(name, email, message) {
+    const response = await fetch(`${API_BASE}/Contact`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name,
+            email,
+            message
+        })
+    });
+   
+    if (!response.ok) {
+        throw new Error("Failed to send contact message");
+    }
+
+    return true;
+}

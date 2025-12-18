@@ -1,73 +1,82 @@
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
-using RentUniversal.Domain.Entities;
-using RentUniversal.Infrastructure.Data;
 using RentUniversal.Application.DTOs;
+using RentUniversal.Application.Interfaces;
 
-namespace RentUniversal.api.Controllers
+namespace RentUniversal.Api.Controllers
 {
-    // Marks this class as an API controller (automatic model validation, etc.)
+    /// <summary>
+    /// API controller responsible for handling contact form requests.
+    /// Acts as a thin entry point that forwards requests to the application layer
+    /// without containing business logic or database access.
+    /// </summary>
     [ApiController]
-
-    // Base route: /api/Contact
     [Route("api/[controller]")]
     public class ContactController : ControllerBase
     {
-        // MongoDB collection used to store contact messages
-        private readonly IMongoCollection<ContactMessage> _messages;
+        private readonly IContactService _contactService;
 
-        // Constructor
-        // The MongoContext is injected via dependency injection
-        // and used to access the MongoDB database
-        public ContactController(MongoContext context)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContactController"/>.
+        /// The controller depends on an application service abstraction
+        /// to follow Clean Architecture and Dependency Inversion principles.
+        /// </summary>
+        /// <param name="contactService">
+        /// Application service responsible for contact-related business logic.
+        /// </param>
+        public ContactController(IContactService contactService)
         {
-            _messages = context.Database.GetCollection<ContactMessage>("ContactMessages");
+            _contactService = contactService;
         }
 
-        // POST: /api/Contact
-        // Used by the frontend contact form to submit a new message
+        /// <summary>
+        /// Creates a new contact message from a contact form submission.
+        /// The contact message is assigned an auto-generated unique identifier
+        /// in the domain layer.
+        /// </summary>
+        /// <param name="dto">
+        /// Data Transfer Object containing sender information and message content.
+        /// </param>
+        /// <returns>
+        /// Returns HTTP 201 Created along with the unique identifier of the new contact message.
+        /// </returns>
         [HttpPost]
-        public async Task<IActionResult> PostContact([FromBody] ContactMessageDto dto)
+        public async Task<IActionResult> Create([FromBody] ContactDTO dto)
         {
-            // Automatic model validation via [ApiController]
-            // This checks required fields, email format, etc.
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            // The ID is generated automatically in the domain entity
+            var id = await _contactService.CreateAsync(dto);
 
-            // Map DTO to domain entity
-            // DTO is used to avoid exposing the database model directly
-            var msg = new ContactMessage
-            {
-                Name = dto.Name,             
-                Email = dto.Email,            
-                Message = dto.Message,        
-                CreatedAt = DateTime.UtcNow   
-            };
-
-            // Save the message to MongoDB
-            await _messages.InsertOneAsync(msg);
-
-            // Return HTTP 200 OK when successful
-            return Ok();
+            // Return the generated ID to the client
+            return CreatedAtAction(nameof(GetAll), new { id }, null);
         }
 
-        // GET: /api/Contact
-        // Returns all contact messages
-        // Typically used for admin/support overview
+        /// <summary>
+        /// Retrieves all contact messages.
+        /// Typically used by administrative or support functionality.
+        /// </summary>
+        /// <returns>
+        /// A list of contact messages wrapped in an HTTP 200 OK response.
+        /// </returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllContacts()
+        public async Task<IActionResult> GetAll()
         {
-            // Fetch all messages from MongoDB
-            // Sorted so the newest messages appear first
-            var messages = await _messages
-                .Find(_ => true)
-                .SortByDescending(m => m.CreatedAt)
-                .ToListAsync();
+            var contacts = await _contactService.GetAllAsync();
+            return Ok(contacts);
+        }
 
-            // Return the list as JSON
-            return Ok(messages);
+        /// <summary>
+        /// Deletes a specific contact message by its unique identifier.
+        /// </summary>
+        /// <param name="id">
+        /// The unique identifier of the contact message to delete.
+        /// </param>
+        /// <returns>
+        /// Returns HTTP 204 No Content when the deletion is successful.
+        /// </returns>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _contactService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }

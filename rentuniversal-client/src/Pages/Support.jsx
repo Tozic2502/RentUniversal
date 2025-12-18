@@ -1,4 +1,4 @@
-
+import { supportMessage } from "../api.js";
 import { useState } from "react";
 import CityImage from "../assets/City.jpg";
 import RentAllLogo from "../assets/logo.png";
@@ -15,8 +15,9 @@ export default function SupportPage() {
     async function handleSubmit(e) {
         e.preventDefault(); // Prevents the default form submission behavior
         setStatus(""); // Resets the status message
-
+        
         try {
+            await supportMessage(name, email, message);
             
             // Resets form fields and sets a success message
             setName("");
