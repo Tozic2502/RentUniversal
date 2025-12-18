@@ -3,7 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="White">
 
-    <!-- TODO: Play around with colors / styles bc dis aint it chief-->
+    <!-- 
+        Shared navigation button style for the top taskbar.
+        Keeps hover logic and visuals consistent across tabs.
+    -->
     <UserControl.Resources>
         <Style x:Key="NavButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -53,7 +56,6 @@
                 <Button Content="User" Command="{Binding NavigateUser}" Style="{StaticResource NavButton}"/>
                 <Button Content="Annoncer" Command="{Binding NavigateAnnoncer}" Style="{StaticResource NavButton}"/>
                 <Button Content="Stats" Command="{Binding NavigateStats}" Style="{StaticResource NavButton}"/>
-				<Button Content="Upload" Command="{Binding NavigateUpload}" Style="{StaticResource NavButton}"/>
 			</StackPanel>
 
             <!-- logout button -->

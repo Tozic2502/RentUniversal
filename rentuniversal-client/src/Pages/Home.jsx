@@ -37,10 +37,10 @@ function Home({ selectedCategory }) {
 
     return (
         <div style={{ padding: "20px" }}>
-            <h1>Tilgaengelige produkter</h1>
+            <h1>Tilg&aelig;ngelige produkter</h1>
 
             {/* Display a loading message if no items are available */}
-            {items.length === 0 && <p>Indlæser...</p>}
+            {items.length === 0 && <p>Indl&aelig;ser...</p>}
             {/* Display a message if no items match the selected category */}
             {items.length > 0 && visibleItems.length === 0 && (
                 <p>Ingen produkter i den valgte kategori.</p>

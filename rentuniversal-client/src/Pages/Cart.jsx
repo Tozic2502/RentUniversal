@@ -40,7 +40,7 @@ export default function Cart() {
     function openContract() {
         if (!user) {
             // Alert the user to log in if not authenticated
-            alert("Du skal være logget ind for at leje dine varer!");
+            alert("Du skal v&aelig;re logget ind for at leje dine varer!");
             navigate("/login");
             return;
         }
@@ -85,7 +85,7 @@ export default function Cart() {
                     }}
                     onClick={() => navigate("/")}
                 >
-                    Gå til Home
+                    G&aring; til Home
                 </button>
             </div>
         );
@@ -134,7 +134,7 @@ export default function Cart() {
             </ul>
 
             <div style={{ marginTop: "20px", textAlign: "right" }}>
-                <p><strong>Total Beloeb:</strong> {estimatedTotal} kr</p>
+                <p><strong>Total Bel&oslash;b:</strong> {estimatedTotal} kr</p>
 
                 <button
                     onClick={openContract}
@@ -178,10 +178,10 @@ export default function Cart() {
                             Estimeret total: {estimatedTotal} kr
                         </p>
 
-                        <p>Du accepterer hermed følgende vilkår:</p>
+                        <p>Du accepterer hermed følgende vilk&aring;r:</p>
                         <ul>
                             <li>Udstyret skal returneres i samme stand</li>
-                            <li>Du hæfter for eventuelle skader</li>
+                            <li>Du h&aelig;fter for eventuelle skader</li>
                             <li>Forsinket aflevering kan medføre ekstra omkostninger</li>
                         </ul>
 

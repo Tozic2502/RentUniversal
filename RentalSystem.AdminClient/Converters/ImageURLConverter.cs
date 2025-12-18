@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
@@ -22,7 +21,6 @@ namespace RentalSystem.AdminClient.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // ❗ Wird nicht benötigt → sauber abbrechen
             throw new NotSupportedException();
         }
     }

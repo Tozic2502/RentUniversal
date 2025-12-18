@@ -65,7 +65,7 @@ export default function Profile() {
 
         // Show error if old password is incorrect
         if (!response.ok) {
-            alert("Forkert nuværende password");
+            alert("Forkert nuv&aelig;rende password");
             return;
         }
 
@@ -73,7 +73,7 @@ export default function Profile() {
         setOldPass("");
         setNewPass("");
 
-        alert("Password ændret!");
+        alert("Password &aelig;ndret!");
     }
 
     return (
@@ -102,7 +102,7 @@ export default function Profile() {
 
                     {/* Save profile changes */}
                     <button type="submit" className="primary-btn profile-btn">
-                        Gem ændringer
+                        Gem &aelig;ndringer
                     </button>
                 </form>
             </section>

@@ -38,6 +38,6 @@ FROM base AS final
 WORKDIR /app
 
 # Copy published output
-COPY --from=publish /app/publish 
+COPY --from=publish /app/publish .
 
 ENTRYPOINT ["dotnet", "RentUniversal.api.dll"]

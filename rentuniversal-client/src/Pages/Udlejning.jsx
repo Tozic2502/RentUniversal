@@ -128,7 +128,7 @@ export default function Udlejning() {
             return;
         }
 
-        if (!confirm("Er du sikker på, at du vil aflevere denne vare?")) return;
+        if (!confirm("Er du sikker p&aring;, at du vil aflevere denne vare?")) return;
 
         try {
             // Mark rental as being returned (disable button)
@@ -170,7 +170,7 @@ export default function Udlejning() {
     // ----- Conditional rendering -----
 
     if (!user) {
-        return <p>Du skal være logget ind for at se dine udlejninger.</p>;
+        return <p>Du skal v&aelig;re logget ind for at se dine udlejninger.</p>;
     }
 
     if (loading) {
@@ -229,7 +229,7 @@ export default function Udlejning() {
 
                         <p><strong>Kategori:</strong> {r.item?.category ?? "-"}</p>
                         <p><strong>Stand:</strong> {r.item?.condition ?? "-"}</p>
-                        <p><strong>Værdi:</strong> {r.item?.value ?? 0} kr</p>
+                        <p><strong>V&aelig;rdi:</strong> {r.item?.value ?? 0} kr</p>
                         <p><strong>Pris pr. dag:</strong> {r.item?.pricePerDay ?? r.pricePerDay ?? 0} kr</p>
                         <p><strong>Depositum:</strong> {r.item?.deposit ?? 0} kr</p>
 
