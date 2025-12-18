@@ -35,7 +35,7 @@ export default function SupportPage() {
         } catch (err) {
             // Logs the error and sets an error message
             console.error(err);
-            setStatus("Der skete en fejl. Prøv igen.");
+            setStatus("Der skete en fejl. Pr&oslash;v igen.");
         }
     }
 
@@ -50,25 +50,25 @@ export default function SupportPage() {
                     <p>
                         RentAll er en udlejningsplatform udviklet af et team p&aring; fire
                         softwareudviklere. Platformen samler forskelligt udstyr ét sted –
-                        fra værktøj og udendørsudstyr til festartikler – s&aring; brugerne nemt
+                        fra værkt&oslash;j og udend&oslash;rsudstyr til festartikler – s&aring; brugerne nemt
                         kan finde og reservere det, de har brug for.
                     </p>
 
                     <p>
-                        Idéen bag løsningen er, at du kun betaler for det udstyr, du
+                        Idéen bag l&oslash;sningen er, at du kun betaler for det udstyr, du
                         anvender, og kun i den periode, hvor du faktisk har behov for det.
                         P&aring; den m&aring;de kan b&aring;de private og mindre virksomheder undg&aring;
-                        unødvendige køb og i stedet leje fleksibelt efter behov.
+                        un&oslash;dvendige k&oslash;b og i stedet leje fleksibelt efter behov.
                     </p>
 
                     {/* Firmaoplysninger */}
                     <p><strong>Navn:</strong> RentAll ApS</p>
                     <p><strong>Telefon:</strong> +45 12 34 56 78</p>
                     <p><strong>Email:</strong> support@rentall.dk</p>
-                    <p><strong>Lokation:</strong> Sønderborg, Danmark</p>
+                    <p><strong>Lokation:</strong> S&oslash;nderborg, Danmark</p>
                 </div>
 
-                {/* Højre side: city-billede */}
+                {/* H&oslash;jre side: city-billede */}
                 <div className="about-image">
                     <img src={CityImage} alt="Moderne by" />
                 </div>
@@ -86,7 +86,7 @@ export default function SupportPage() {
                 </div>
 
                 <p className="contact-text">
-                    Har du spørgsm&aring;l eller efterspørgsel til udlejning? Skriv en besked her:
+                    Har du sp&oslash;rgsm&aring;l eller eftersp&oslash;rgsel til udlejning? Skriv en besked her:
                 </p>
 
                 {/* Kontaktformular */}

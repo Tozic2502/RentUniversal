@@ -55,7 +55,7 @@ export default function Register() {
 
             // Show error if registration fails
             if (!response.ok) {
-                setError("Kunne ikke oprette bruger. Prøv igen.");
+                setError("Kunne ikke oprette bruger. Pr&oslash;v igen.");
                 return;
             }
 
@@ -65,7 +65,7 @@ export default function Register() {
         } catch (err) {
             // Handle network or unexpected errors
             console.error("Register error", err);
-            setError("Der skete en fejl. Prøv igen.");
+            setError("Der skete en fejl. Pr&oslash;v igen.");
         }
     }
 
