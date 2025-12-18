@@ -1,7 +1,7 @@
 // src/Pages/Page-Support/Support.jsx
 import { useState } from "react";
-import CityImage from "../../assets/City.jpg";
-import RentAllLogo from "../../assets/logo.png";
+import CityImage from "../assets/City.jpg";
+import RentAllLogo from "../assets/logo.png";
 
 // Defining the SupportPage functional component
 export default function SupportPage() {

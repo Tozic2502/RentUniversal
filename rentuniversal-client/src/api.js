@@ -30,6 +30,9 @@ export async function getUserRentals(userId) {
     return response.json();
 }
 
+
+
+
 // Return rental
 export async function returnRental(rentalId) {
     const response = await fetch(`${API_BASE}/Rentals/return/${rentalId}`, {
@@ -37,4 +40,30 @@ export async function returnRental(rentalId) {
     });
 
     if (!response.ok) throw new Error("Failed to return rental");
+}
+
+// ---------------- Users ----------------
+
+//Authenticate user with email + password
+export async function loginUser(email, password) {
+    const response = await fetch(`${API_BASE}/users/authenticate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+        throw new Error("Invalid email or password");
+    }
+
+    // Read raw text first (prevents JSON crash)
+    const text = await response.text();
+
+    // If backend returns no body
+    if (!text) {
+        return null;
+    }
+
+    // Parse JSON safely
+    return JSON.parse(text);
 }

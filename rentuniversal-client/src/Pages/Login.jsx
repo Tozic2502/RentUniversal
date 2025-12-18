@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../Context/UserContext";
+import { loginUser } from "../api.js";
 
 export default function Login() {
 
@@ -32,31 +33,25 @@ export default function Login() {
      * Sends credentials to the backend API
      */
     async function handleLogin(e) {
-        e.preventDefault(); // Prevent page reload
-        setErrorMessage(""); // Clear previous errors
+        e.preventDefault();
+        setErrorMessage("");
 
-        // Send login request to backend
-        const response = await fetch("http://localhost:8080/api/users/authenticate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-        });
+        try {
+            const loggedInUser = await loginUser(email, password);
 
-        // Show error message if login fails
-        if (!response.ok) {
+            if (!loggedInUser) {
+                throw new Error("No user returned");
+            }
+
+            login(loggedInUser);
+            navigate("/profile");
+
+        } catch (error) {
+            console.error("Login error:", error);
             setErrorMessage("Forkert email eller password!");
-            return;
         }
-
-        // Parse logged-in user data from response
-        const loggedInUser = await response.json();
-
-        // Store user in global context
-        login(loggedInUser);
-
-        // Navigate to profile page after successful login
-        navigate("/profile");
     }
+
 
     return (
         <section className="login-section">
