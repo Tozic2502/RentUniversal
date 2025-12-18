@@ -54,7 +54,7 @@
 
         </StackPanel>
 
-        <!-- SER DETAILS -->
+        <!-- USER DETAILS -->
         <StackPanel Grid.Column="1" Margin="40 0 0 0">
 
             <TextBlock Text="User Details"

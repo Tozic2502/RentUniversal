@@ -84,7 +84,7 @@ function Home({ selectedCategory }) {
                                 className="item-button"
                                 onClick={() => addToCart(item)}
                             >
-                                Tilføj til kurv
+                                Tilf&oslash;j til kurv
                             </button>
                         </div>
                     );
