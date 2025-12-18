@@ -10,6 +10,9 @@ namespace RentalSystem.AdminClient.View
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Register if there is a change in the PasswordBox field
+        /// </summary>
         private void PasswordBox_OnPasswordChanged(object sender, System.Windows.RoutedEventArgs e)
         {
             if (DataContext is LoginViewModel vm &&

@@ -3,11 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="White">
 
-    <!-- 
-        Shared navigation button style for the top taskbar.
-        Keeps hover logic and visuals consistent across tabs.
-    -->
     <UserControl.Resources>
+        <!-- Shared style for navigation buttons in the top bar -->
         <Style x:Key="NavButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="White"/>
@@ -20,7 +17,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bd" Background="{TemplateBinding Background}">
+                        <Border Background="{TemplateBinding Background}">
                             <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center"/>
                         </Border>
@@ -36,29 +33,37 @@
         </Style>
     </UserControl.Resources>
 
-
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/> <!-- topbar -->
-            <RowDefinition Height="*"/>  <!-- content -->
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Taskbar play around here 2 change color -->
+        <!-- Top navigation bar -->
         <Grid Background="#00B2A9" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- navbar -->
             <StackPanel Orientation="Horizontal">
-                <Button Content="Settings" Command="{Binding NavigateSettings}" Style="{StaticResource NavButton}"/>
-                <Button Content="User" Command="{Binding NavigateUser}" Style="{StaticResource NavButton}"/>
-                <Button Content="Annoncer" Command="{Binding NavigateAnnoncer}" Style="{StaticResource NavButton}"/>
-                <Button Content="Stats" Command="{Binding NavigateStats}" Style="{StaticResource NavButton}"/>
-			</StackPanel>
+                <Button Content="Settings"
+                        Command="{Binding NavigateSettings}"
+                        Style="{StaticResource NavButton}"/>
 
-            <!-- logout button -->
+                <Button Content="User"
+                        Command="{Binding NavigateUser}"
+                        Style="{StaticResource NavButton}"/>
+
+                <Button Content="Annoncer"
+                        Command="{Binding NavigateAnnoncer}"
+                        Style="{StaticResource NavButton}"/>
+
+                <Button Content="Stats"
+                        Command="{Binding NavigateStats}"
+                        Style="{StaticResource NavButton}"/>
+            </StackPanel>
+
             <Button Grid.Column="1"
                     Content="Logout"
                     Command="{Binding Logout}">
@@ -76,6 +81,8 @@
             </Button>
         </Grid>
 
-        <ContentControl Grid.Row="1" Content="{Binding CurrentAdminViewModel}" />
+        <!-- Active view -->
+        <ContentControl Grid.Row="1"
+                        Content="{Binding CurrentAdminViewModel}"/>
     </Grid>
 </UserControl>

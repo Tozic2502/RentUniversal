@@ -4,13 +4,19 @@ namespace RentalSystem.AdminClient.ViewModel
 {
     public class AdminShellViewModel : BaseViewModel
     {
+        // Currently active admin view
         private object _currentAdminViewModel;
         public object CurrentAdminViewModel
         {
             get => _currentAdminViewModel;
-            set { _currentAdminViewModel = value; OnPropertyChanged(); }
+            set
+            {
+                _currentAdminViewModel = value;
+                OnPropertyChanged();
+            }
         }
 
+        // Navigation commands
         public ICommand NavigateSettings { get; }
         public ICommand NavigateUser { get; }
         public ICommand NavigateAnnoncer { get; }
@@ -22,15 +28,25 @@ namespace RentalSystem.AdminClient.ViewModel
         public AdminShellViewModel(NavigationService nav)
         {
             _nav = nav;
-            
-            CurrentAdminViewModel = new SettingsViewModel();
-            
-            NavigateSettings = new RelayCommand(_ => CurrentAdminViewModel = new SettingsViewModel());
-            NavigateUser = new RelayCommand(_ => CurrentAdminViewModel = new UserViewModel());
-            NavigateAnnoncer = new RelayCommand(_ => CurrentAdminViewModel = new AnnoncerViewModel());
-            NavigateStats = new RelayCommand(_ => CurrentAdminViewModel = new StatsViewModel());
 
-            Logout = new RelayCommand(_ => _nav.Navigate(new LoginViewModel(_nav)));
+            // Default view after login
+            CurrentAdminViewModel = new SettingsViewModel();
+
+            NavigateSettings = new RelayCommand(_ =>
+                CurrentAdminViewModel = new SettingsViewModel());
+
+            NavigateUser = new RelayCommand(_ =>
+                CurrentAdminViewModel = new UserViewModel());
+
+            NavigateAnnoncer = new RelayCommand(_ =>
+                CurrentAdminViewModel = new AnnoncerViewModel());
+
+            NavigateStats = new RelayCommand(_ =>
+                CurrentAdminViewModel = new StatsViewModel());
+
+            // Return to login and reset navigation
+            Logout = new RelayCommand(_ =>
+                _nav.Navigate(new LoginViewModel(_nav)));
         }
     }
 }
