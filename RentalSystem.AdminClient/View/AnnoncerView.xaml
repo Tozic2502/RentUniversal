@@ -4,18 +4,18 @@
              xmlns:converters="clr-namespace:RentalSystem.AdminClient.Converters"
              Background="#f5f5f5">
 
+    <!-- Converts relative image paths from API to absolute URLs -->
     <UserControl.Resources>
         <converters:ImageUrlConverter x:Key="ImageURLConverter"/>
     </UserControl.Resources>
 
-    
     <Grid Margin="40">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="350"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- LEFT: ITEM LIST -->
+        <!-- Item list -->
         <StackPanel Grid.Column="0">
             <TextBlock Text="Annoncer"
                        FontSize="28"
@@ -56,7 +56,7 @@
             </ListBox>
         </StackPanel>
 
-        <!-- RIGHT: EDIT / CREATE -->
+        <!-- Editor -->
         <StackPanel Grid.Column="1" Margin="40 0 0 0">
 
             <TextBlock Text="Rediger Annonce"
@@ -75,8 +75,8 @@
 
             <TextBlock Text="Value" FontWeight="Bold"/>
             <TextBox Text="{Binding Value}" Margin="0 0 0 10"/>
-            
-            <TextBlock Text="Available?" FontWeight="Bold" />
+
+            <TextBlock Text="Available?" FontWeight="Bold"/>
             <TextBlock Text="{Binding IsAvailable}" Margin="0 0 0 10"/>
 
             <TextBlock Text="Images"
@@ -84,15 +84,14 @@
                        FontWeight="Bold"
                        Margin="0 30 0 10"/>
 
-            <!-- IMAGE GALLERY -->
+            <!-- Image gallery for selected item -->
             <ItemsControl ItemsSource="{Binding SelectedItem.ImageUrls}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <WrapPanel/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
-                
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Width="140"
@@ -104,21 +103,18 @@
                                 CornerRadius="6">
 
                             <StackPanel>
-                                <!-- IMAGE -->
                                 <Image Source="{Binding Converter={StaticResource ImageURLConverter}}"
                                        Width="120"
                                        Height="120"
                                        Stretch="UniformToFill"/>
 
-
-                                <!-- DELETE  -->
                                 <Button Content="Delete"
                                         Margin="0 5 0 0"
                                         Height="28"
                                         Background="#ffdddd"
                                         Command="{Binding DataContext.DeleteImageCommand,
-                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                        CommandParameter="{Binding}" />
+                                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"/>
                             </StackPanel>
 
                         </Border>
@@ -126,17 +122,14 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <!-- addimg -->
             <Button Content="Add Image"
                     Width="120"
                     Height="28"
                     Margin="0 15 0 15"
                     HorizontalAlignment="Left"
-                    Command="{Binding UploadImageCommand}" />
-            
+                    Command="{Binding UploadImageCommand}"/>
 
             <StackPanel Orientation="Horizontal">
-
                 <Button Content="Create"
                         Width="120"
                         Margin="0 0 10 0"
@@ -156,7 +149,6 @@
                         Background="#F44336"
                         Foreground="White"
                         Command="{Binding DeleteCommand}"/>
-
             </StackPanel>
 
         </StackPanel>

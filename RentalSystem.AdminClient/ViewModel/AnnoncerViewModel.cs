@@ -1,42 +1,19 @@
 ﻿using RentalSystem.AdminClient.Models;
 using RentalSystem.AdminClient.Services;
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Win32;
-using RentalSystem.AdminClient.Models;
-using RentalSystem.AdminClient.Services;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace RentalSystem.AdminClient.ViewModel
 {
-    /// <summary>
-    /// ViewModel responsible for managing rental advertisements (annonces)
-    /// in the Admin Panel.
-    /// </summary>
-    /// <remarks>
-    /// This ViewModel represents a moderation workflow where administrators
-    /// can approve or reject submitted advertisements.
-    ///
-    /// Currently uses dummy data. In a production setup, ads would be loaded
-    /// from an API and actions would trigger backend updates.
-    /// </remarks>
     public class AnnoncerViewModel : BaseViewModel
     {
-        /// <summary>
-        /// Collection of advertisements pending review.
-        /// </summary>
-        /// <remarks>
-        /// ObservableCollection is used to ensure UI updates automatically
-        /// when items are added or removed.
-        /// </remarks>
         private readonly ApiService _api = ApiService.Instance;
 
         public ObservableCollection<ItemModel> Items { get; } = new();
 
-        
         private ItemModel? _selectedItem;
         public ItemModel? SelectedItem
         {
@@ -51,12 +28,12 @@ namespace RentalSystem.AdminClient.ViewModel
 
                 if (value != null)
                     LoadSelectedItem();
-                
+
                 CommandManager.InvalidateRequerySuggested();
             }
         }
 
-        // form fields
+        // Form fields
         private string _name = "";
         public string Name
         {
@@ -97,7 +74,6 @@ namespace RentalSystem.AdminClient.ViewModel
         public ICommand CreateCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
-        
         public ICommand UploadImageCommand { get; }
         public ICommand DeleteImageCommand { get; }
 
@@ -119,18 +95,15 @@ namespace RentalSystem.AdminClient.ViewModel
 
             UploadImageCommand = new RelayCommand(_ => UploadImage());
             DeleteImageCommand = new RelayCommand(img => DeleteImage(img as string));
-            
+
             _ = LoadItemsAsync();
         }
-
-        // 
-        // Load
-        // 
 
         private async Task LoadItemsAsync()
         {
             Items.Clear();
             var items = await _api.GetAllItemsAsync();
+
             foreach (var item in items)
                 Items.Add(item);
         }
@@ -147,16 +120,12 @@ namespace RentalSystem.AdminClient.ViewModel
             IsAvailable = SelectedItem.IsAvailable;
         }
 
-        // 
-        // CRUD
-        //
-
         private bool CanCreate()
         {
             return !string.IsNullOrWhiteSpace(Name)
-                && !string.IsNullOrWhiteSpace(Category)
-                && !string.IsNullOrWhiteSpace(Condition)
-                && Value > 0;
+                   && !string.IsNullOrWhiteSpace(Category)
+                   && !string.IsNullOrWhiteSpace(Condition)
+                   && Value > 0;
         }
 
         private async Task CreateItem()
@@ -166,12 +135,11 @@ namespace RentalSystem.AdminClient.ViewModel
                 Name = Name,
                 Category = Category,
                 Condition = Condition,
-                IsAvailable = IsAvailable,
                 Value = Value,
+                IsAvailable = IsAvailable
             };
 
-            var success = await _api.CreateItemAsync(item);
-            if (!success)
+            if (!await _api.CreateItemAsync(item))
             {
                 MessageBox.Show("Failed to create item.", "Error");
                 return;
@@ -192,8 +160,7 @@ namespace RentalSystem.AdminClient.ViewModel
             SelectedItem.Value = Value;
             SelectedItem.IsAvailable = IsAvailable;
 
-            var success = await _api.UpdateItemAsync(SelectedItem.Id, SelectedItem);
-            if (!success)
+            if (!await _api.UpdateItemAsync(SelectedItem.Id, SelectedItem))
             {
                 MessageBox.Show("Failed to update item.", "Error");
                 return;
@@ -220,8 +187,6 @@ namespace RentalSystem.AdminClient.ViewModel
             await LoadItemsAsync();
             ClearForm();
         }
-        
-        
 
         private async void UploadImage()
         {
@@ -237,15 +202,8 @@ namespace RentalSystem.AdminClient.ViewModel
             if (dialog.ShowDialog() != true)
                 return;
 
-            var success = await _api.UploadItemImageAsync(
-                SelectedItem.Id,
-                dialog.FileName
-            );
-
-            if (success)
-            {
+            if (await _api.UploadItemImageAsync(SelectedItem.Id, dialog.FileName))
                 await RefreshSelectedItemAsync();
-            }
         }
 
         private async void DeleteImage(string? imageUrl)
@@ -253,29 +211,21 @@ namespace RentalSystem.AdminClient.ViewModel
             if (SelectedItem == null || string.IsNullOrEmpty(imageUrl))
                 return;
 
-            var success = await _api.DeleteItemImageAsync(
-                SelectedItem.Id,
-                imageUrl
-            );
-
-            if (success)
-            {
+            if (await _api.DeleteItemImageAsync(SelectedItem.Id, imageUrl))
                 await RefreshSelectedItemAsync();
-            }
         }
-        
-        // 
-        // Util / helpers
-        // 
 
+        // Reloads item after image changes
         private async Task RefreshSelectedItemAsync()
         {
             var updated = await _api.GetItemByIdAsync(SelectedItem!.Id);
-            if (updated == null) return;
+            if (updated == null)
+                return;
 
             SelectedItem.ImageUrls = updated.ImageUrls;
             OnPropertyChanged(nameof(SelectedItem));
         }
+
         private void ClearForm()
         {
             Name = "";

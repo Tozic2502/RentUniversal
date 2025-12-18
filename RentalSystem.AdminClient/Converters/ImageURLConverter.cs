@@ -11,7 +11,7 @@ namespace RentalSystem.AdminClient.Converters
             if (value is not string url || string.IsNullOrWhiteSpace(url))
                 return null;
 
-            // Absolute URL für WPF bauen
+            // Absolute URL for WPF
             var fullUrl = url.StartsWith("http", StringComparison.OrdinalIgnoreCase)
                 ? url
                 : $"http://localhost:8080{url}";

@@ -1,6 +1,4 @@
 ﻿using RentalSystem.AdminClient.Services;
-using System;
-using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace RentalSystem.AdminClient.ViewModel
