@@ -17,7 +17,7 @@ function SideKategori({ selectedCategory, onSelectCategory, searchTerm, onSearch
             <input
                 type="text"
                 className="sidebar-search"
-                placeholder="Søg efter vare..." // Placeholder text in Danish: "Search for item..."
+                placeholder="S&oslash;g efter vare..." // Placeholder text in Danish: "Search for item..."
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)} // Trigger onSearchChange when input changes
             />
@@ -32,12 +32,12 @@ function SideKategori({ selectedCategory, onSelectCategory, searchTerm, onSearch
                     <button className="sidebar-btn">Alle</button>
                 </li>
 
-                {/* "V&aelig;rktøj" (Tools) category option */}
+                {/* "Værktøj" (Tools) category option */}
                 <li
-                    className={selectedCategory === "V&aelig;rktøj" ? "active" : ""} // Highlight if "Værktøj" is selected
-                    onClick={() => onSelectCategory("V&aelig;rktøj")} // Select "Værktøj" category
+                    className={selectedCategory === "Værktøj" ? "active" : ""} // Highlight if "Værkt&oslash;j" is selected
+                    onClick={() => onSelectCategory("Værktøj")} // Select "Værkt&oslash;j" category
                 >
-                    <button className="sidebar-btn">V&aelig;rktøj</button>
+                    <button className="sidebar-btn">Værktøj</button>
                 </li>
 
                 {/* "Mekanik" (Mechanics) category option */}

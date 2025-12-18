@@ -21,7 +21,7 @@
 
         <!-- EMAIL -->
         
-        <TextBlock Grid.Row="1" Margin="55 -10" Text="E-Mail" FontWeight="Bold"/>
+        <TextBlock Grid.Row="1" Margin="55 0" Text="E-Mail" FontWeight="Bold"/>
         <TextBox Grid.Row="1"
                  Width="250"
                  HorizontalAlignment="Center"
