@@ -72,13 +72,14 @@ export async function loginUser(email, password) {
 // -------------------Contact---------------------
 
 // Post contact message
-export async function supportMessage(name, email, message) {
+export async function supportMessage(id, name, email, message) {
     const response = await fetch(`${API_BASE}/Contact`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
+            id,
             name,
             email,
             message

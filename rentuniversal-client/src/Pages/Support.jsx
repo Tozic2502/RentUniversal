@@ -6,6 +6,7 @@ import RentAllLogo from "../assets/logo.png";
 // Defining the SupportPage functional component
 export default function SupportPage() {
     // State variables for form inputs and submission status
+    const [id, setId] = useState("");
     const [name, setName] = useState(""); // Stores the user's name
     const [email, setEmail] = useState(""); // Stores the user's email
     const [message, setMessage] = useState(""); // Stores the user's message
@@ -17,9 +18,10 @@ export default function SupportPage() {
         setStatus(""); // Resets the status message
         
         try {
-            await supportMessage(name, email, message);
+            await supportMessage(id, name, email, message);
             
             // Resets form fields and sets a success message
+            setId("");
             setName("");
             setEmail("");
             setMessage("");
