@@ -1,9 +1,48 @@
 ﻿<Application x:Class="RentalSystem.AdminClient.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:RentalSystem.AdminClient"
-             StartupUri="MainWindow.xaml">
+             xmlns:view="clr-namespace:RentalSystem.AdminClient.View"
+             xmlns:vm="clr-namespace:RentalSystem.AdminClient.ViewModel"
+             xmlns:converters="clr-namespace:RentalSystem.AdminClient.Converters"
+             StartupUri="View/MainWindow.xaml">
+
     <Application.Resources>
-         
+
+        <!-- LOGIN -->
+        <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+            <view:LoginView />
+        </DataTemplate>
+
+        <!-- ADMIN DASHBOARD -->
+        <DataTemplate DataType="{x:Type vm:AdminShellViewModel}">
+            <view:AdminShellView />
+        </DataTemplate>
+
+        <!-- SETTINGS -->
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <view:SettingsView />
+        </DataTemplate>
+
+        <!-- USER -->
+        <DataTemplate DataType="{x:Type vm:UserViewModel}">
+            <view:UserView />
+        </DataTemplate>
+
+        <!-- ANNONCER -->
+        <DataTemplate DataType="{x:Type vm:AnnoncerViewModel}">
+            <view:AnnoncerView />
+        </DataTemplate>
+
+        <!-- Support -->
+        <DataTemplate DataType="{x:Type vm:SupportViewModel}">
+            <view:SupportView />
+        </DataTemplate>
+        
+        <!-- STATS -->
+        <DataTemplate DataType="{x:Type vm:StatsViewModel}">
+            <view:StatsView />
+        </DataTemplate>
+		<converters:BoolToStatusConv x:Key="BoolToStatusConverter"/>
+        
     </Application.Resources>
 </Application>
