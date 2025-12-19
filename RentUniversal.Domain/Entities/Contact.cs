@@ -1,9 +1,14 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace RentUniversal.Domain.Entities
 {
-    public class ContactMessage
+    public class Contact
     {
         // Unique identifier for the contact message, initialized with a new GUID.
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
 
         // Name of the person who sent the contact message.
         public string Name { get; set; } = string.Empty;

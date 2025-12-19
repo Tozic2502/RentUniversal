@@ -90,4 +90,16 @@ public static class DTOMapper
         DocumentUrl = id.DocumentUrl,
         VerifiedDate = id.VerifiedDate
     };
+    /// <summary>
+    /// Maps a domain <see cref="Contact"/> entity to an <see cref="ContactDTO"/>
+    /// </summary>
+    /// <param name="contact"></param>
+    /// <returns></returns>
+    public static ContactDTO ToDTO(Contact contact) => new()
+    {
+        Id = contact.Id,
+        Name = contact.Name,
+        Email = contact.Email,
+        Message = contact.Message
+    };
 }

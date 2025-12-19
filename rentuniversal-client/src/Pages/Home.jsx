@@ -1,90 +1,122 @@
-import { useEffect, useState } from "react";
 import { useCart } from "../Context/CartContext";
-import { getItems } from "../api";
 
-const API_BASE_URL = "http://localhost:8080"; 
+const API_BASE_URL = "http://localhost:8080";
 
-// Helper function to build a full image URL from a given path
+/**
+ * Builds a full image URL from a relative backend path
+ * Example:
+ *  "/uploads/items/123/img.jpg"
+ *  ? "http://localhost:8080/uploads/items/123/img.jpg"
+ */
 function buildImageUrl(path) {
-    if (!path) return ""; // Return an empty string if the path is not provided
-    if (path.startsWith("http")) return path; // Return the path if it's already a full URL
-    return `${API_BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`; // Construct the full URL
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    return `${API_BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
-// Home component displays a list of items and allows adding them to the cart
-function Home({ selectedCategory }) {
-    const [items, setItems] = useState([]); // State to store the list of items
-    const { addToCart } = useCart(); // Access the addToCart function from the CartContext
+/**
+ * Home
+ * Displays all available items.
+ * Items are filtered by:
+ * - selectedCategory (from sidebar)
+ * - searchTerm (from sidebar search input)
+ */
+function Home({ items, selectedCategory, searchTerm }) {
+    const { addToCart } = useCart();
 
-    // useEffect to load items when the component mounts
-    useEffect(() => {
-        async function load() {
-            try {
-                const data = await getItems(); // Fetch items from the API
-                setItems(data); // Update the state with the fetched items
-            } catch (err) {
-                console.error("Failed to load items", err); // Log an error if fetching fails
-            }
-        }
+    // Filter items by category AND search term
+    const visibleItems = items.filter(item => {
+        const matchesCategory =
+            !selectedCategory || item.category === selectedCategory;
 
-        load(); // Call the load function
-    }, []); // Empty dependency array ensures this runs only once
+        const matchesSearch =
+            item.name
+                ?.toLowerCase()
+                .includes(searchTerm.toLowerCase());
 
-    // Filter items based on the selected category, if provided
-    const visibleItems = selectedCategory
-        ? items.filter((item) => item.category === selectedCategory)
-        : items;
+        return matchesCategory && matchesSearch;
+    });
 
+    {/*
+  Renders the home page displaying available products.
+  The view handles loading states, empty result states,
+  and presents items in a responsive grid layout.
+*/}
     return (
         <div style={{ padding: "20px" }}>
-            <h1>Tilg&aelig;ngelige produkter</h1>
-
-            {/* Display a loading message if no items are available */}
-            {items.length === 0 && <p>Indl&aelig;ser...</p>}
-            {/* Display a message if no items match the selected category */}
+            <h1>Tilgaengelige produkter</h1>
+            {items.length === 0 && <p>Indlaeser...</p>}
             {items.length > 0 && visibleItems.length === 0 && (
-                <p>Ingen produkter i den valgte kategori.</p>
+                <p>Ingen produkter matcher dit valg.</p>
             )}
-
+            
             <div className="item-grid">
-                {/* Render a card for each visible item */}
-                {visibleItems.map((item) => {
-                    const hasImages = item.imageUrls && item.imageUrls.length > 0; // Check if the item has images
-                    const imgSrc = hasImages ? buildImageUrl(item.imageUrls[0]) : null; // Get the first image URL
+                {visibleItems.map(item => {
+                    {/*
+                  Determines whether the current item has
+                  one or more associated image URLs.
+                */}
+                    const hasImages =
+                        item.imageUrls && item.imageUrls.length > 0;
+
+                    {/*
+                  Builds the image source URL for the first image
+                  if available, otherwise falls back to null.
+                */}
+                    const imgSrc = hasImages
+                        ? buildImageUrl(item.imageUrls[0])
+                        : null;
 
                     return (
                         <div key={item.id} className="item-card">
+                            {/*
+                          Thumbnail section for the product.
+                          Displays an image if available, otherwise
+                          falls back to the first character of the item name.
+                        */}
                             <div className="item-thumb">
-                                {/* Display the item's thumbnail image */}
-                                <img
-                                    src={imgSrc}
-                                    className="item-thumb-img"
-                                />
+                                {imgSrc ? (
+                                    <img
+                                        src={imgSrc}
+                                        alt={item.name}
+                                        className="item-thumb-img"
+                                    />
+                                ) : (
+                                    <span>
+                                    {item.name?.charAt(0) ?? "?"}
+                                </span>
+                                )}
                             </div>
-
+                            
                             <div className="item-info">
-                                {/* Display item details */}
                                 <h3>{item.name}</h3>
+
                                 <p className="item-meta">
                                     <strong>Kategori:</strong> {item.category}
                                 </p>
+
                                 <p className="item-meta">
                                     <strong>Stand:</strong> {item.condition}
                                 </p>
+
                                 <p className="item-price">
                                     Pris pr. dag: {item.pricePerDay ?? 0} kr
                                 </p>
+
                                 <p className="item-meta">
                                     Depositum: {item.deposit ?? 0} kr
                                 </p>
                             </div>
-
-                            {/* Button to add the item to the cart */}
+                            
+                            {/*
+                          Action button for adding the selected product
+                          to the user's cart.
+                        */}
                             <button
                                 className="item-button"
                                 onClick={() => addToCart(item)}
                             >
-                                Tilf&oslash;j til kurv
+                                Tilfoej til kurv
                             </button>
                         </div>
                     );

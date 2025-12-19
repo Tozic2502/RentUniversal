@@ -4,8 +4,10 @@ namespace RentUniversal.Application.DTOs
     /// Data Transfer Object (DTO) representing a contact form submission.
     /// Used to carry basic sender details and the message content from the client to the API.
     /// </summary>
-    public class ContactMessageDto
+    public class ContactDTO
     {
+        
+        public string Id { get; set; }
         /// <summary>
         /// The sender's name as provided in the contact form.
         /// </summary>

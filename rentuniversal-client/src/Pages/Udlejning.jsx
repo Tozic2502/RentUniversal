@@ -144,7 +144,7 @@ export default function Udlejning() {
             await loadRentals();
         } catch (err) {
             console.error("Return failed", err);
-            alert("Fejl ved aflevering af varen. Prøv igen.");
+            alert("Fejl ved aflevering af varen. Pr&oslash;v igen.");
         } finally {
             // Remove rental from returning state
             setReturningIds(prev => {
@@ -182,7 +182,7 @@ export default function Udlejning() {
             <div style={{ padding: 20 }}>
                 <p style={{ color: "crimson" }}>{error}</p>
                 <button onClick={loadRentals} style={{ padding: "8px 12px" }}>
-                    Prøv igen
+                    Pr&oslash;v igen
                 </button>
             </div>
         );

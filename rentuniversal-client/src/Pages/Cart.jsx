@@ -64,7 +64,7 @@ export default function Cart() {
         } catch (error) {
             // Handle errors during the rental process
             console.error("Checkout failed:", error);
-            alert("Fejl! Prøv igen senere.");
+            alert("Fejl! Pr	&oslash;v igen senere.");
         }
     }
 
@@ -191,11 +191,11 @@ export default function Cart() {
                             Estimeret total: {estimatedTotal} kr
                         </p>
 
-                        <p>Du accepterer hermed følgende vilk&aring;r:</p>
+                        <p>Du accepterer hermed f	&oslash;lgende vilk&aring;r:</p>
                         <ul>
                             <li>Udstyret skal returneres i samme stand</li>
                             <li>Du h&aelig;fter for eventuelle skader</li>
-                            <li>Forsinket aflevering kan medføre ekstra omkostninger</li>
+                            <li>Forsinket aflevering kan medf&oslash;re ekstra omkostninger</li>
                         </ul>
 
                         <div style={{ marginTop: "15px", textAlign: "right" }}>

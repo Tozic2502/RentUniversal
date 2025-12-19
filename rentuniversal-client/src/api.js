@@ -12,7 +12,6 @@ export async function getItems() {
     return items.filter(item => item.isAvailable === true);
 }
 
-
 // ---------------- Rentals ----------------
 
 // Create a rental
@@ -34,9 +33,6 @@ export async function getUserRentals(userId) {
     if (!response.ok) throw new Error("Failed to load rentals");
     return response.json();
 }
-
-
-
 
 // Return rental
 export async function returnRental(rentalId) {
@@ -71,4 +67,28 @@ export async function loginUser(email, password) {
 
     // Parse JSON safely
     return JSON.parse(text);
+}
+
+// -------------------Contact---------------------
+
+// Post contact message
+export async function supportMessage(id, name, email, message) {
+    const response = await fetch(`${API_BASE}/Contact`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id,
+            name,
+            email,
+            message
+        })
+    });
+   
+    if (!response.ok) {
+        throw new Error("Failed to send contact message");
+    }
+
+    return true;
 }

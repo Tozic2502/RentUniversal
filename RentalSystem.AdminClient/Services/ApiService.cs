@@ -196,6 +196,24 @@ namespace RentalSystem.AdminClient.Services
                 $"/api/Items/{itemId}"
             );
         }
+        
+        /// <summary>
+        /// Retrieves all contacts
+        /// </summary>
+        public async Task<List<ContactModel>> GetAllContactsAsync()
+        {
+            return await _http.GetFromJsonAsync<List<ContactModel>>("/api/Contact")
+                   ?? new List<ContactModel>();
+        }
+
+        /// <summary>
+        /// Deletes a single contact
+        /// </summary>
+        public async Task<bool> DeleteContactAsync(string id)
+        {
+            var res = await _http.DeleteAsync($"/api/Contact/{id}");
+            return res.IsSuccessStatusCode;
+        }
 
         /// <summary>
         /// Clears the current user session.

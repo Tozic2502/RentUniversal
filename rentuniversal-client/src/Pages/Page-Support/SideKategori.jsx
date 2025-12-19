@@ -1,52 +1,58 @@
 import React from "react";
 
-// SideKategori component renders a sidebar for category selection and search functionality.
-// Props:
-// - selectedCategory: The currently selected category.
-// - onSelectCategory: Callback function to handle category selection.
-// - searchTerm: The current search term entered by the user.
-// - onSearchChange: Callback function to handle changes in the search input.
-function SideKategori({ selectedCategory, onSelectCategory, searchTerm, onSearchChange }) {
-    
+/**
+ * SideKategori
+ * Sidebar that:
+ * - Builds category list dynamically from items
+ * - Shows search input
+ * - Filters items by category
+ */
+function SideKategori({items, selectedCategory, onSelectCategory, searchTerm, onSearchChange}) {
+    // Build UNIQUE category list from backend items
+    const categories = [
+        "Alle",
+        ...Array.from(
+            new Set(
+                items
+                    .map(item => item.category)
+                    .filter(Boolean)
+            )
+        )
+    ];
+
     return (
         <aside className="sidebar">
-            {/* Sidebar header */}
             <h3>Kategori</h3>
 
-            {/* Search input field */}
             <input
                 type="text"
                 className="sidebar-search"
-                placeholder="Søg efter vare..." // Placeholder text in Danish: "Search for item..."
+                placeholder="Soeg efter vare..."
                 value={searchTerm}
-                onChange={(e) => onSearchChange(e.target.value)} // Trigger onSearchChange when input changes
+                onChange={(e) => onSearchChange(e.target.value)}
             />
 
-            {/* Category list */}
             <ul>
-                {/* "Alle" (All) category option */}
-                <li
-                    className={selectedCategory === null ? "active" : ""} // Highlight if no category is selected
-                    onClick={() => onSelectCategory(null)} // Select "All" category
-                >
-                    <button className="sidebar-btn">Alle</button>
-                </li>
-
-                {/* "V&aelig;rktøj" (Tools) category option */}
-                <li
-                    className={selectedCategory === "V&aelig;rktøj" ? "active" : ""} // Highlight if "Værktøj" is selected
-                    onClick={() => onSelectCategory("V&aelig;rktøj")} // Select "Værktøj" category
-                >
-                    <button className="sidebar-btn">V&aelig;rktøj</button>
-                </li>
-
-                {/* "Mekanik" (Mechanics) category option */}
-                <li
-                    className={selectedCategory === "Mekanik" ? "active" : ""} // Highlight if "Mekanik" is selected
-                    onClick={() => onSelectCategory("Mekanik")} // Select "Mekanik" category
-                >
-                    <button className="sidebar-btn">Mekanik</button>
-                </li>
+                {categories.map(category => (
+                    <li
+                        key={category}
+                        className={
+                            (category === "Alle" && selectedCategory === null) ||
+                            selectedCategory === category
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() =>
+                            onSelectCategory(
+                                category === "Alle" ? null : category
+                            )
+                        }
+                    >
+                        <button className="sidebar-btn">
+                            {category}
+                        </button>
+                    </li>
+                ))}
             </ul>
         </aside>
     );
