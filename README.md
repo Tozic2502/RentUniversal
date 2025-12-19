@@ -2,7 +2,7 @@ RentUniversal
 
 RentUniversal er et 3. semester gruppeprojekt, der demonstrerer et fuldt rentalsystem med backend-API, frontend-klienter og Docker-opsætning.
 
-Projektet er bygget med ASP.NET Core, frontend i JavaScript, og kan køres samlet via Docker Compose.
+Projektet er bygget med ASP.NET Core, frontend i TypeScript, og kan køres samlet via Docker Compose.
 
 Krav
 
